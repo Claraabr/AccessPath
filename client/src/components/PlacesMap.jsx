@@ -3,7 +3,8 @@ import 'leaflet/dist/leaflet.css';
 
 const BEIRUT = [33.8938, 35.5018];
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY;
-// Our own copy of the Streets map, set to English in MapTiler Cloud
+// Our own copy of the Streets map, set to English in MapTiler Cloud.
+// Tiles are asked as .webp instead of .png: same map, about a third lighter (Lighthouse, session 22)
 const MAPTILER_MAP = import.meta.env.VITE_MAPTILER_MAP || 'streets-v2';
 
 // Map of places with Leaflet
@@ -19,7 +20,7 @@ export function PlacesMap({ places, onOpen }) {
       {MAPTILER_KEY ? (
         <TileLayer
           attribution='&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url={`https://api.maptiler.com/maps/${MAPTILER_MAP}/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`}
+          url={`https://api.maptiler.com/maps/${MAPTILER_MAP}/{z}/{x}/{y}.webp?key=${MAPTILER_KEY}`}
           tileSize={512}
           zoomOffset={-1}
           minZoom={1}

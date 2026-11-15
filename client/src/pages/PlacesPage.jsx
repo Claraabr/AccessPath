@@ -3,6 +3,7 @@ import { useApi } from '../hooks/useApi.js';
 import { PLACE_CATEGORIES, CRITERIA } from '../constants.js';
 import { PlacesMap } from '../components/PlacesMap.jsx';
 import { CriteriaBadges } from '../components/CriteriaBadges.jsx';
+import { sizedPhoto } from '../api/upload.js';
 
 export function PlacesPage({ go }) {
   // The filters live in the URL query, e.g. "?search=cafe&criteria=stepFree"
@@ -62,7 +63,18 @@ export function PlacesPage({ go }) {
             {places.map((p) => (
               <article key={p._id} className="card">
                 {/* Cover photo = the first photo of the place */}
-                {p.photos?.length > 0 && <img src={p.photos[0]} alt={p.name} className="place-cover" />}
+                {/* 800px wide is enough for a 400px card on a sharp screen; the cards are
+                    under the search form, so they can load lazily */}
+                {p.photos?.length > 0 && (
+                  <img
+                    src={sizedPhoto(p.photos[0], 800)}
+                    alt={p.name}
+                    className="place-cover"
+                    width="400"
+                    height="160"
+                    loading="lazy"
+                  />
+                )}
                 <h2>{p.name}</h2>
                 <p className="muted">{p.category} · {p.address}</p>
                 <CriteriaBadges place={p} />

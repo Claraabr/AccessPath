@@ -18,7 +18,8 @@ const app = express();
 // Secure headers: CSP, HSTS, nosniff... and no X-Powered-By (session 21)
 app.use(helmet());
 // Let the React app (on another port) call this API
-app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+// CLIENT_ORIGIN can list several origins with commas: dev (5173) and preview (4173)
+app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(',') }));
 
 // Rate limits: 300 requests per 15 min for the whole API, 5 login tries
 const apiLimiter = rateLimit({

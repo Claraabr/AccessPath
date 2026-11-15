@@ -18,3 +18,10 @@ export async function uploadPhoto(file) {
   if (!res.ok) throw new Error('Photo upload failed');
   return (await res.json()).secure_url;
 }
+
+// Session 22, images: right size, right format. Cloudinary resizes the photo
+// when the size is written in the URL, e.g. .../upload/w_800,f_auto,q_auto/...
+// f_auto sends WebP to browsers that support it, q_auto picks a lighter quality.
+export function sizedPhoto(url, width) {
+  return url.replace('/upload/', `/upload/w_${width},f_auto,q_auto/`);
+}

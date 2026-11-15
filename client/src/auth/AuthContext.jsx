@@ -7,8 +7,11 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }) {
   // localStorage survives a refresh, useState triggers a re-render
   const [token, setToken] = useState(() => localStorage.getItem('token'));
-  // { id, name, email, role } of the logged-in person
-  const [user, setUser] = useState(null);
+  // { id, name, email, role } of the logged-in person.
+  // Kept in localStorage too, so after a refresh the menu is drawn right away
+  // instead of appearing a moment later and pushing the page down (Lighthouse: layout shift).
+  // The role here only picks which menu to show; the server still checks it on every request.
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
 
   // After a refresh we only have the token: ask the API who we are
   useEffect(() => {
@@ -19,6 +22,7 @@ export function AuthProvider({ children }) {
   // Login and signup both answer { token, user }
   function saveSession(data) {
     localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
     setToken(data.token);
     setUser(data.user);
   }
@@ -41,6 +45,7 @@ export function AuthProvider({ children }) {
 
   function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setToken(null);
     setUser(null);
   }

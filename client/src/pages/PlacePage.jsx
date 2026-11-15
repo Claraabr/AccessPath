@@ -6,6 +6,7 @@ import { PlacesMap } from '../components/PlacesMap.jsx';
 import { CriteriaBadges } from '../components/CriteriaBadges.jsx';
 import { Stars } from '../components/Stars.jsx';
 import { ReviewForm } from '../components/ReviewForm.jsx';
+import { sizedPhoto } from '../api/upload.js';
 
 // The page of a place, like a Google Maps card: photos, name, rating, accessibility, map, reviews.
 // A user opens it from the search. A venue sees its own place here, with an
@@ -43,7 +44,8 @@ export function PlacePage({ id, go, ownerActions }) {
       {place.photos?.length > 0 && (
         <div className="gallery">
           {place.photos.map((url, i) => (
-            <img key={url} src={url} alt={`${place.name}, photo ${i + 1}`} />
+            // shown 220px high, so a 600px wide copy is plenty for a landscape photo
+            <img key={url} src={sizedPhoto(url, 600)} alt={`${place.name}, photo ${i + 1}`} height="220" />
           ))}
         </div>
       )}
