@@ -1,0 +1,144 @@
+/* AccessPath styles: high contrast, big click targets, visible focus,
+   because the app itself should be accessible */
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #17202b;
+  --muted: #546070;
+  --border: #d3d9e1;
+  --primary: #00563b; /* Castleton green */
+  --primary-dark: #003d2a;
+  --danger: #b42318;
+  --ok: #067647;
+  --warn: #9a4a06;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+h1, h2, h3 { line-height: 1.25; margin: 0 0 12px; }
+p { margin: 0 0 12px; }
+
+/* Keyboard users always see where they are */
+:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+
+/* Layout */
+.header {
+  background: var(--primary-dark);
+  color: #fff;
+  padding: 12px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.brand { font-size: 22px; font-weight: 700; margin-right: auto; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.nav button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid transparent;
+}
+.nav button[aria-current='page'] { border-color: #fff; background: rgba(255, 255, 255, 0.12); }
+.main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.muted { color: var(--muted); }
+
+/* Buttons: at least 44px tall so they are easy to hit */
+button, .button {
+  font: inherit;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+}
+button:hover { background: var(--primary-dark); }
+button.secondary { background: #fff; color: var(--primary); }
+button.danger { background: var(--danger); border-color: var(--danger); }
+button.link { background: none; border: none; color: var(--primary); padding: 0; min-height: auto; text-decoration: underline; }
+
+/* Forms */
+form { display: grid; gap: 14px; }
+label { display: grid; gap: 4px; font-weight: 600; }
+input, select, textarea {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid #8a94a3;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+}
+fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: grid; gap: 8px; }
+legend { font-weight: 600; padding: 0 4px; }
+.check { display: flex; align-items: center; gap: 10px; font-weight: 400; }
+.check input { width: 20px; height: 20px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+
+/* Messages */
+.error { color: var(--danger); font-weight: 600; }
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid currentColor;
+}
+.badge.yes { color: var(--ok); }
+.badge.no { color: var(--muted); }
+.badge.pending { color: var(--warn); }
+.badge.accepted { color: var(--ok); }
+.badge.declined { color: var(--danger); }
+.auth { max-width: 440px; margin: 0 auto; }
+
+/* Map and reviews */
+.map {
+  height: 380px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 16px 0;
+  z-index: 0;
+}
+.criteria { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+.stars { color: #a15c07; letter-spacing: 2px; }
+.review-photo { display: block; max-width: 100%; max-height: 280px; border-radius: 8px; margin: 8px 0 12px; }
+.listing-photo { display: block; width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; }
+
+/* Photos of a place: a row you can scroll sideways, like on Google Maps */
+.gallery {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border-radius: 10px;
+}
+.gallery img {
+  height: 220px;
+  width: auto;
+  max-width: 90%;
+  object-fit: cover;
+  border-radius: 10px;
+  flex: 0 0 auto;
+}
+.place-cover { display: block; width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; }
+/* Photos in the edit form, each with its Remove button */
+.photo-edit { display: flex; flex-wrap: wrap; gap: 12px; }
+.photo-edit div { display: grid; gap: 6px; width: 140px; }
+.photo-edit img { width: 140px; height: 100px; object-fit: cover; border-radius: 8px; }
