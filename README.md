@@ -53,8 +53,23 @@ AccessPath/
 │   ├── app.js               # the Express app: helmet, rate limits, routes
 │   ├── server.js            # checks .env, connects to MongoDB, listens
 │   └── .env.example
-└── SECURITY.md              # the security lab: attacks, fixes, results
+├── SECURITY.md              # the security lab: attacks, fixes, results
+└── PERFORMANCE.md           # the Lighthouse audit: scores before, fixes, after
 ```
+
+## Data model
+
+Five MongoDB collections (Mongoose models in `server/models/`). Every document also has `createdAt` and `updatedAt`.
+
+| Model | Fields | Links |
+|---|---|---|
+| `User` | name, email (unique), passwordHash, role (`user` / `venue` / `supplier`) | – |
+| `Place` | name, category, address, lat, lng, stepFree, elevator, toilets, parking, photos (10 max) | `ownerId` → User (a venue, one place each) |
+| `Review` | rating (1–5), comment, photoUrl | `placeId` → Place, `userId` → User (one review per user and place) |
+| `Listing` | title, type (ramp, wheelchair…), mode (`rent` / `sale`), price, area, photoUrl | `ownerId` → User (a supplier) |
+| `Request` | message, status (`pending` / `accepted` / `declined`) | `listingId` → Listing, `seekerId` → User (a user or a venue) |
+
+Deleting a place deletes its reviews; deleting a listing deletes its requests.
 
 ## Pages
 
@@ -95,7 +110,7 @@ Open `server/.env` and fill it in:
 | `PORT` | `3000` |
 | `MONGODB_URI` | your Atlas connection string, with `accesspath` as the database name: `mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/accesspath`. With MongoDB installed locally: `mongodb://127.0.0.1:27017/accesspath` |
 | `JWT_SECRET` | a long random string: run `node -p "crypto.randomBytes(32).toString('hex')"` and paste the result |
-| `CLIENT_ORIGIN` | `http://localhost:5173` (no `/` at the end) |
+| `CLIENT_ORIGIN` | `http://localhost:5173` (no `/` at the end). Several origins are separated by commas, e.g. `http://localhost:5173,http://localhost:4173` to also use `npm run preview` |
 
 In Atlas, check **Network Access**: your IP address must be allowed, otherwise the connection times out.
 
@@ -137,6 +152,34 @@ npm run dev
 ```
 
 Open http://localhost:5173, sign up and try it. To see every feature, create one account of each role: a `venue` adds a place, a `user` reviews it, a `supplier` posts a ramp, then the venue or the user requests it.
+
+## Deployment
+
+Three hosts, one app: the database on **MongoDB Atlas**, the API on **Render**, the React app on **Vercel**. Every push to `main` redeploys both.
+
+**Atlas.** A free cluster, a database user, and in Network Access `0.0.0.0/0` (Render does not have a fixed IP).
+
+**Render** (Web Service, connected to this repo):
+
+| Field | Value |
+|---|---|
+| Root directory | `server` |
+| Build command | `npm ci` |
+| Start command | `npm start` |
+| Environment | `MONGODB_URI` (Atlas string), `JWT_SECRET` (a new long random string, not the dev one), `CLIENT_ORIGIN` (the Vercel URL, no `/` at the end), `NODE_ENV=production` |
+
+Render gives the port in `PORT`, the server reads it. Check: `https://<api>.onrender.com/api/health` answers `{"status":"ok"}`. The free plan sleeps when nobody uses it, so the first request can take about 30 seconds.
+
+**Vercel** (connected to this repo):
+
+| Field | Value |
+|---|---|
+| Root directory | `client` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Environment | `VITE_API_URL` (the Render URL, no `/` at the end), `VITE_MAPTILER_KEY`, `VITE_MAPTILER_MAP`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_CLOUDINARY_UPLOAD_PRESET` |
+
+`client/vercel.json` sends every URL to `index.html`, so refreshing `/places/…` or `/accessfix` does not give a 404. `VITE_` variables are read at build time: after changing one, redeploy.
 
 ## API
 

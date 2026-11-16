@@ -25,6 +25,7 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(',') }));
 const apiLimiter = rateLimit({
   windowMs: 15 * 60_000,
   limit: 300,
+  message: { error: 'Too many requests. Try again later.' }, // JSON, like our other errors
 });
 const loginLimiter = rateLimit({
   windowMs: 15 * 60_000,
@@ -34,6 +35,12 @@ const loginLimiter = rateLimit({
 app.set('trust proxy', 1); // behind the host's proxy once deployed
 // Read JSON bodies sent by the client, 10 kb max
 app.use(express.json({ limit: '10kb' }));
+// Express 5 leaves req.body undefined when a request has no JSON body.
+// Then req.body.name would crash with a 500; with {} the route answers 400 instead.
+app.use((req, res, next) => {
+  if (!req.body) req.body = {};
+  next();
+});
 app.use('/api', apiLimiter);
 app.use('/api/auth/login', loginLimiter);
 
