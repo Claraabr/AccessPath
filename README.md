@@ -167,7 +167,7 @@ cd server
 node scripts/seed.js
 ```
 
-This adds 16 places in 8 towns of Lebanon (Beirut, Bourj Hammoud, Jounieh, Byblos, Batroun, Tripoli, Saida, Tyre, Zahle): hotels, supermarkets, restaurants, cafes, a shop and a pharmacy, each with its accessibility and 2 photos. It also adds 14 reviews, 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+This adds 47 places in 22 towns of Lebanon, from Tripoli, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, a bank, a hospital and a university, each with its accessibility and 2 photos. It also adds 8 visitors who left 140 reviews (2 to 4 per place), 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
 
 | Role | Email |
 |---|---|
@@ -197,6 +197,37 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [TyreNarrowStChrQrt](https://commons.wikimedia.org/wiki/File:TyreNarrowStChrQrt.jpg) | Heretiq | CC BY-SA 2.5 |
 | [Berdawnicafe](https://commons.wikimedia.org/wiki/File:Berdawnicafe.jpg) | Linaduliban | CC BY 3.0 |
 | [Zahle,Lebanon](https://commons.wikimedia.org/wiki/File:Zahle,Lebanon.JPG) | Nassif.seif | Public domain |
+| [Gemmayzeh (4694185351)](https://commons.wikimedia.org/wiki/File:Gemmayzeh_(4694185351).jpg) | Francisco Anzola | CC BY 2.0 |
+| [Beirut Bourj Hammoud - 2018 - 12](https://commons.wikimedia.org/wiki/File:Beirut_Bourj_Hammoud_-_2018_-_12.jpg) | Daieuxetdailleurs | CC BY-SA 4.0 |
+| [Beirut Bourj Hammoud - 2018 - 07](https://commons.wikimedia.org/wiki/File:Beirut_Bourj_Hammoud_-_2018_-_07.jpg) | Daieuxetdailleurs | CC BY-SA 4.0 |
+| [Beirut Bourj Hammoud - 2018 - 10](https://commons.wikimedia.org/wiki/File:Beirut_Bourj_Hammoud_-_2018_-_10.jpg) | Daieuxetdailleurs | CC BY-SA 4.0 |
+| [Sioufi Garden Achrafieh District 01](https://commons.wikimedia.org/wiki/File:Sioufi_Garden_Achrafieh_District_01.jpg) | Patrice Bon | CC0 |
+| [Zahrat al Ihsan Street, Achrafieh, Beirut](https://commons.wikimedia.org/wiki/File:Zahrat_al_Ihsan_Street,_Achrafieh,_Beirut.jpg) | James Bradbury | CC BY-SA 4.0 |
+| [Rue Hamra Sign](https://commons.wikimedia.org/wiki/File:Rue_Hamra_Sign.jpg) | Aza161 | CC BY-SA 4.0 |
+| [Verdun beirut](https://commons.wikimedia.org/wiki/File:Verdun_beirut.jpg) | A.K.Khalifeh | CC BY-SA 3.0 |
+| [Achrafieh](https://commons.wikimedia.org/wiki/File:Achrafieh.jpg) | Lebnen18 | CC BY-SA 3.0 |
+| [Broumana From Hazmieh, Lebanon](https://commons.wikimedia.org/wiki/File:Broumana_From_Hazmieh,_Lebanon.jpg) | Paul Saad | CC BY-SA 4.0 |
+| [Beit Meri - Grapevine on Balcony (2318594652)](https://commons.wikimedia.org/wiki/File:Beit_Meri_-_Grapevine_on_Balcony_(2318594652).jpg) | Serge Melki | CC BY 2.0 |
+| [Aley Lebanon Houses and hillside](https://commons.wikimedia.org/wiki/File:Aley_Lebanon_Houses_and_hillside.jpg) | Peripitus | CC BY-SA 3.0 |
+| [Deir El-Qamar 02](https://commons.wikimedia.org/wiki/File:Deir_El-Qamar_02.jpg) | Patrice Bon | CC0 |
+| [Antelias Mar Elias](https://commons.wikimedia.org/wiki/File:Antelias_Mar_Elias.JPG) | Karapet Rubinyan (Lastak) | CC BY-SA 3.0 |
+| [Jounieh 2](https://commons.wikimedia.org/wiki/File:Jounieh_2.jpg) | PublicSelfie | CC BY-SA 4.0 |
+| [The village of faraya](https://commons.wikimedia.org/wiki/File:The_village_of_faraya.jpg) | Potatoes8895 | CC BY-SA 3.0 |
+| [ByblosOldSouk](https://commons.wikimedia.org/wiki/File:ByblosOldSouk.jpg) | Elgaard | CC BY-SA 3.0 |
+| [ByblosSoukNight](https://commons.wikimedia.org/wiki/File:ByblosSoukNight.jpg) | Elgaard | CC BY-SA 3.0 |
+| [Batroun port IMG 1038](https://commons.wikimedia.org/wiki/File:Batroun_port_IMG_1038.jpg) | Amalmc | CC BY-SA 3.0 |
+| [Historical districts, streets of Tripoli, Lebanon](https://commons.wikimedia.org/wiki/File:Historical_districts,_streets_of_Tripoli,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Downtown Tripoli, old buildings, Tripoli, Lebanon](https://commons.wikimedia.org/wiki/File:Downtown_Tripoli,_old_buildings,_Tripoli,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [La route principale à Zghorta](https://commons.wikimedia.org/wiki/File:La_route_principale_%C3%A0_Zghorta.jpg) | Canaïma | CC BY-SA 4.0 |
+| [Vue de Ehden et du Mont-Liban](https://commons.wikimedia.org/wiki/File:Vue_de_Ehden_et_du_Mont-Liban.JPG) | Canaïma | CC BY-SA 4.0 |
+| [Bsharri church and main square with a statue of angel, Bsharri, Lebanon](https://commons.wikimedia.org/wiki/File:Bsharri_church_and_main_square_with_a_statue_of_angel,_Bsharri,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Anjar Street, March 2017](https://commons.wikimedia.org/wiki/File:Anjar_Street,_March_2017.jpg) | Bdx | CC BY-SA 4.0 |
+| [Temple of Jupiter, Baalbek, Lebanon (5073942385)](https://commons.wikimedia.org/wiki/File:Temple_of_Jupiter,_Baalbek,_Lebanon_(5073942385).jpg) | yeowatzup | CC BY 2.0 |
+| [Rashaya](https://commons.wikimedia.org/wiki/File:Rashaya.jpg) | Hardscarf | CC BY-SA 4.0 |
+| [Sidon Sea Castle, Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Sidon_Sea_Castle,_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Alleyways, Old city of Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Alleyways,_Old_city_of_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Jezzine 3](https://commons.wikimedia.org/wiki/File:Jezzine_3.JPG) | Freedom's Falcon | CC BY-SA 3.0 |
+| [Remains of ancient columns at Al Mina excavation site, Tyre, Lebanon](https://commons.wikimedia.org/wiki/File:Remains_of_ancient_columns_at_Al_Mina_excavation_site,_Tyre,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
 | [3 elevators](https://commons.wikimedia.org/wiki/File:3_elevators.jpg) | Atomicdragon136 | CC BY 3.0 |
 | [Entrance with ramp (5866504842)](https://commons.wikimedia.org/wiki/File:Entrance_with_ramp_(5866504842).jpg) | SuSanA Secretariat | CC BY 2.0 |
 | [Accessible entrance at UCMS](https://commons.wikimedia.org/wiki/File:Accessible_entrance_at_UCMS.jpg) | Dr Satendra | CC BY-SA 3.0 |
@@ -213,6 +244,37 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [Analysing elevator control buttons (7771545062)](https://commons.wikimedia.org/wiki/File:Analysing_elevator_control_buttons_(7771545062).jpg) | Karen Mardahl | CC BY-SA 2.0 |
 | [Accessible toilet in Japan](https://commons.wikimedia.org/wiki/File:Accessible_toilet_in_Japan.JPG) | Sara.szoke | CC BY-SA 4.0 |
 | [Disabled Parking Spaces in Seminario](https://commons.wikimedia.org/wiki/File:Disabled_Parking_Spaces_in_Seminario.jpg) | Daniel Capilla | CC BY-SA 4.0 |
+| [Lyttelton House Gallery, Priory Steps, Malvern - geograph.org.uk - 1305094](https://commons.wikimedia.org/wiki/File:Lyttelton_House_Gallery,_Priory_Steps,_Malvern_-_geograph.org.uk_-_1305094.jpg) | Bob Embleton | CC BY-SA 2.0 |
+| [Wheelchair ramp sign ](https://commons.wikimedia.org/wiki/File:Wheelchair_ramp_sign_.jpg) | MarkBuckawicki | CC0 |
+| [Old steps - geograph.org.uk - 415706](https://commons.wikimedia.org/wiki/File:Old_steps_-_geograph.org.uk_-_415706.jpg) | Alexander P Kapp | CC BY-SA 2.0 |
+| [7-Eleven Dongji Store wheelchair ramp 20221020](https://commons.wikimedia.org/wiki/File:7-Eleven_Dongji_Store_wheelchair_ramp_20221020.jpg) | ThomasYehYeh | CC BY-SA 4.0 |
+| [Accessible toilet Platform 10 Roma Street Station Brisbane P1110354](https://commons.wikimedia.org/wiki/File:Accessible_toilet_Platform_10_Roma_Street_Station_Brisbane_P1110354.jpg) | John Robert McPherson | CC BY-SA 4.0 |
+| [Destination control elevator interior 2](https://commons.wikimedia.org/wiki/File:Destination_control_elevator_interior_2.jpg) | Edward Orde | CC BY-SA 4.0 |
+| [SSF Main Library wheelchair ramp 1](https://commons.wikimedia.org/wiki/File:SSF_Main_Library_wheelchair_ramp_1.JPG) | BrokenSphere | CC BY-SA 3.0 |
+| [Diagonal handicapped parking space (18463401242)](https://commons.wikimedia.org/wiki/File:Diagonal_handicapped_parking_space_(18463401242).jpg) | Eric Fischer | CC BY 2.0 |
+| [Interior of a vintage Montgomery elevator with a modified controller](https://commons.wikimedia.org/wiki/File:Interior_of_a_vintage_Montgomery_elevator_with_a_modified_controller.jpg) | Baron Maddock | CC BY 4.0 |
+| [Schindler 330A hydraulic elevator interior with cascading doors](https://commons.wikimedia.org/wiki/File:Schindler_330A_hydraulic_elevator_interior_with_cascading_doors.jpg) | Baron Maddock | CC BY 4.0 |
+| [Accessible toiletblock with ramp and handrail (6253938166)](https://commons.wikimedia.org/wiki/File:Accessible_toiletblock_with_ramp_and_handrail_(6253938166).jpg) | SuSanA Secretariat | CC BY 2.0 |
+| [Entrance ramp on Market Place, Candler Building (1912; renovated 1990), 101-125 Market Place, Baltimore, MD 21202](https://commons.wikimedia.org/wiki/File:Entrance_ramp_on_Market_Place,_Candler_Building_(1912%3B_renovated_1990),_101-125_Market_Place,_Baltimore,_MD_21202.jpg) | Baltimore Heritage | CC0 |
+| [Entrance to Heatherslaw Mill Shop - geograph.org.uk - 1555460](https://commons.wikimedia.org/wiki/File:Entrance_to_Heatherslaw_Mill_Shop_-_geograph.org.uk_-_1555460.jpg) | David Hambidge | CC BY-SA 2.0 |
+| [Disabled Parking Space in Virreina Neighbourhood](https://commons.wikimedia.org/wiki/File:Disabled_Parking_Space_in_Virreina_Neighbourhood.jpg) | Daniel Capilla | CC BY-SA 4.0 |
+| [Disabled accessible toilet Haringey](https://commons.wikimedia.org/wiki/File:Disabled_accessible_toilet_Haringey.jpg) | Acabashi | CC BY-SA 4.0 |
+| [Handicap Parking Space (32283094777)](https://commons.wikimedia.org/wiki/File:Handicap_Parking_Space_(32283094777).jpg) | Tony Webster | CC BY-SA 2.0 |
+| [Steps at the entrance to Grand Central - geograph.org.uk - 4693180](https://commons.wikimedia.org/wiki/File:Steps_at_the_entrance_to_Grand_Central_-_geograph.org.uk_-_4693180.jpg) | Mat Fascione | CC BY-SA 2.0 |
+| [Charlecote Park disabled toilet Warwickshire England](https://commons.wikimedia.org/wiki/File:Charlecote_Park_disabled_toilet_Warwickshire_England.jpg) | Acabashi | CC BY-SA 4.0 |
+| [On-street parallel handicapped parking space (18521571846)](https://commons.wikimedia.org/wiki/File:On-street_parallel_handicapped_parking_space_(18521571846).jpg) | Eric Fischer | CC BY 2.0 |
+| [Accessible entrance](https://commons.wikimedia.org/wiki/File:Accessible_entrance.jpg) | Dr Satendra | CC BY-SA 3.0 |
+| [ThyssenKrupp wheelchair lift in Moscow 01](https://commons.wikimedia.org/wiki/File:ThyssenKrupp_wheelchair_lift_in_Moscow_01.jpg) | Stolbovsky | CC BY-SA 3.0 |
+| [B5 Johor Street Market - Disabled Parking](https://commons.wikimedia.org/wiki/File:B5_Johor_Street_Market_-_Disabled_Parking.jpg) | Chongkian | CC BY-SA 4.0 |
+| [Lift doors - geograph.org.uk - 5562733](https://commons.wikimedia.org/wiki/File:Lift_doors_-_geograph.org.uk_-_5562733.jpg) | Bob Harvey | CC BY-SA 2.0 |
+| [Hull Maritime Museum New Wheelchair Ramp, Kingston upon Hull Jun24](https://commons.wikimedia.org/wiki/File:Hull_Maritime_Museum_New_Wheelchair_Ramp,_Kingston_upon_Hull_Jun24.jpg) | Hullian111 | CC BY-SA 4.0 |
+| [Accessible toilet at Majiapu Station (20181231133605)](https://commons.wikimedia.org/wiki/File:Accessible_toilet_at_Majiapu_Station_(20181231133605).jpg) | N509FZ | CC BY-SA 4.0 |
+| [Handicapped parking space outside of the Combi, Aschendorf (2017)](https://commons.wikimedia.org/wiki/File:Handicapped_parking_space_outside_of_the_Combi,_Aschendorf_(2017).jpg) | Donald Trung | CC BY-SA 4.0 |
+| [Toilet for disabled people with wheelchairs](https://commons.wikimedia.org/wiki/File:Toilet_for_disabled_people_with_wheelchairs.jpg) | E4024 | CC BY-SA 4.0 |
+| [Changing Places Accessible Toilet for Disabled Inclusion](https://commons.wikimedia.org/wiki/File:Changing_Places_Accessible_Toilet_for_Disabled_Inclusion.jpg) | Southend-on-Sea Borough Council | CC0 |
+| [Handrails in the ramp for wheelchair users](https://commons.wikimedia.org/wiki/File:Handrails_in_the_ramp_for_wheelchair_users.jpg) | Tarasna0922 | CC BY-SA 4.0 |
+| [Accessible toilet Brisbane Airport Domestic Terminal IMGP5513](https://commons.wikimedia.org/wiki/File:Accessible_toilet_Brisbane_Airport_Domestic_Terminal_IMGP5513.jpg) | John Robert McPherson | CC BY-SA 4.0 |
+| [Steps, handrail and ramp, Gate No.2 - geograph.org.uk - 2613734](https://commons.wikimedia.org/wiki/File:Steps,_handrail_and_ramp,_Gate_No.2_-_geograph.org.uk_-_2613734.jpg) | Robin Stott | CC BY-SA 2.0 |
 
 ## Deployment
 
