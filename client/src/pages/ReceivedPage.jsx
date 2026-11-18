@@ -22,7 +22,7 @@ export function ReceivedPage() {
           <h2>{r.listingId?.title}</h2>
           <p>
             From <strong>{r.seekerId?.name}</strong>
-            {r.seekerId?.email && <> · <a href={`mailto:${r.seekerId.email}`}>{r.seekerId.email}</a></>}
+            {r.seekerId?.email && <>, <a href={`mailto:${r.seekerId.email}`}>{r.seekerId.email}</a></>}
           </p>
           <p><StatusBadge status={r.status} /> <span className="muted">{new Date(r.createdAt).toLocaleDateString()}</span></p>
           {r.message && <p>“{r.message}”</p>}

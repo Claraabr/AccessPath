@@ -40,6 +40,7 @@ Everybody has to log in before seeing the app.
 
 ```
 AccessPath/
+├── .github/workflows/ci.yml # tests on every push (GitHub Actions)
 ├── client/                  # React app (Vite) – http://localhost:5173
 │   ├── src/
 │   │   ├── api/             # client.js (apiFetch), upload.js (Cloudinary)
@@ -159,6 +160,60 @@ npm run dev
 
 Open http://localhost:5173, sign up and try it. To see every feature, create one account of each role: a `venue` adds a place, a `user` reviews it, a `supplier` posts a ramp, then the venue or the user requests it.
 
+### 5. Demo data (optional)
+
+```bash
+cd server
+node scripts/seed.js
+```
+
+This adds 16 places in 8 towns of Lebanon (Beirut, Bourj Hammoud, Jounieh, Byblos, Batroun, Tripoli, Saida, Tyre, Zahle): hotels, supermarkets, restaurants, cafes, a shop and a pharmacy, each with its accessibility and 2 photos. It also adds 14 reviews, 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+
+| Role | Email |
+|---|---|
+| user | `rana@demo.accesspath.lb` |
+| venue | `hotel-cedar-bay@demo.accesspath.lb` |
+| supplier | `georges-medical-supply@demo.accesspath.lb` |
+
+Running it again replaces the old demo data instead of adding it twice. To fill the online database, run it with the Atlas string: `MONGODB_URI="mongodb+srv://..." node scripts/seed.js`.
+
+Each place has a photo of its street and a photo of what matters for access (the ramp or the steps at the door, the elevator, the toilets or the parking). No photo is used twice. They all come from Wikimedia Commons:
+
+| Photo | Author | License |
+|---|---|---|
+| [Another rainy Beirut day](https://commons.wikimedia.org/wiki/File:Another_rainy_Beirut_day.jpg) | craigfinlay | CC BY 2.0 |
+| [Hamra Street, Beirut (1)](https://commons.wikimedia.org/wiki/File:Hamra_Street,_Beirut_(1).jpg) | Radosław Botev | CC BY 3.0 PL |
+| [Beirut Bourj Hammoud - 2018 - 08](https://commons.wikimedia.org/wiki/File:Beirut_Bourj_Hammoud_-_2018_-_08.jpg) | Daieuxetdailleurs | CC BY-SA 4.0 |
+| [Beirut Bourj Hammoud - 2018 - 11](https://commons.wikimedia.org/wiki/File:Beirut_Bourj_Hammoud_-_2018_-_11.jpg) | Daieuxetdailleurs | CC BY-SA 4.0 |
+| [Bayofjouniehviewfromrabieh2](https://commons.wikimedia.org/wiki/File:Bayofjouniehviewfromrabieh2.JPG) | Karlaboumansour | Public domain |
+| [3133 (8)jounieh](https://commons.wikimedia.org/wiki/File:3133_(8)jounieh.JPG) | FunkMonk | CC BY 3.0 |
+| [Beach in Byblos](https://commons.wikimedia.org/wiki/File:Beach_in_Byblos.JPG) | Marcopolisnet | CC BY-SA 3.0 |
+| [Batroun - Old Street (2308265587)](https://commons.wikimedia.org/wiki/File:Batroun_-_Old_Street_(2308265587).jpg) | Serge Melki | CC BY 2.0 |
+| [Arches and the natural sea wall of the old city (2308265699)](https://commons.wikimedia.org/wiki/File:Arches_and_the_natural_sea_wall_of_the_old_city_(2308265699).jpg) | Serge Melki | CC BY 2.0 |
+| ['Sour' dough (5348283264)](https://commons.wikimedia.org/wiki/File:'Sour'_dough_(5348283264).jpg) | Varun Shiv Kapur | CC BY 2.0 |
+| [Streets of Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Streets_of_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Old city of Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Old_city_of_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [City Road 01](https://commons.wikimedia.org/wiki/File:City_Road_01.JPG) | Matze187 | CC BY-SA 3.0 |
+| [TyreNarrowStChrQrt](https://commons.wikimedia.org/wiki/File:TyreNarrowStChrQrt.jpg) | Heretiq | CC BY-SA 2.5 |
+| [Berdawnicafe](https://commons.wikimedia.org/wiki/File:Berdawnicafe.jpg) | Linaduliban | CC BY 3.0 |
+| [Zahle,Lebanon](https://commons.wikimedia.org/wiki/File:Zahle,Lebanon.JPG) | Nassif.seif | Public domain |
+| [3 elevators](https://commons.wikimedia.org/wiki/File:3_elevators.jpg) | Atomicdragon136 | CC BY 3.0 |
+| [Entrance with ramp (5866504842)](https://commons.wikimedia.org/wiki/File:Entrance_with_ramp_(5866504842).jpg) | SuSanA Secretariat | CC BY 2.0 |
+| [Accessible entrance at UCMS](https://commons.wikimedia.org/wiki/File:Accessible_entrance_at_UCMS.jpg) | Dr Satendra | CC BY-SA 3.0 |
+| [Disabled Parking Space in Málaga](https://commons.wikimedia.org/wiki/File:Disabled_Parking_Space_in_M%C3%A1laga.jpg) | Daniel Capilla | CC BY-SA 4.0 |
+| [Handicap toilet 2](https://commons.wikimedia.org/wiki/File:Handicap_toilet_2.jpg) | Tiia Monto | CC BY-SA 4.0 |
+| [Bibliotheque Saint-Sulpice 12](https://commons.wikimedia.org/wiki/File:Bibliotheque_Saint-Sulpice_12.JPG) | Jeangagnon | CC BY-SA 4.0 |
+| [Disabled Parking in Gibralfaro](https://commons.wikimedia.org/wiki/File:Disabled_Parking_in_Gibralfaro.jpg) | Daniel Capilla | CC BY-SA 4.0 |
+| [Access Ramp 1](https://commons.wikimedia.org/wiki/File:Access_Ramp_1.JPG) | jsg1224 | CC BY-SA 3.0 |
+| [An old dorway with steps - geograph.org.uk - 254063](https://commons.wikimedia.org/wiki/File:An_old_dorway_with_steps_-_geograph.org.uk_-_254063.jpg) | Stanley Howe | CC BY-SA 2.0 |
+| [Abraham J. Friedlander House, Cincinnati, OH (46438201195)](https://commons.wikimedia.org/wiki/File:Abraham_J._Friedlander_House,_Cincinnati,_OH_(46438201195).jpg) | Warren LeMay | CC0 |
+| [Accès pour handicapés 01](https://commons.wikimedia.org/wiki/File:Acc%C3%A8s_pour_handicap%C3%A9s_01.jpg) | Kondah | CC BY-SA 4.0 |
+| [Ataman's district building (entrance)](https://commons.wikimedia.org/wiki/File:Ataman's_district_building_(entrance).jpg) | Alexander Roumega | CC BY-SA 4.0 |
+| [Accessible toilet](https://commons.wikimedia.org/wiki/File:Accessible_toilet.jpg) | Tiia Monto | CC BY-SA 3.0 |
+| [Analysing elevator control buttons (7771545062)](https://commons.wikimedia.org/wiki/File:Analysing_elevator_control_buttons_(7771545062).jpg) | Karen Mardahl | CC BY-SA 2.0 |
+| [Accessible toilet in Japan](https://commons.wikimedia.org/wiki/File:Accessible_toilet_in_Japan.JPG) | Sara.szoke | CC BY-SA 4.0 |
+| [Disabled Parking Spaces in Seminario](https://commons.wikimedia.org/wiki/File:Disabled_Parking_Spaces_in_Seminario.jpg) | Daniel Capilla | CC BY-SA 4.0 |
+
 ## Deployment
 
 Three hosts, one app: the database on **MongoDB Atlas**, the API on **Render**, the React app on **Vercel**. Every push to `main` redeploys both.
@@ -223,6 +278,10 @@ cd client && npm test   # components: PlaceForm, Stars
 ```
 
 Both use Vitest. The server tests import `app.js` with supertest, so they need no port and no database.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push and pull request (session 23): a clean GitHub machine installs the server and the client with `npm ci`, runs `npm test` in both, and builds the client. A red check on GitHub means something is broken before it reaches Render or Vercel. On Render, Auto-Deploy is set to "After CI checks pass", so a failing commit is never deployed.
 
 ## Security
 

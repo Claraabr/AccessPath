@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useApi } from '../hooks/useApi.js';
 import { PLACE_CATEGORIES, CRITERIA } from '../constants.js';
 import { PlacesMap } from '../components/PlacesMap.jsx';
-import { CriteriaBadges } from '../components/CriteriaBadges.jsx';
+import { CriteriaBadges, AccessIcon } from '../components/CriteriaBadges.jsx';
 import { sizedPhoto } from '../api/upload.js';
 
 export function PlacesPage({ go }) {
@@ -25,7 +25,8 @@ export function PlacesPage({ go }) {
   return (
     <>
       <h1>Find an accessible place</h1>
-      <form onSubmit={handleSearch} className="card">
+      <p className="muted">Places in Lebanon say how accessible they are, and visitors confirm it in their reviews.</p>
+      <form onSubmit={handleSearch} className="card filters">
         <div className="row">
           <label style={{ flex: 2 }}>
             Name
@@ -45,6 +46,7 @@ export function PlacesPage({ go }) {
             {Object.entries(CRITERIA).map(([key, label]) => (
               <label key={key} className="check">
                 <input type="checkbox" name="criteria" value={key} />
+                <AccessIcon name={key} />
                 {label}
               </label>
             ))}
@@ -56,33 +58,38 @@ export function PlacesPage({ go }) {
       {loading && !places && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
       {places && (
-        <>
-          <PlacesMap places={places} onOpen={(id) => go('place', id)} />
-          <p className="muted">{places.length} place(s) found</p>
-          <div className="grid">
-            {places.map((p) => (
-              <article key={p._id} className="card">
-                {/* Cover photo = the first photo of the place */}
-                {/* 800px wide is enough for a 400px card on a sharp screen; the cards are
-                    under the search form, so they can load lazily */}
-                {p.photos?.length > 0 && (
-                  <img
-                    src={sizedPhoto(p.photos[0], 800)}
-                    alt={p.name}
-                    className="place-cover"
-                    width="400"
-                    height="160"
-                    loading="lazy"
-                  />
-                )}
-                <h2>{p.name}</h2>
-                <p className="muted">{p.category} · {p.address}</p>
-                <CriteriaBadges place={p} />
-                <button onClick={() => go('place', p._id)}>See details and reviews</button>
-              </article>
-            ))}
+        // Results on the left, map on the right, like Google Maps (stacked on phones)
+        <div className="search-layout">
+          <div>
+            <p className="muted">{places.length === 1 ? '1 place found' : `${places.length} places found`}</p>
+            {places.length === 0 && <p>No place matches these filters. Try with fewer criteria.</p>}
+            {places.length > 0 && (
+              <ul className="list">
+                {places.map((p) => (
+                  <li key={p._id} className="place-row">
+                    {/* Cover photo = the first photo of the place. Shown 88px wide, so a
+                        200px copy is enough; the list is under the form, so it loads lazily */}
+                    {p.photos?.length > 0 ? (
+                      <img src={sizedPhoto(p.photos[0], 200)} alt="" className="place-thumb" width="88" height="88" loading="lazy" />
+                    ) : (
+                      <div className="place-thumb" />
+                    )}
+                    <div>
+                      <h2>
+                        <button className="title-link" onClick={() => go('place', p._id)}>{p.name}</button>
+                      </h2>
+                      <p className="muted"><span className="category">{p.category}</span>, {p.address}</p>
+                      <CriteriaBadges place={p} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        </>
+          <div className="search-map">
+            <PlacesMap places={places} onOpen={(id) => go('place', id)} />
+          </div>
+        </div>
       )}
     </>
   );

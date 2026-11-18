@@ -37,10 +37,31 @@ export function PlacePage({ id, go, ownerActions }) {
   return (
     <>
       {!ownerActions && (
-        <button className="secondary" onClick={() => go('places')} style={{ marginBottom: 16 }}>
-          ← Back to places
+        <button className="back" onClick={() => go('places')}>
+          ← Back to the search
         </button>
       )}
+      <div className="place-head">
+        <div>
+          <h1>{place.name}</h1>
+          <p className="muted"><span className="category">{place.category}</span>, {place.address}</p>
+          <p className="rating">
+            {average ? (
+              <>
+                <Stars value={Number(average)} /> <strong>{average}</strong>{' '}
+                <span className="muted">from {list.length === 1 ? '1 review' : `${list.length} reviews`}</span>
+              </>
+            ) : (
+              <span className="muted">No reviews yet</span>
+            )}
+          </p>
+        </div>
+        {ownerActions}
+      </div>
+
+      <h2 className="section-title">Accessibility, as declared by the place</h2>
+      <CriteriaBadges place={place} large />
+
       {place.photos?.length > 0 && (
         <div className="gallery">
           {place.photos.map((url, i) => (
@@ -49,18 +70,6 @@ export function PlacePage({ id, go, ownerActions }) {
           ))}
         </div>
       )}
-      <section className="card">
-        <div className="row" style={{ justifyContent: 'space-between', alignItems: 'start' }}>
-          <h1>{place.name}</h1>
-          {ownerActions}
-        </div>
-        <p className="muted">{place.category} · {place.address}</p>
-        <p>
-          {average ? <><Stars value={Number(average)} /> {average} / 5 ({list.length} review(s))</> : 'No reviews yet'}
-        </p>
-        <h2>Accessibility (declared by the place)</h2>
-        <CriteriaBadges place={place} />
-      </section>
 
       <PlacesMap places={[place]} />
 
@@ -69,32 +78,38 @@ export function PlacePage({ id, go, ownerActions }) {
       {list.length === 0 && (
         <p className="muted">{ownerActions ? 'No reviews yet.' : 'Be the first to share your experience.'}</p>
       )}
-      {list.map((r) => editingId === r._id ? (
-        <ReviewForm
-          key={r._id}
-          review={r}
-          onAdded={() => {
-            setEditingId(null);
-            reload();
-          }}
-          onCancel={() => setEditingId(null)}
-        />
-      ) : (
-        <article key={r._id} className="card">
-          <p>
-            <strong>{r.userId?.name ?? 'Deleted user'}</strong> · <Stars value={r.rating} />{' '}
-            <span className="muted">{new Date(r.createdAt).toLocaleDateString()}</span>
-          </p>
-          {r.comment && <p>{r.comment}</p>}
-          {r.photoUrl && <img src={r.photoUrl} alt={`Photo by ${r.userId?.name ?? 'a user'}`} className="review-photo" />}
-          {r.userId?._id === user?.id && (
-            <div className="row">
-              <button className="secondary" onClick={() => setEditingId(r._id)}>Edit my review</button>
-              <button className="danger" onClick={() => removeReview(r._id)}>Delete my review</button>
-            </div>
-          )}
-        </article>
-      ))}
+      {list.length > 0 && (
+        <ul className="list">
+          {list.map((r) => editingId === r._id ? (
+            <li key={r._id}>
+              <ReviewForm
+                review={r}
+                onAdded={() => {
+                  setEditingId(null);
+                  reload();
+                }}
+                onCancel={() => setEditingId(null)}
+              />
+            </li>
+          ) : (
+            <li key={r._id}>
+              <div className="review-head">
+                <strong>{r.userId?.name ?? 'Deleted user'}</strong>
+                <Stars value={r.rating} />
+                <span className="muted">{new Date(r.createdAt).toLocaleDateString()}</span>
+              </div>
+              {r.comment && <p>{r.comment}</p>}
+              {r.photoUrl && <img src={r.photoUrl} alt={`Photo by ${r.userId?.name ?? 'a user'}`} className="review-photo" />}
+              {r.userId?._id === user?.id && (
+                <div className="row">
+                  <button className="secondary" onClick={() => setEditingId(r._id)}>Edit my review</button>
+                  <button className="danger" onClick={() => removeReview(r._id)}>Delete my review</button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

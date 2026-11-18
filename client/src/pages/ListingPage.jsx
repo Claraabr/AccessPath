@@ -34,11 +34,11 @@ export function ListingPage({ id, go }) {
       <section className="card" style={{ marginTop: 16 }}>
         {listing.photoUrl && <img src={listing.photoUrl} alt={listing.title} className="review-photo" />}
         <h1>{listing.title}</h1>
-        <p className="muted">{listing.type} · {listing.mode === 'rent' ? 'For rent' : 'For sale'} · {listing.area}</p>
+        <p className="muted"><span className="category">{listing.type}</span> {listing.mode === 'rent' ? 'for rent' : 'for sale'} in {listing.area}</p>
         <p><Price listing={listing} /></p>
         <p>
           Offered by <strong>{listing.ownerId?.name}</strong>
-          {listing.ownerId?.email && <> · <a href={`mailto:${listing.ownerId.email}`}>{listing.ownerId.email}</a></>}
+          {listing.ownerId?.email && <>, <a href={`mailto:${listing.ownerId.email}`}>{listing.ownerId.email}</a></>}
         </p>
       </section>
 

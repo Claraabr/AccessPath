@@ -30,6 +30,7 @@ export function AuthPage({ onDone }) {
   return (
     <div className="auth card">
       <h1>{mode === 'login' ? 'Log in' : 'Create an account'}</h1>
+      <p className="muted">Check if a place in Lebanon is accessible before you go.</p>
       <form onSubmit={handleSubmit}>
         {mode === 'signup' && (
           <label>

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 export const PLACE_CATEGORIES = [
-  'restaurant', 'cafe', 'shop', 'pharmacy', 'hospital',
-  'bank', 'university', 'government', 'other',
+  'restaurant', 'cafe', 'hotel', 'supermarket', 'shop', 'pharmacy',
+  'hospital', 'bank', 'university', 'government', 'other',
 ];
 
 const placeSchema = new mongoose.Schema(

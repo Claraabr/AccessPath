@@ -23,5 +23,7 @@ export async function uploadPhoto(file) {
 // when the size is written in the URL, e.g. .../upload/w_800,f_auto,q_auto/...
 // f_auto sends WebP to browsers that support it, q_auto picks a lighter quality.
 export function sizedPhoto(url, width) {
+  // Demo photos from Wikimedia Commons: the width is already in the URL (?width=800)
+  if (url.includes('wikimedia.org')) return url.replace(/width=\d+/, `width=${width}`);
   return url.replace('/upload/', `/upload/w_${width},f_auto,q_auto/`);
 }

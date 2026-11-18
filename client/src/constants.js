@@ -1,7 +1,7 @@
 // Same lists as the server models, with readable labels
 export const PLACE_CATEGORIES = [
-  'restaurant', 'cafe', 'shop', 'pharmacy', 'hospital',
-  'bank', 'university', 'government', 'other',
+  'restaurant', 'cafe', 'hotel', 'supermarket', 'shop', 'pharmacy',
+  'hospital', 'bank', 'university', 'government', 'other',
 ];
 
 export const CRITERIA = {

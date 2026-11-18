@@ -57,7 +57,7 @@ export function ListingsPage({ go }) {
               <article key={l._id} className="card">
                 {l.photoUrl && <img src={l.photoUrl} alt={l.title} className="listing-photo" />}
                 <h2>{l.title}</h2>
-                <p className="muted">{l.type} · {l.mode === 'rent' ? 'For rent' : 'For sale'} · {l.area}</p>
+                <p className="muted"><span className="category">{l.type}</span> {l.mode === 'rent' ? 'for rent' : 'for sale'} in {l.area}</p>
                 <p><Price listing={l} /></p>
                 <button onClick={() => go('listing', l._id)}>See details</button>
               </article>

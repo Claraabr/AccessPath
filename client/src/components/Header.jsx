@@ -29,6 +29,7 @@ export function Header({ page, go }) {
           {user.role !== 'supplier' && link('my-requests', 'My requests')}
           {user.role === 'supplier' && link('received', 'Requests received')}
           <button
+            className="logout"
             onClick={() => {
               logout();
               go('places');
