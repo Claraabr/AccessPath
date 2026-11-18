@@ -10,18 +10,29 @@ export function PlacesPage({ go }) {
   const [query, setQuery] = useState('');
   // The list only shows up after a search; before that, the map shows every place
   const [searched, setSearched] = useState(false);
+  // Shown when Search is clicked with nothing filled in
+  const [hint, setHint] = useState('');
   const { data: places, loading, error } = useApi(`/api/places${query}`);
 
   function handleSearch(e) {
     e.preventDefault();
     const form = new FormData(e.target);
     const params = new URLSearchParams();
-    if (form.get('search')) params.set('search', form.get('search'));
+    const search = form.get('search').trim(); // only spaces counts as empty
+    if (search) params.set('search', search);
     if (form.get('category')) params.set('category', form.get('category'));
     const criteria = form.getAll('criteria');
     if (criteria.length > 0) params.set('criteria', criteria.join(','));
     const qs = params.toString();
-    setQuery(qs ? `?${qs}` : ''); // new path -> useApi loads again
+    // Nothing filled in -> no list, ask for at least one filter
+    if (!qs) {
+      setQuery('');
+      setSearched(false);
+      setHint('Type a name, choose a category or tick what you need, then search.');
+      return;
+    }
+    setHint('');
+    setQuery(`?${qs}`); // new path -> useApi loads again
     setSearched(true);
   }
 
@@ -56,6 +67,7 @@ export function PlacesPage({ go }) {
           </div>
         </fieldset>
         <button>Search</button>
+        {hint && <p className="hint" role="status">{hint}</p>}
       </form>
 
       {loading && !places && <p>Loading…</p>}
