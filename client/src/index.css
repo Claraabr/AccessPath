@@ -245,6 +245,8 @@ ul.access-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)
 .search-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
 .search-map { position: sticky; top: 16px; }
 .search-map .map { height: calc(100vh - 140px); min-height: 360px; margin: 0; }
+/* Before the first search: only the map, across the whole page */
+.map-wide .map { height: 520px; }
 .list { background: var(--white); border: 1px solid var(--line); border-radius: 8px; }
 .list > li { padding: 16px 18px; border-top: 1px solid var(--line); }
 .list > li:first-child { border-top: none; }
@@ -298,6 +300,7 @@ button.title-link:hover { background: none; text-decoration-color: var(--green);
   .search-layout { grid-template-columns: 1fr; }
   .search-map { position: static; order: -1; }
   .search-map .map { height: 280px; min-height: 0; }
+  .map-wide .map { height: 360px; }
 }
 @media (max-width: 560px) {
   .header { padding: 0 14px; }

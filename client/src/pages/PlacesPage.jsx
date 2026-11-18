@@ -8,6 +8,8 @@ import { sizedPhoto } from '../api/upload.js';
 export function PlacesPage({ go }) {
   // The filters live in the URL query, e.g. "?search=cafe&criteria=stepFree"
   const [query, setQuery] = useState('');
+  // The list only shows up after a search; before that, the map shows every place
+  const [searched, setSearched] = useState(false);
   const { data: places, loading, error } = useApi(`/api/places${query}`);
 
   function handleSearch(e) {
@@ -20,6 +22,7 @@ export function PlacesPage({ go }) {
     if (criteria.length > 0) params.set('criteria', criteria.join(','));
     const qs = params.toString();
     setQuery(qs ? `?${qs}` : ''); // new path -> useApi loads again
+    setSearched(true);
   }
 
   return (
@@ -57,7 +60,17 @@ export function PlacesPage({ go }) {
 
       {loading && !places && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
-      {places && (
+      {places && !searched && (
+        <>
+          <p className="muted">
+            {places.length} places on the map. Search by name, category or what you need to see the list.
+          </p>
+          <div className="map-wide">
+            <PlacesMap places={places} onOpen={(id) => go('place', id)} />
+          </div>
+        </>
+      )}
+      {places && searched && (
         // Results on the left, map on the right, like Google Maps (stacked on phones)
         <div className="search-layout">
           <div>
