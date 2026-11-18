@@ -1,5 +1,11 @@
 # AccessPath
 
+**Live app:** https://access-path-brown.vercel.app
+
+**API:** https://accesspath-api-0yy7.onrender.com (health check: [/api/health](https://accesspath-api-0yy7.onrender.com/api/health))
+
+The API runs on Render's free plan and sleeps when nobody uses it: the first request after a while can take about 50 seconds.
+
 AccessPath helps people with reduced mobility in Lebanon check whether a place is accessible before they go: a wheelchair user, a parent with a stroller, a grandparent with a cane, someone on crutches.
 
 - **AccessPath** – places (cafes, hotels, shops, pharmacies…) declare their accessibility (step-free entrance, elevator, accessible toilets, parking). Visitors leave reviews with a rating, a comment and a photo, so everyone can check if the place tells the truth.
