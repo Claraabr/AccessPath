@@ -11,4 +11,12 @@ export const CRITERIA = {
   parking: 'Accessible parking',
 };
 
+// What the photo of each criterion shows (form labels and alt text of the photos)
+export const ACCESS_PHOTO_TEXT = {
+  stepFree: 'the entrance (ramp or steps)',
+  elevator: 'the elevator',
+  toilets: 'the accessible toilets',
+  parking: 'the accessible parking',
+};
+
 export const EQUIPMENT_TYPES = ['ramp', 'wheelchair', 'stair-climber', 'walker', 'other'];

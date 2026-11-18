@@ -71,7 +71,7 @@ Five MongoDB collections (Mongoose models in `server/models/`). Every document a
 | Model | Fields | Links |
 |---|---|---|
 | `User` | name, email (unique), passwordHash, role (`user` / `venue` / `supplier`) | – |
-| `Place` | name, category, address, lat, lng, stepFree, elevator, toilets, parking, photos (10 max) | `ownerId` → User (a venue, one place each) |
+| `Place` | name, category, address, lat, lng, stepFree, elevator, toilets, parking, photos (10 max), accessPhotos (one photo per criterion) | `ownerId` → User (a venue, one place each) |
 | `Review` | rating (1–5), comment, photoUrl | `placeId` → Place, `userId` → User (one review per user and place) |
 | `Listing` | title, type (ramp, wheelchair…), mode (`rent` / `sale`), price, area, photoUrl | `ownerId` → User (a supplier) |
 | `Request` | message, status (`pending` / `accepted` / `declined`) | `listingId` → Listing, `seekerId` → User (a user or a venue) |
@@ -85,7 +85,7 @@ Each role has its own home page and menu. A URL that is not for your role sends 
 | URL | user | venue | supplier |
 |---|---|---|---|
 | `/` | search places (map + list) | my place as visitors see it, with Edit (photos, details, criteria) | my listings: post, edit, delete |
-| `/places/:id` | a place, its photos and reviews; write / edit / delete my review | – | – |
+| `/places/:id` | a place, its criteria with their photos, its other photos and reviews; write / edit / delete my review | – | – |
 | `/accessfix` | search equipment | search equipment | – |
 | `/accessfix/:id` | a listing, ask to rent or buy | a listing, ask to rent or buy | – |
 | `/my-requests` | the requests I sent | the requests I sent | – |
@@ -167,7 +167,7 @@ cd server
 node scripts/seed.js
 ```
 
-This adds 47 places in 22 towns of Lebanon, from Tripoli, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, a bank, a hospital and a university, each with its accessibility and 2 photos. It also adds 8 visitors who left 140 reviews (2 to 4 per place), 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+This adds 47 places in 22 towns of Lebanon, from Tripoli, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, a bank, a hospital and a university, each with its accessibility, a cover photo and a photo of one of its criteria. It also adds 8 visitors who left 140 reviews (2 to 4 per place), 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
 
 | Role | Email |
 |---|---|
@@ -177,7 +177,7 @@ This adds 47 places in 22 towns of Lebanon, from Tripoli, Ehden and Bsharri in t
 
 Running it again replaces the old demo data instead of adding it twice. To fill the online database, run it with the Atlas string: `MONGODB_URI="mongodb+srv://..." node scripts/seed.js`.
 
-Each place has a photo of its street and a photo of what matters for access (the ramp or the steps at the door, the elevator, the toilets or the parking). No photo is used twice. They all come from Wikimedia Commons:
+Each place has a photo of its street and a photo of what matters for access (the ramp or the steps at the door, the elevator, the toilets or the parking), shown next to that criterion on the place page. No photo is used twice. They all come from Wikimedia Commons:
 
 | Photo | Author | License |
 |---|---|---|

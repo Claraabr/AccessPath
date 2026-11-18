@@ -1,4 +1,5 @@
-import { CRITERIA } from '../constants.js';
+import { CRITERIA, ACCESS_PHOTO_TEXT } from '../constants.js';
+import { sizedPhoto } from '../api/upload.js';
 
 // Pictograms like the ones on accessibility signs, drawn with lines on a 24x24 grid
 const ICONS = {
@@ -44,25 +45,41 @@ export function AccessIcon({ name }) {
 
 // The 4 criteria of a place, never shown by color only:
 // - small (search results): 4 squares, a missing one is crossed out, the words are for screen readers
-// - large (place page): one tile per criterion with "Yes" or "No" written
+// - large (place page): one tile per criterion with "Yes" or "No" written,
+//   and under it the photo of that criterion when the place shared one
 export function CriteriaBadges({ place, large = false }) {
+  if (large) {
+    return (
+      <ul className="access-tiles">
+        {Object.entries(CRITERIA).map(([key, label]) => {
+          const yes = Boolean(place[key]);
+          const photo = place.accessPhotos?.[key];
+          return (
+            <li key={key} className={yes ? 'yes' : 'no'}>
+              <div className="access-head">
+                <AccessIcon name={key} />
+                <strong>{label}</strong>
+                <span className="answer">{yes ? 'Yes' : 'No'}</span>
+              </div>
+              {/* shown about 500px wide, so a 600px copy is enough */}
+              {photo && <img src={sizedPhoto(photo, 600)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} loading="lazy" />}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
   return (
-    <ul className={large ? 'access-tiles' : 'access-icons'}>
+    <ul className="access-icons">
       {Object.entries(CRITERIA).map(([key, label]) => {
         const yes = Boolean(place[key]);
         return (
           <li key={key} className={yes ? 'yes' : 'no'} title={`${label}: ${yes ? 'yes' : 'no'}`}>
             <AccessIcon name={key} />
-            {large ? (
-              <span>
-                <strong>{label}</strong>
-                <span>{yes ? 'Yes' : 'No'}</span>
-              </span>
-            ) : (
-              <span className="sr-only">
-                {label}: {yes ? 'yes' : 'no'}
-              </span>
-            )}
+            <span className="sr-only">
+              {label}: {yes ? 'yes' : 'no'}
+            </span>
           </li>
         );
       })}

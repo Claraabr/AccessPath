@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { PLACE_CATEGORIES, CRITERIA } from '../constants.js';
-import { photosEnabled, uploadPhoto } from '../api/upload.js';
+import { PLACE_CATEGORIES, CRITERIA, ACCESS_PHOTO_TEXT } from '../constants.js';
+import { photosEnabled, uploadPhoto, sizedPhoto } from '../api/upload.js';
 
 const MAX_PHOTOS = 10;
 
@@ -10,6 +10,8 @@ export function PlaceForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
   const [sending, setSending] = useState(false);
   // Photos already saved; a click on "Remove" takes one out of the list
   const [photos, setPhotos] = useState(initial.photos ?? []);
+  // One photo per criterion, e.g. { stepFree: 'https://...', toilets: '' }
+  const [accessPhotos, setAccessPhotos] = useState(initial.accessPhotos ?? {});
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,17 +27,25 @@ export function PlaceForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
       }
       const uploaded = [];
       for (const file of files) uploaded.push(await uploadPhoto(file));
+      // Photo of a criterion: a new file replaces the old photo
+      const newAccessPhotos = { ...accessPhotos };
+      for (const key of Object.keys(CRITERIA)) {
+        const file = form.get(`photo-${key}`);
+        if (file && file.size > 0) newAccessPhotos[key] = await uploadPhoto(file);
+      }
 
       const data = {
         name: form.get('name'),
         category: form.get('category'),
         address: form.get('address'),
         photos: [...photos, ...uploaded],
+        accessPhotos: newAccessPhotos,
       };
       // A checked checkbox sends "on", an unchecked one sends nothing
       for (const key of Object.keys(CRITERIA)) data[key] = form.get(key) === 'on';
 
       await onSubmit(data);
+      setAccessPhotos(newAccessPhotos);
       formEl.reset();
     } catch (err) {
       setError(err.message);
@@ -64,15 +74,38 @@ export function PlaceForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
       <fieldset>
         <legend>What does your place offer?</legend>
         {Object.entries(CRITERIA).map(([key, label]) => (
-          <label key={key} className="check">
-            <input type="checkbox" name={key} defaultChecked={initial[key]} />
-            {label}
-          </label>
+          <div key={key} className="criterion-edit">
+            <label className="check">
+              <input type="checkbox" name={key} defaultChecked={initial[key]} />
+              {label}
+            </label>
+            {/* A photo shows visitors what it really looks like, even when the answer is no (the steps) */}
+            {photosEnabled && (
+              <div className="access-photo-edit">
+                {accessPhotos[key] && (
+                  <>
+                    <img src={sizedPhoto(accessPhotos[key], 280)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} />
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={() => setAccessPhotos({ ...accessPhotos, [key]: '' })}
+                    >
+                      Remove
+                    </button>
+                  </>
+                )}
+                <label>
+                  {accessPhotos[key] ? 'Replace the photo' : `Photo of ${ACCESS_PHOTO_TEXT[key]} (optional)`}
+                  <input name={`photo-${key}`} type="file" accept="image/*" />
+                </label>
+              </div>
+            )}
+          </div>
         ))}
       </fieldset>
       {photosEnabled && (
         <fieldset>
-          <legend>Photos (the first one is the cover)</legend>
+          <legend>Other photos (the first one is the cover)</legend>
           {photos.length > 0 && (
             <div className="photo-edit">
               {photos.map((url, i) => (

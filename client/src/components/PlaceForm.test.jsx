@@ -31,6 +31,7 @@ describe('PlaceForm', () => {
       toilets: false,
       parking: false,
       photos: [],
+      accessPhotos: {},
     });
   });
 

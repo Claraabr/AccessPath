@@ -10,6 +10,17 @@ import { escapeRegex } from '../utils/escapeRegex.js';
 const placesRouter = express.Router();
 const CRITERIA = ['stepFree', 'elevator', 'toilets', 'parking'];
 
+// The photo of each criterion, taken from the body: only these 4 keys,
+// and only text (a link), anything else becomes "no photo"
+function readAccessPhotos(body) {
+  const photos = {};
+  for (const key of CRITERIA) {
+    const url = body.accessPhotos?.[key];
+    photos[key] = typeof url === 'string' ? url : '';
+  }
+  return photos;
+}
+
 // GET /api/places?search=cafe&category=restaurant&criteria=stepFree,elevator
 // Public: anyone can look for accessible places
 placesRouter.get('/', async (req, res) => {
@@ -76,6 +87,7 @@ placesRouter.post('/', requireAuth, requireRole('venue'), async (req, res) => {
       toilets: Boolean(req.body.toilets),
       parking: Boolean(req.body.parking),
       photos: req.body.photos,
+      accessPhotos: readAccessPhotos(req.body),
       ownerId: req.userId, // owner comes from the token, never the body
     });
     res.status(201).json(place);
@@ -95,6 +107,7 @@ placesRouter.patch('/:id', requireAuth, requireRole('venue'), async (req, res) =
   for (const key of ['name', 'category', 'address', 'photos', ...CRITERIA]) {
     if (req.body[key] !== undefined) updates[key] = req.body[key];
   }
+  if (req.body.accessPhotos !== undefined) updates.accessPhotos = readAccessPhotos(req.body);
   // New address -> new coordinates
   if (updates.address) {
     const coords = await geocode(updates.address);

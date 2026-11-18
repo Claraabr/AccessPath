@@ -26,6 +26,14 @@ const placeSchema = new mongoose.Schema(
       default: [],
       validate: [(list) => list.length <= 10, 'A place can have 10 photos at most'],
     },
+    // One photo for each criterion, to show what it really looks like
+    // (the ramp or the steps at the door, the elevator, the toilets, the parking). Empty = no photo
+    accessPhotos: {
+      stepFree: { type: String, default: '' },
+      elevator: { type: String, default: '' },
+      toilets: { type: String, default: '' },
+      parking: { type: String, default: '' },
+    },
   },
   { timestamps: true }
 );
