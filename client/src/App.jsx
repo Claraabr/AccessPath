@@ -113,12 +113,13 @@ export default function App() {
     );
   }
 
+  // Logged in: the menu on the left, the page on the right
   return (
-    <>
+    <div className="layout">
       <Header page={page} go={go} />
       <main className="main">
         <Routes>{routes}</Routes>
       </main>
-    </>
+    </div>
   );
 }
