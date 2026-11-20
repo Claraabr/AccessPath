@@ -14,7 +14,12 @@ export function MyRequestsPage({ go }) {
 
   return (
     <>
-      <h1>My requests</h1>
+      <div className="page-head">
+        <h1>My requests</h1>
+        {/* A request is sent from a listing: this opens AccessFix to choose one */}
+        <button onClick={() => go('listings')}>New request</button>
+      </div>
+      <p className="muted">Need a ramp, a wheelchair or a walker? Choose it on AccessFix and send your request to the supplier.</p>
       {loading && !requests && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
       {requests && requests.length === 0 && <p className="muted">You have not sent any request yet.</p>}

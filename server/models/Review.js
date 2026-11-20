@@ -9,6 +9,9 @@ const reviewSchema = new mongoose.Schema(
     comment: { type: String, trim: true, maxlength: 500, default: '' },
     // Cloudinary link, empty if no photo
     photoUrl: { type: String, default: '' },
+    // The owner of the place can answer, like on Google Maps. Empty = no reply yet
+    reply: { type: String, trim: true, maxlength: 500, default: '' },
+    repliedAt: { type: Date },
   },
   { timestamps: true }
 );

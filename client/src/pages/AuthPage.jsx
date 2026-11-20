@@ -51,15 +51,15 @@ export function AuthPage({ onDone }) {
             <legend>I am…</legend>
             <label className="check">
               <input type="radio" name="role" value="user" defaultChecked />
-              Looking for accessible places or equipment
+              A person with reduced mobility, or someone who helps one: I look for accessible places and equipment
             </label>
             <label className="check">
               <input type="radio" name="role" value="venue" />
-              A place (cafe, hotel, shop, pharmacy…) that shows its accessibility
+              A business (restaurant, hotel, supermarket…): I show my accessibility, read my reviews and ask for equipment
             </label>
             <label className="check">
               <input type="radio" name="role" value="supplier" />
-              An equipment supplier (I rent or sell ramps, wheelchairs…)
+              An equipment supplier: I rent or sell ramps, wheelchairs… to people and businesses
             </label>
           </fieldset>
         )}

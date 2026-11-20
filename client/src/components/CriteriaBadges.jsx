@@ -45,24 +45,18 @@ export function AccessIcon({ name }) {
 
 // The 4 criteria of a place, never shown by color only:
 // - small (search results): 4 squares, a missing one is crossed out, the words are for screen readers
-// - large (place page): one tile per criterion with "Yes" or "No" written,
-//   and under it the photo of that criterion when the place shared one
+// - large (place page): one tile per criterion with "Yes" or "No" written
 export function CriteriaBadges({ place, large = false }) {
   if (large) {
     return (
       <ul className="access-tiles">
         {Object.entries(CRITERIA).map(([key, label]) => {
           const yes = Boolean(place[key]);
-          const photo = place.accessPhotos?.[key];
           return (
             <li key={key} className={yes ? 'yes' : 'no'}>
-              <div className="access-head">
-                <AccessIcon name={key} />
-                <strong>{label}</strong>
-                <span className="answer">{yes ? 'Yes' : 'No'}</span>
-              </div>
-              {/* shown about 500px wide, so a 600px copy is enough */}
-              {photo && <img src={sizedPhoto(photo, 600)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} loading="lazy" />}
+              <AccessIcon name={key} />
+              <strong>{label}</strong>
+              <span className="answer">{yes ? 'Yes' : 'No'}</span>
             </li>
           );
         })}
@@ -84,5 +78,29 @@ export function CriteriaBadges({ place, large = false }) {
         );
       })}
     </ul>
+  );
+}
+
+// Place page: the photos of the criteria, all the same size,
+// each one with its criterion written under it (a photo of steps says "no")
+export function AccessPhotos({ place }) {
+  const withPhoto = Object.entries(CRITERIA).filter(([key]) => place.accessPhotos?.[key]);
+  if (withPhoto.length === 0) return null;
+  return (
+    <>
+      <h2 className="section-title">Photos of the access</h2>
+      <div className="access-photos">
+        {withPhoto.map(([key, label]) => (
+          <figure key={key}>
+            {/* shown about 300px wide, so a 600px copy is enough */}
+            <img src={sizedPhoto(place.accessPhotos[key], 600)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} loading="lazy" />
+            <figcaption>
+              <AccessIcon name={key} />
+              {label}: {place[key] ? 'yes' : 'no'}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </>
   );
 }

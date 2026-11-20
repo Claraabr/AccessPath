@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate, useLocation, useParams } from 'react-router
 import { useAuth } from './auth/AuthContext.jsx';
 import { Header } from './components/Header.jsx';
 import { AuthPage } from './pages/AuthPage.jsx';
+import { WelcomePage } from './pages/WelcomePage.jsx';
 import { PlacesPage } from './pages/PlacesPage.jsx';
 import { PlacePage } from './pages/PlacePage.jsx';
 import { MyPlacePage } from './pages/MyPlacePage.jsx';
@@ -9,12 +10,14 @@ import { ListingsPage } from './pages/ListingsPage.jsx';
 import { ListingPage } from './pages/ListingPage.jsx';
 import { MyListingsPage } from './pages/MyListingsPage.jsx';
 import { MyRequestsPage } from './pages/MyRequestsPage.jsx';
+import { MyReviewsPage } from './pages/MyReviewsPage.jsx';
 import { ReceivedPage } from './pages/ReceivedPage.jsx';
 
 // Each page has its own URL, so a refresh or the back button keeps you on it.
-// "/" is the home page of each role: the search for a user,
-// its own place for a venue, my listings for a supplier.
+// "/" is the home page of each role, with "Welcome back" on top:
+// the search for a user, its own place for a venue, my listings for a supplier.
 const PATHS = {
+  home: () => '/',
   places: () => '/',
   'my-places': () => '/',
   'my-listings': () => '/',
@@ -22,6 +25,7 @@ const PATHS = {
   listings: () => '/accessfix',
   listing: (id) => `/accessfix/${id}`,
   'my-requests': () => '/my-requests',
+  'my-reviews': () => '/my-reviews',
   received: () => '/received',
 };
 
@@ -29,10 +33,8 @@ const HOME = { user: 'places', venue: 'my-places', supplier: 'my-listings' };
 
 // Which menu entry is open, for the Header
 function pageName(pathname, role) {
-  if (pathname === '/') return HOME[role];
-  if (pathname.startsWith('/places/')) return 'place';
-  if (pathname === '/accessfix') return 'listings';
-  if (pathname.startsWith('/accessfix/')) return 'listing';
+  if (pathname === '/' || pathname.startsWith('/places/')) return HOME[role];
+  if (pathname.startsWith('/accessfix')) return 'listings';
   return pathname.slice(1);
 }
 
@@ -64,7 +66,7 @@ export default function App() {
       <>
         <Header page={page} go={go} />
         <main className="main">
-          <AuthPage onDone={() => go('places')} />
+          <AuthPage onDone={() => go('home')} />
         </main>
       </>
     );
@@ -83,32 +85,36 @@ export default function App() {
   // Each role only gets its own pages; any other URL goes back to its home page
   let routes;
   if (user.role === 'venue') {
+    const home = <WelcomePage><MyPlacePage go={go} /></WelcomePage>;
     routes = (
       <>
-        <Route path="/" element={<MyPlacePage go={go} />} />
+        <Route path="/" element={home} />
+        <Route path="/my-reviews" element={<MyReviewsPage />} />
         <Route path="/accessfix" element={<ListingsPage go={go} />} />
         <Route path="/accessfix/:id" element={<ListingRoute go={go} />} />
         <Route path="/my-requests" element={<MyRequestsPage go={go} />} />
-        <Route path="*" element={<MyPlacePage go={go} />} />
+        <Route path="*" element={home} />
       </>
     );
   } else if (user.role === 'supplier') {
+    const home = <WelcomePage><MyListingsPage /></WelcomePage>;
     routes = (
       <>
-        <Route path="/" element={<MyListingsPage />} />
+        <Route path="/" element={home} />
         <Route path="/received" element={<ReceivedPage />} />
-        <Route path="*" element={<MyListingsPage />} />
+        <Route path="*" element={home} />
       </>
     );
   } else {
+    const home = <WelcomePage><PlacesPage go={go} /></WelcomePage>;
     routes = (
       <>
-        <Route path="/" element={<PlacesPage go={go} />} />
+        <Route path="/" element={home} />
         <Route path="/places/:id" element={<PlaceRoute go={go} />} />
         <Route path="/accessfix" element={<ListingsPage go={go} />} />
         <Route path="/accessfix/:id" element={<ListingRoute go={go} />} />
         <Route path="/my-requests" element={<MyRequestsPage go={go} />} />
-        <Route path="*" element={<PlacesPage go={go} />} />
+        <Route path="*" element={home} />
       </>
     );
   }

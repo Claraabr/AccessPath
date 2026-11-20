@@ -3,20 +3,42 @@ import { useAuth } from '../auth/AuthContext.jsx';
 
 // Each role has its own menu:
 // user     -> Places, AccessFix, My requests
-// venue    -> My place, AccessFix, My requests
+// venue    -> My place, My reviews, AccessFix, My requests
 // supplier -> My listings, Requests received
 // Before login, only the name of the app is shown, in a band at the top.
-// After login, the menu is a column on the left (a top bar with a Menu button on phones).
+// After login, on a computer the menu is a thin column of icons on the left that opens
+// when the mouse is on it (or when it gets the keyboard focus), all in CSS.
+// On phones it is a top bar with a Menu button.
 
 // Line icons on a 24x24 grid, like the accessibility icons of the app
 const ICONS = {
   places: <path d="M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM15.5 15.5 21 21" />, // magnifier
   'my-places': <path d="M4 9 5.5 4h13L20 9M4 9h16M5 9v11h14V9M10 20v-5h4v5" />, // shop front
+  'my-reviews': <path d="M4 5h16v11H10l-5 4v-4H4zM8 9h8M8 12h5" />, // speech bubble
   listings: <path d="M3 19h18V7z" />, // a ramp, like the step-free icon
   'my-requests': <path d="M4 6h16v12H4zM4 7l8 6 8-6" />, // envelope
   'my-listings': <path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10" />, // box
   received: <path d="M4 13 7 5h10l3 8v6H4zM4 13h5l1 2h4l1-2h5" />, // inbox tray
+  logout: <path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9" />, // arrow out of a door
 };
+
+function Icon({ name }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {ICONS[name]}
+    </svg>
+  );
+}
 
 const ROLE_NAMES = { user: 'Visitor', venue: 'Place owner', supplier: 'Equipment supplier' };
 
@@ -33,7 +55,8 @@ export function Header({ page, go }) {
     );
   }
 
-  // One menu entry; aria-current tells screen readers which page is open
+  // One menu entry. The label is hidden while the column is folded, but screen
+  // readers always read it. aria-current tells them which page is open.
   function link(name, label) {
     return (
       <button
@@ -43,27 +66,18 @@ export function Header({ page, go }) {
           setOpen(false);
         }}
       >
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          {ICONS[name]}
-        </svg>
-        {label}
+        <Icon name={name} />
+        <span className="side-label">{label}</span>
       </button>
     );
   }
 
   return (
     <header className="sidebar">
-      <span className="brand">AccessPath</span>
+      <span className="brand">
+        <span className="brand-mark" aria-hidden="true">A</span>
+        <span className="side-label">AccessPath</span>
+      </span>
       <button className="menu-toggle" aria-expanded={open} aria-controls="side-menu" onClick={() => setOpen(!open)}>
         {open ? 'Close' : 'Menu'}
       </button>
@@ -71,13 +85,15 @@ export function Header({ page, go }) {
         <nav className="side-nav" aria-label="Main menu">
           {user.role === 'user' && link('places', 'Places')}
           {user.role === 'venue' && link('my-places', 'My place')}
+          {user.role === 'venue' && link('my-reviews', 'My reviews')}
           {user.role === 'supplier' && link('my-listings', 'My listings')}
           {user.role !== 'supplier' && link('listings', 'AccessFix')}
           {user.role !== 'supplier' && link('my-requests', 'My requests')}
           {user.role === 'supplier' && link('received', 'Requests received')}
         </nav>
         <div className="side-user">
-          <p>
+          <span className="avatar" aria-hidden="true">{user.name.charAt(0)}</span>
+          <p className="side-label">
             <strong>{user.name}</strong>
             <span>{ROLE_NAMES[user.role]}</span>
           </p>
@@ -89,7 +105,8 @@ export function Header({ page, go }) {
               go('places');
             }}
           >
-            Log out
+            <Icon name="logout" />
+            <span className="side-label">Log out</span>
           </button>
         </div>
       </div>

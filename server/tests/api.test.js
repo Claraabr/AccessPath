@@ -56,6 +56,15 @@ describe('places', () => {
   });
 });
 
+describe('reviews', () => {
+  it('needs a token to reply to a review', async () => {
+    const res = await request(app)
+      .put('/api/reviews/6b007ef8c4e4ddecfc17cbaa/reply')
+      .send({ text: 'Thank you!' });
+    expect(res.status).toBe(401);
+  });
+});
+
 describe('the app', () => {
   it('answers a broken JSON body with 400, not 500', async () => {
     const res = await request(app)

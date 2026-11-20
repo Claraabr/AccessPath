@@ -30,7 +30,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; font-weight: 600; }
-h1 { font-size: 30px; }
+h1 { font-size: 30px; letter-spacing: -0.01em; }
 h2 { font-size: 20px; }
 h3 { font-size: 17px; }
 p { margin: 0 0 12px; }
@@ -57,51 +57,91 @@ ul.list, ul.access-icons, ul.access-tiles { list-style: none; margin: 0; padding
 }
 .brand { font-size: 22px; font-weight: 600; }
 
-/* After login: the menu is a column on the left, the page on the right */
-.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
+/* After login, on a computer: a thin column of icons on the left.
+   It opens when the mouse is on it, or when a menu entry has the keyboard focus,
+   and slides over the page instead of pushing it. */
+.layout { min-height: 100vh; padding-left: 76px; }
 .sidebar {
-  background: var(--green-dark);
-  color: var(--white);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* above the map */
+  width: 76px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
-  align-self: start;
-  height: 100vh;
-  padding: 20px 12px;
+  padding: 20px 18px;
+  overflow: hidden;
+  background: var(--green-dark);
+  color: var(--white);
+  transition: width 0.25s ease, box-shadow 0.25s ease;
 }
-.sidebar .brand { padding: 4px 12px 24px; }
+.sidebar:hover,
+.sidebar:focus-within { width: 248px; box-shadow: 8px 0 28px rgba(0, 61, 42, 0.28); }
+/* The words of the menu appear once the column is open */
+.side-label { white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; }
+.sidebar:hover .side-label,
+.sidebar:focus-within .side-label { opacity: 1; transition-delay: 0.05s; }
+
+.sidebar .brand { display: flex; align-items: center; gap: 16px; padding: 0 0 28px; font-size: 20px; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--green-dark);
+  font-size: 20px;
+  font-weight: 700;
+}
 .side-menu { display: flex; flex-direction: column; flex: 1; }
-.side-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.side-nav button {
+.side-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.side-nav button,
+.side-user button.logout {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
+  min-height: 40px;
+  padding: 9px;
   text-align: left;
   background: transparent;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.82);
   border: none;
-  border-left: 4px solid transparent;
-  border-radius: 6px;
-  padding: 10px 12px;
+  border-radius: 10px;
   font-weight: 400;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition: background-color 0.15s, color 0.15s;
 }
-.side-nav button svg { flex: none; }
-.side-nav button:hover { background: var(--green); color: var(--white); }
-/* The open page: lighter green, with the yellow mark on its left */
-.side-nav button[aria-current='page'] {
+.side-nav svg,
+.side-user svg { flex: none; }
+.side-nav button:hover,
+.side-user button.logout:hover { background: var(--green); color: var(--white); }
+/* The open page: a white pill */
+.side-nav button[aria-current='page'] { background: var(--white); color: var(--green-dark); font-weight: 600; }
+.side-user {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: var(--green);
-  color: var(--white);
-  border-left-color: var(--yellow);
   font-weight: 600;
 }
-.side-user { border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 16px 12px 0; }
-.side-user p { display: grid; margin: 0 0 12px; line-height: 1.35; }
-.side-user span { font-size: 14px; color: rgba(255, 255, 255, 0.75); }
-.side-user button.logout,
+.side-user p { display: grid; margin: 0; line-height: 1.3; }
+.side-user p span { font-size: 13px; color: rgba(255, 255, 255, 0.7); }
+.side-user button.logout { grid-column: 1 / -1; }
 .menu-toggle {
+  display: none;
   background: transparent;
   color: var(--white);
   border: 2px solid rgba(255, 255, 255, 0.6);
@@ -109,12 +149,17 @@ ul.list, ul.access-icons, ul.access-tiles { list-style: none; margin: 0; padding
   padding: 6px 14px;
   font-weight: 400;
 }
-.side-user button.logout:hover,
 .menu-toggle:hover { background: var(--green); border-color: var(--white); }
-.menu-toggle { display: none; }
 @media (prefers-reduced-motion: reduce) {
-  .side-nav button { transition: none; }
+  .sidebar, .side-label, .side-nav button { transition: none; }
 }
+
+/* Home page: "Welcome back" on the left, above the page */
+.welcome { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin: 8px 0 24px; }
+/* Search page: the title and the form in a narrower box, in the middle */
+.search-box { max-width: 640px; margin: 0 auto 8px; }
+.search-box h1,
+.search-box > p { text-align: center; }
 
 .main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
 
@@ -221,18 +266,25 @@ fieldset .check:has(input[type='radio']:checked) { border-color: var(--green); b
   background: #9aa7aa;
   transform: rotate(-45deg);
 }
-/* Place page: one tile per criterion, with Yes / No written and the photo of that criterion.
+/* Place page: one tile per criterion, with Yes / No written */
+ul.access-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0 0 28px; }
+.access-tiles li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; font-size: 15px; }
+.access-tiles li svg { width: 22px; height: 22px; flex: none; }
+.access-tiles li strong { font-weight: 600; line-height: 1.25; }
+.access-tiles .answer { margin-left: auto; }
+.access-tiles li.yes { background: var(--green); color: var(--white); border: 1px solid var(--green); }
+.access-tiles li.no { background: var(--white); color: var(--muted); border: 1px dashed #9aa7aa; }
+
+/* Photos of the criteria: all the same size, the criterion written under each one.
    Like an access guide: you see the ramp, the elevator or the toilets before you go. */
-ul.access-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 28px; align-items: start; }
-.access-tiles li { border: 1px solid var(--green); border-radius: 8px; background: var(--white); overflow: hidden; }
-.access-tiles li.no { border: 1px dashed #9aa7aa; }
-.access-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
-.access-head svg { width: 22px; height: 22px; flex: none; }
-.access-head strong { font-weight: 600; }
-.access-head .answer { margin-left: auto; }
-.access-tiles li.yes .access-head { background: var(--green); color: var(--white); }
-.access-tiles li.no .access-head { color: var(--muted); }
-.access-tiles img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.access-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 0 0 28px; }
+.access-photos figure { margin: 0; background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.access-photos img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.access-photos figcaption { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 15px; }
+.access-photos figcaption svg { width: 20px; height: 20px; flex: none; color: var(--green); }
+
+/* Place page: the cover photo under the name */
+.place-hero { display: block; width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin: 0 0 24px; }
 
 /* Place form: under each criterion, its photo and the field to change it */
 .criterion-edit { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); }
@@ -261,6 +313,33 @@ button.title-link {
   text-decoration-color: var(--line); text-underline-offset: 4px;
 }
 button.title-link:hover { background: none; text-decoration-color: var(--green); color: var(--green); }
+
+/* "Near me": the button next to Search, and the distance under each result */
+.search-buttons { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+.distance { display: block; font-weight: 600; color: var(--green-dark); }
+
+/* Venue page: equipment from AccessFix for what the place is missing */
+.fix-card { border-left: 4px solid var(--green); }
+.fix-card h3 { font-size: 16px; margin: 20px 0 8px; }
+.fix-card .list { margin-bottom: 16px; }
+.place-row h4 { font-size: 16px; margin: 0 0 2px; }
+
+/* Page title with its main action on the right (stacked on phones) */
+.page-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
+.page-head h1 { margin: 0; }
+
+/* The reply of the owner under a review, like on Google Maps */
+.owner-reply { margin: 10px 0 4px 16px; padding: 10px 14px; border-left: 3px solid var(--green); background: var(--green-tint); border-radius: 0 6px 6px 0; }
+.owner-reply p { margin: 0 0 6px; }
+.owner-reply p:last-of-type { margin-bottom: 0; }
+.owner-reply .row { margin-top: 10px; }
+.owner-reply-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.reply-form { margin: 10px 0 4px 16px; gap: 10px; }
+
+/* My reviews: two tabs, all the reviews or the ones waiting for a reply */
+.filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.filter-tabs button { background: var(--white); color: var(--green); font-weight: 500; }
+.filter-tabs button[aria-pressed='true'] { background: var(--green); color: var(--white); }
 
 /* Place page */
 .place-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 20px; }
@@ -292,9 +371,18 @@ button.title-link:hover { background: none; text-decoration-color: var(--green);
 
 /* Tablets and phones */
 @media (max-width: 820px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 0 14px; }
-  .sidebar .brand { padding: 14px 0; margin-right: auto; }
+  ul.access-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .place-hero { height: 220px; }
+  /* Phones and tablets: the column becomes a top bar with a Menu button */
+  .layout { padding-left: 0; }
+  .sidebar,
+  .sidebar:hover,
+  .sidebar:focus-within {
+    position: static; width: auto; height: auto; box-shadow: none; overflow: visible;
+    flex-direction: row; flex-wrap: wrap; align-items: center; padding: 0 14px;
+  }
+  .side-label { opacity: 1; }
+  .sidebar .brand { padding: 12px 0; margin-right: auto; }
   .menu-toggle { display: block; }
   .side-menu { display: none; flex: 0 0 100%; padding: 4px 0 16px; }
   .side-menu.open { display: block; }
@@ -310,6 +398,6 @@ button.title-link:hover { background: none; text-decoration-color: var(--green);
   h1 { font-size: 28px; }
   .place-row { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
   .place-thumb { width: 64px; height: 64px; }
-  .access-tiles { grid-template-columns: 1fr; }
+  ul.access-tiles { grid-template-columns: 1fr; }
   .access-photo-edit { padding-left: 0; }
 }

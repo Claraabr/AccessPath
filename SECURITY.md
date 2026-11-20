@@ -3,7 +3,7 @@
 We attacked our own API with the seven checks of the Session 21 lab, then fixed what was open.
 For each one: the attack, what the API answered before, the fix, and what it answers now.
 
-All commands use the local API (`http://localhost:3000`). `$TOKEN` is a token from `/api/auth/login`.
+All commands use `$API`, the address of the API (the Render URL, or the server running on your computer, port 3000). `$TOKEN` is a token from `/api/auth/login`.
 The fixes are also covered by the automated tests in `server/tests/api.test.js` (`npm test` in `server/`).
 
 ## Summary
@@ -23,7 +23,7 @@ The fixes are also covered by the automated tests in `server/tests/api.test.js` 
 **Attack:** send an object instead of an email at login.
 
 ```bash
-curl -i -X POST localhost:3000/api/auth/login \
+curl -i -X POST $API/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email": {"$ne": null}, "password": "x"}'
 ```
@@ -45,7 +45,7 @@ Same family: `GET /api/places?search=(` used to answer 500, because `(` is not a
 
 ```bash
 for i in $(seq 1 20); do
-  curl -s -o /dev/null -w "%{http_code}\n" -X POST localhost:3000/api/auth/login \
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST $API/api/auth/login \
     -H "Content-Type: application/json" -d '{"email":"clara@test.com","password":"wrong"}'
 done
 ```
@@ -61,7 +61,7 @@ done
 **Attack:**
 
 ```bash
-curl -I localhost:3000/api/health
+curl -I $API/api/health
 ```
 
 **Before:** `X-Powered-By: Express` (tells everyone what we run), no `Content-Security-Policy`, no `Strict-Transport-Security`.
@@ -89,11 +89,11 @@ git log -p | grep -i -E "JWT_SECRET=|MONGODB_URI=mongodb"
 **Attack:** try to choose the owner or the role in the body.
 
 ```bash
-curl -i -X POST localhost:3000/api/places -H "Authorization: Bearer $TOKEN" \
+curl -i -X POST $API/api/places -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","category":"cafe","address":"Hamra, Beirut","ownerId":"<someone else id>"}'
 
-curl -i -X POST localhost:3000/api/auth/signup -H "Content-Type: application/json" \
+curl -i -X POST $API/api/auth/signup -H "Content-Type: application/json" \
   -d '{"name":"Eve","email":"eve@test.com","password":"password123","role":"admin"}'
 ```
 
@@ -108,8 +108,8 @@ curl -i -X POST localhost:3000/api/auth/signup -H "Content-Type: application/jso
 **Attack:** venue B edits or deletes venue A's place, user B deletes user A's review.
 
 ```bash
-curl -i -X DELETE localhost:3000/api/places/<place of A> -H "Authorization: Bearer $TOKEN_OF_B"
-curl -i -X DELETE localhost:3000/api/reviews/<review of A> -H "Authorization: Bearer $TOKEN_OF_B"
+curl -i -X DELETE $API/api/places/<place of A> -H "Authorization: Bearer $TOKEN_OF_B"
+curl -i -X DELETE $API/api/reviews/<review of A> -H "Authorization: Bearer $TOKEN_OF_B"
 ```
 
 **Before and after:** `404`. Every PATCH and DELETE looks for `{ _id, ownerId: req.userId }` (or `userId` for reviews, `seekerId` for requests), so B cannot even tell the record exists. Accepting or declining a request checks that the listing behind it belongs to the supplier.

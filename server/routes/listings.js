@@ -5,9 +5,17 @@ import { Request } from '../models/Request.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { requireRole } from '../middleware/requireRole.js';
 import { escapeRegex } from '../utils/escapeRegex.js';
+import { geocode } from '../utils/geocode.js';
 
 const listingsRouter = express.Router();
 const EDITABLE = ['title', 'type', 'mode', 'price', 'area', 'photoUrl'];
+
+// Position of the area for "Near me". If the area is not found or the service is down,
+// the listing is still saved, just without a position (null).
+async function findPosition(area) {
+  const coords = typeof area === 'string' && area.trim() ? await geocode(area).catch(() => null) : null;
+  return coords ? { lat: coords.lat, lng: coords.lng } : { lat: null, lng: null };
+}
 
 // GET /api/listings?type=ramp&mode=rent&area=beirut -> public
 listingsRouter.get('/', async (req, res) => {
@@ -46,6 +54,7 @@ listingsRouter.get('/:id', async (req, res) => {
 listingsRouter.post('/', requireAuth, requireRole('supplier'), async (req, res) => {
   const data = { ownerId: req.userId }; // owner from the token
   for (const key of EDITABLE) data[key] = req.body[key];
+  Object.assign(data, await findPosition(data.area));
   try {
     res.status(201).json(await Listing.create(data));
   } catch (err) {
@@ -63,6 +72,8 @@ listingsRouter.patch('/:id', requireAuth, requireRole('supplier'), async (req, r
   for (const key of EDITABLE) {
     if (req.body[key] !== undefined) updates[key] = req.body[key];
   }
+  // New area -> new position
+  if (updates.area !== undefined) Object.assign(updates, await findPosition(updates.area));
   try {
     const listing = await Listing.findOneAndUpdate(
       { _id: id, ownerId: req.userId },

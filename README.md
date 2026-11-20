@@ -8,8 +8,8 @@ The API runs on Render's free plan and sleeps when nobody uses it: the first req
 
 AccessPath helps people with reduced mobility in Lebanon check whether a place is accessible before they go: a wheelchair user, a parent with a stroller, a grandparent with a cane, someone on crutches.
 
-- **AccessPath** – places (cafes, hotels, shops, pharmacies…) declare their accessibility (step-free entrance, elevator, accessible toilets, parking). Visitors leave reviews with a rating, a comment and a photo, so everyone can check if the place tells the truth.
-- **AccessFix** – a small marketplace where equipment suppliers rent or sell ramps, wheelchairs and other equipment. People and places can send a request; a place that is not accessible yet can rent a ramp.
+- **AccessPath** – places (cafes, hotels, shops, pharmacies…) declare their accessibility (step-free entrance, elevator, accessible toilets, parking), with a photo of each. Visitors leave reviews with a rating, a comment and a photo, so everyone can check if the place tells the truth. "Near me" uses the position of the phone to show the closest places first.
+- **AccessFix** – a small marketplace where equipment suppliers rent or sell ramps, wheelchairs and other equipment. People and places can send a request, and "Near me" shows the closest suppliers first. A place with no step-free entrance or no elevator sees, on its own page, the ramps or stair climbers closest to it.
 
 Capstone project for 020WBPES3 – Web Programming (ESIB, USJ).
 Team: Clara Abou Rjeily (230718), Denise Aboukhater (240810).
@@ -20,9 +20,9 @@ You choose your role when you sign up.
 
 | Role | Who | Can |
 |---|---|---|
-| `user` | a person | search places, write reviews, request equipment |
-| `venue` | a place (cafe, hotel, shop…) | one account = one place: set it up with photos, declare its accessibility, read its reviews, request equipment |
-| `supplier` | an equipment business | post listings, accept or decline requests |
+| `user` | a person with reduced mobility, or someone who helps one | search places, write reviews, rent or buy equipment for themselves |
+| `venue` | a business (restaurant, hotel, supermarket…) | one account = one place: set it up with photos, declare its accessibility, read and answer its reviews, update it when something changes, request equipment for the place |
+| `supplier` | a business that rents or sells equipment | post listings (ramps, wheelchairs…), accept or decline requests from people and businesses |
 
 Everybody has to log in before seeing the app.
 
@@ -41,7 +41,7 @@ Everybody has to log in before seeing the app.
 ```
 AccessPath/
 ├── .github/workflows/ci.yml # tests on every push (GitHub Actions)
-├── client/                  # React app (Vite) – http://localhost:5173
+├── client/                  # React app (Vite)
 │   ├── src/
 │   │   ├── api/             # client.js (apiFetch), upload.js (Cloudinary)
 │   │   ├── auth/            # AuthContext.jsx (who is logged in)
@@ -50,7 +50,7 @@ AccessPath/
 │   │   ├── pages/           # one file per screen
 │   │   └── App.jsx          # the routes (React Router), one URL per page
 │   └── .env.example
-├── server/                  # Express API – http://localhost:3000
+├── server/                  # Express API
 │   ├── models/              # User, Place, Review, Listing, Request
 │   ├── routes/              # auth, places, reviews, listings, requests
 │   ├── middleware/          # requireAuth (401), requireRole (403), validate (zod, 400)
@@ -72,22 +72,23 @@ Five MongoDB collections (Mongoose models in `server/models/`). Every document a
 |---|---|---|
 | `User` | name, email (unique), passwordHash, role (`user` / `venue` / `supplier`) | – |
 | `Place` | name, category, address, lat, lng, stepFree, elevator, toilets, parking, photos (10 max), accessPhotos (one photo per criterion) | `ownerId` → User (a venue, one place each) |
-| `Review` | rating (1–5), comment, photoUrl | `placeId` → Place, `userId` → User (one review per user and place) |
-| `Listing` | title, type (ramp, wheelchair…), mode (`rent` / `sale`), price, area, photoUrl | `ownerId` → User (a supplier) |
+| `Review` | rating (1–5), comment, photoUrl, reply and repliedAt (the answer of the owner) | `placeId` → Place, `userId` → User (one review per user and place) |
+| `Listing` | title, type (ramp, wheelchair…), mode (`rent` / `sale`), price, area, photoUrl, lat, lng (found from the area) | `ownerId` → User (a supplier) |
 | `Request` | message, status (`pending` / `accepted` / `declined`) | `listingId` → Listing, `seekerId` → User (a user or a venue) |
 
 Deleting a place deletes its reviews; deleting a listing deletes its requests.
 
 ## Pages
 
-Each role has its own home page and menu. A URL that is not for your role sends you back to your home page.
+Each role has its own home page and menu. On a computer the menu is a thin column of icons that opens when you move the mouse on it. A URL that is not for your role sends you back to your home page.
 
 | URL | user | venue | supplier |
 |---|---|---|---|
-| `/` | search places (map + list) | my place as visitors see it, with Edit (photos, details, criteria) | my listings: post, edit, delete |
+| `/` | "Welcome back", then search places (map + list, Near me) | "Welcome back", then my place as visitors see it, with Edit (photos, details, criteria) and AccessFix equipment for what is missing | "Welcome back", then my listings: post, edit, delete |
 | `/places/:id` | a place, its criteria with their photos, its other photos and reviews; write / edit / delete my review | – | – |
-| `/accessfix` | search equipment | search equipment | – |
+| `/accessfix` | search equipment, Near me | search equipment, Near me | – |
 | `/accessfix/:id` | a listing, ask to rent or buy | a listing, ask to rent or buy | – |
+| `/my-reviews` | – | the reviews of my place: reply, edit or delete my reply, see the ones waiting | – |
 | `/my-requests` | the requests I sent | the requests I sent | – |
 | `/received` | – | – | accept or decline requests |
 
@@ -115,9 +116,9 @@ Open `server/.env` and fill it in:
 | Variable | What to put |
 |---|---|
 | `PORT` | `3000` |
-| `MONGODB_URI` | your Atlas connection string, with `accesspath` as the database name: `mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/accesspath`. With MongoDB installed locally: `mongodb://127.0.0.1:27017/accesspath` |
+| `MONGODB_URI` | your Atlas connection string, with `accesspath` as the database name: `mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/accesspath`. With MongoDB installed on your computer: `mongodb://` followed by its address and port 27017, then `/accesspath` |
 | `JWT_SECRET` | a long random string: run `node -p "crypto.randomBytes(32).toString('hex')"` and paste the result |
-| `CLIENT_ORIGIN` | `http://localhost:5173` (no `/` at the end). Several origins are separated by commas, e.g. `http://localhost:5173,http://localhost:4173` to also use `npm run preview` |
+| `CLIENT_ORIGIN` | the address of the client, no `/` at the end: on your computer, the address Vite shows when you start the client (port 5173). Several origins are separated by commas, e.g. to also allow `npm run preview` (port 4173) |
 
 In Atlas, check **Network Access**: your IP address must be allowed, otherwise the connection times out.
 
@@ -133,7 +134,7 @@ Open `client/.env`:
 
 | Variable | What to put |
 |---|---|
-| `VITE_API_URL` | `http://localhost:3000` |
+| `VITE_API_URL` | the address of the API: on your computer, your own server on port 3000 |
 | `VITE_MAPTILER_KEY` | a free key from [cloud.maptiler.com](https://cloud.maptiler.com) → API Keys. Empty = standard OpenStreetMap tiles |
 | `VITE_MAPTILER_MAP` | optional, the id of a map customized in English. Empty = `streets-v2` |
 | `VITE_CLOUDINARY_CLOUD_NAME` | your Cloudinary cloud name. Empty = no photo field |
@@ -155,10 +156,10 @@ npm run dev
 # terminal 2
 cd client
 npm run dev
-# → Local: http://localhost:5173/
+# → Local: the address of the client (port 5173)
 ```
 
-Open http://localhost:5173, sign up and try it. To see every feature, create one account of each role: a `venue` adds a place, a `user` reviews it, a `supplier` posts a ramp, then the venue or the user requests it.
+Open the address Vite shows, sign up and try it. To see every feature, create one account of each role: a `venue` adds a place, a `user` reviews it, a `supplier` posts a ramp, then the venue or the user requests it.
 
 ### 5. Demo data (optional)
 
@@ -167,7 +168,7 @@ cd server
 node scripts/seed.js
 ```
 
-This adds 47 places in 22 towns of Lebanon, from Tripoli, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, a bank, a hospital and a university, each with its accessibility, a cover photo and a photo of one of its criteria. It also adds 8 visitors who left 140 reviews (2 to 4 per place), 14 equipment listings and a few requests. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+This adds 71 places in 24 towns of Lebanon, from Tripoli, Halba, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, banks, hospitals, universities, public offices and a library, each with its accessibility, a cover photo and a photo of one of its criteria. Every category has places with each criterion, so a search like "cafe with an elevator" gives results. It also adds 8 visitors who left 197 reviews (2 to 4 per place), 6 equipment suppliers with 25 listings from Tripoli to Saida (each with a photo and a position for "Near me"), and 10 requests: people who need equipment for themselves or a relative, and businesses that need it for their place. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
 
 | Role | Email |
 |---|---|
@@ -228,6 +229,30 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [Alleyways, Old city of Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Alleyways,_Old_city_of_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
 | [Jezzine 3](https://commons.wikimedia.org/wiki/File:Jezzine_3.JPG) | Freedom's Falcon | CC BY-SA 3.0 |
 | [Remains of ancient columns at Al Mina excavation site, Tyre, Lebanon](https://commons.wikimedia.org/wiki/File:Remains_of_ancient_columns_at_Al_Mina_excavation_site,_Tyre,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Zaitunay Bay (1)](https://commons.wikimedia.org/wiki/File:Zaitunay_Bay_(1).jpg) | Radosław Botev | CC BY 3.0 PL |
+| [Beirut 002](https://commons.wikimedia.org/wiki/File:Beirut_002.jpg) | James Gallagher | CC BY-SA 2.0 |
+| [Badaro nightlife](https://commons.wikimedia.org/wiki/File:Badaro_nightlife.jpeg) | Imageuploader2 | CC BY-SA 4.0 |
+| [Corniche Beirut at sunset, seaside promenade, Beirut, Lebanon](https://commons.wikimedia.org/wiki/File:Corniche_Beirut_at_sunset,_seaside_promenade,_Beirut,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [The Corniche Beirut, Beirut, Lebanon](https://commons.wikimedia.org/wiki/File:The_Corniche_Beirut,_Beirut,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Downtown Beirut](https://commons.wikimedia.org/wiki/File:Downtown_Beirut.jpg) | Brian Dell | Public domain |
+| [Passing Beirut](https://commons.wikimedia.org/wiki/File:Passing_Beirut.jpg) | James Whatley | CC BY 2.0 |
+| [Ras Beirut District (3)](https://commons.wikimedia.org/wiki/File:Ras_Beirut_District_(3).jpg) | Radosław Botev | CC BY 3.0 PL |
+| [Rue Monot](https://commons.wikimedia.org/wiki/File:Rue_Monot.jpg) | Evilscaught | CC BY-SA 4.0 |
+| [Beirut Corniche from University Tower](https://commons.wikimedia.org/wiki/File:Beirut_Corniche_from_University_Tower.jpg) | Wusel007 | CC BY-SA 3.0 |
+| [Beirut Central District, Beirut, Lebanon - panoramio](https://commons.wikimedia.org/wiki/File:Beirut_Central_District,_Beirut,_Lebanon_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [BeirutCentralDistrict](https://commons.wikimedia.org/wiki/File:BeirutCentralDistrict.jpg) | Lebnen18 | CC BY-SA 3.0 |
+| [Beirut skyline](https://commons.wikimedia.org/wiki/File:Beirut_skyline.jpg) | Laura C Ellis | CC BY-SA 4.0 |
+| [Beirut skylines 2019](https://commons.wikimedia.org/wiki/File:Beirut_skylines_2019.jpg) | Laura C Ellis | CC BY-SA 4.0 |
+| [Lebanon- Dbayeh Highway](https://commons.wikimedia.org/wiki/File:Lebanon-_Dbayeh_Highway.jpg) | Serge Melki | CC BY 2.0 |
+| [The city of Byblos, Lebanon](https://commons.wikimedia.org/wiki/File:The_city_of_Byblos,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Byblos historic quarter, Byblos, Lebanon](https://commons.wikimedia.org/wiki/File:Byblos_historic_quarter,_Byblos,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
+| [Byblos - Jbeil City (2308966694)](https://commons.wikimedia.org/wiki/File:Byblos_-_Jbeil_City_(2308966694).jpg) | Serge Melki | CC BY 2.0 |
+| [Mina-Tripoli-1](https://commons.wikimedia.org/wiki/File:Mina-Tripoli-1.jpg) | Dina El Ahdab | CC BY-SA 4.0 |
+| [ساحة بلدية حلبا](https://commons.wikimedia.org/wiki/File:%D8%B3%D8%A7%D8%AD%D8%A9_%D8%A8%D9%84%D8%AF%D9%8A%D8%A9_%D8%AD%D9%84%D8%A8%D8%A7.jpg) | Amjliban | CC BY-SA 4.0 |
+| [وسط حلبا](https://commons.wikimedia.org/wiki/File:%D9%88%D8%B3%D8%B7_%D8%AD%D9%84%D8%A8%D8%A7.jpg) | جمهورية حلبا | CC BY-SA 4.0 |
+| [Zahlé pano](https://commons.wikimedia.org/wiki/File:Zahl%C3%A9_pano.jpg) | Eusebius | CC BY 3.0 |
+| [SidonNewCity](https://commons.wikimedia.org/wiki/File:SidonNewCity.jpg) | Heretiq | CC BY-SA 2.5 |
+| [Old city, Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Old_city,_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
 | [3 elevators](https://commons.wikimedia.org/wiki/File:3_elevators.jpg) | Atomicdragon136 | CC BY 3.0 |
 | [Entrance with ramp (5866504842)](https://commons.wikimedia.org/wiki/File:Entrance_with_ramp_(5866504842).jpg) | SuSanA Secretariat | CC BY 2.0 |
 | [Accessible entrance at UCMS](https://commons.wikimedia.org/wiki/File:Accessible_entrance_at_UCMS.jpg) | Dr Satendra | CC BY-SA 3.0 |
@@ -275,6 +300,60 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [Handrails in the ramp for wheelchair users](https://commons.wikimedia.org/wiki/File:Handrails_in_the_ramp_for_wheelchair_users.jpg) | Tarasna0922 | CC BY-SA 4.0 |
 | [Accessible toilet Brisbane Airport Domestic Terminal IMGP5513](https://commons.wikimedia.org/wiki/File:Accessible_toilet_Brisbane_Airport_Domestic_Terminal_IMGP5513.jpg) | John Robert McPherson | CC BY-SA 4.0 |
 | [Steps, handrail and ramp, Gate No.2 - geograph.org.uk - 2613734](https://commons.wikimedia.org/wiki/File:Steps,_handrail_and_ramp,_Gate_No.2_-_geograph.org.uk_-_2613734.jpg) | Robin Stott | CC BY-SA 2.0 |
+| [Hakata Bus Terminal the interior of the elevator passing through the 5th floor Hakata-eki-chūōgai Hakata-ku Fukuoka 20240806](https://commons.wikimedia.org/wiki/File:Hakata_Bus_Terminal_the_interior_of_the_elevator_passing_through_the_5th_floor_Hakata-eki-ch%C5%AB%C5%8Dgai_Hakata-ku_Fukuoka_20240806.jpg) | Hirho | CC BY-SA 4.0 |
+| [Lift doors at Tyntesfield](https://commons.wikimedia.org/wiki/File:Lift_doors_at_Tyntesfield.jpg) | Rodw | CC BY-SA 4.0 |
+| [Accessible toilet Cherry Street Sports Club 68 Cherry St Ballina NSW L1010056](https://commons.wikimedia.org/wiki/File:Accessible_toilet_Cherry_Street_Sports_Club_68_Cherry_St_Ballina_NSW_L1010056.jpg) | John Robert McPherson | CC BY-SA 4.0 |
+| [Blue Disc Parking Area Markings Blue Paint](https://commons.wikimedia.org/wiki/File:Blue_Disc_Parking_Area_Markings_Blue_Paint.JPG) | Spsmiler | CC0 |
+| [Interior of Panoramic VEK Elevator in Beton Brut Hotel (Anapa)](https://commons.wikimedia.org/wiki/File:Interior_of_Panoramic_VEK_Elevator_in_Beton_Brut_Hotel_(Anapa).jpg) | ООО ТД "Век" | CC BY-SA 4.0 |
+| [Fukuoka Airport Domestic Passenger Terminal Bldg The elevators in the atrium Hakata-ku Fukuoka 20250304 152738](https://commons.wikimedia.org/wiki/File:Fukuoka_Airport_Domestic_Passenger_Terminal_Bldg_The_elevators_in_the_atrium_Hakata-ku_Fukuoka_20250304_152738.jpg) | Hirho | CC BY 4.0 |
+| [A closer view of the accessible toilet on the VIA Rail](https://commons.wikimedia.org/wiki/File:A_closer_view_of_the_accessible_toilet_on_the_VIA_Rail.jpg) | Gogerr | CC BY-SA 4.0 |
+| [Red lift doors on platform 1, Bridgend railway station - geograph.org.uk - 6707903](https://commons.wikimedia.org/wiki/File:Red_lift_doors_on_platform_1,_Bridgend_railway_station_-_geograph.org.uk_-_6707903.jpg) | Jaggery | CC BY-SA 2.0 |
+| [Accessible toilet Platforms 2&3 Rocklea Railway Station, Brooke Street, Rocklea P1120352](https://commons.wikimedia.org/wiki/File:Accessible_toilet_Platforms_2%263_Rocklea_Railway_Station,_Brooke_Street,_Rocklea_P1120352.jpg) | John Robert McPherson | CC0 |
+| [Elevators at point A2 - NÄL hospital 1](https://commons.wikimedia.org/wiki/File:Elevators_at_point_A2_-_N%C3%84L_hospital_1.jpg) | W.carter | CC0 |
+| [RDW disabled parking sign, Veendam (2020) 01](https://commons.wikimedia.org/wiki/File:RDW_disabled_parking_sign,_Veendam_(2020)_01.jpg) | Donald Trung Quoc Don | CC BY-SA 4.0 |
+| [Dover elevator passenger controls (3 floors)](https://commons.wikimedia.org/wiki/File:Dover_elevator_passenger_controls_(3_floors).jpg) | unknown | Public domain |
+| [Lift doors, Port Talbot Parkway station - geograph.org.uk - 7728730](https://commons.wikimedia.org/wiki/File:Lift_doors,_Port_Talbot_Parkway_station_-_geograph.org.uk_-_7728730.jpg) | Jaggery | CC BY-SA 2.0 |
+| [Wheelchair ramp up to the cathedral entrance, Coventry – start of the handrail - geograph.org.uk - 5028944](https://commons.wikimedia.org/wiki/File:Wheelchair_ramp_up_to_the_cathedral_entrance,_Coventry_%E2%80%93_start_of_the_handrail_-_geograph.org.uk_-_5028944.jpg) | Robin Stott | CC BY-SA 2.0 |
+| [French Disabled Parking Space Sign](https://commons.wikimedia.org/wiki/File:French_Disabled_Parking_Space_Sign.jpg) | Seanbhean-chríonna-caite | CC0 |
+| [Provisional disabled parking sign, Molenlaankwartier, Rotterdam (2021) 02](https://commons.wikimedia.org/wiki/File:Provisional_disabled_parking_sign,_Molenlaankwartier,_Rotterdam_(2021)_02.jpg) | Donald Trung Quoc Don | CC BY-SA 4.0 |
+| [Accessible outdoor public toilet Botanic Gardens Aarhus](https://commons.wikimedia.org/wiki/File:Accessible_outdoor_public_toilet_Botanic_Gardens_Aarhus.jpg) | Ciara Ní Riain | CC BY-SA 4.0 |
+| [Lift doors - geograph.org.uk - 7367152](https://commons.wikimedia.org/wiki/File:Lift_doors_-_geograph.org.uk_-_7367152.jpg) | Bob Harvey | CC BY-SA 2.0 |
+| [Michelangelostraat disabled parking sign, Prinsenland, Rotterdam (2022) 01](https://commons.wikimedia.org/wiki/File:Michelangelostraat_disabled_parking_sign,_Prinsenland,_Rotterdam_(2022)_01.jpg) | Donald Trung Quoc Don | CC BY-SA 4.0 |
+| [Accessible toilet in CR400BF-0503 (20170307102356)](https://commons.wikimedia.org/wiki/File:Accessible_toilet_in_CR400BF-0503_(20170307102356).jpg) | N509FZ | CC BY-SA 4.0 |
+| [Elevator Call Button](https://commons.wikimedia.org/wiki/File:Elevator_Call_Button.jpg) | Dieselducy | CC BY-SA 3.0 |
+| [Chrysler Central Elevator 2019-10-03 20-18](https://commons.wikimedia.org/wiki/File:Chrysler_Central_Elevator_2019-10-03_20-18.jpg) | Axel Tschentscher | CC BY-SA 4.0 |
+| [Elevator at Vestfold Hospital 2](https://commons.wikimedia.org/wiki/File:Elevator_at_Vestfold_Hospital_2.jpg) | Peter Fiskerstrand | CC BY-SA 4.0 |
+| [Disabled ramp to Caernarfon Castle - geograph.org.uk - 1280693](https://commons.wikimedia.org/wiki/File:Disabled_ramp_to_Caernarfon_Castle_-_geograph.org.uk_-_1280693.jpg) | Eirian Evans | CC BY-SA 2.0 |
+
+The equipment photos of the AccessFix listings also come from Wikimedia Commons:
+
+| Photo | Author | License |
+|---|---|---|
+| [Station worker with portable wheelchair ramp and wheelchair user - Tokyo - Akihabara stn Sep 20 2019 02-13PM](https://commons.wikimedia.org/wiki/File:Station_worker_with_portable_wheelchair_ramp_and_wheelchair_user_-_Tokyo_-_Akihabara_stn_Sep_20_2019_02-13PM.jpeg) | Nesnad | CC BY 4.0 |
+| [Modular Wheelchair Ramp - Upside Innovations](https://commons.wikimedia.org/wiki/File:Modular_Wheelchair_Ramp_-_Upside_Innovations.jpg) | RampExpert | CC BY-SA 4.0 |
+| [Temporary access ramp, Brisbane 01](https://commons.wikimedia.org/wiki/File:Temporary_access_ramp,_Brisbane_01.jpg) | John Robert McPherson | CC0 |
+| [Medline F-1 manual wheelchair 1](https://commons.wikimedia.org/wiki/File:Medline_F-1_manual_wheelchair_1.JPG) | Stephen B Calvert | CC BY-SA 4.0 |
+| [Blue folding lightweight wheelchair](https://commons.wikimedia.org/wiki/File:Blue_folding_lightweight_wheelchair.jpg) | Arnold C | CC BY 2.0 |
+| [GUS7910](https://commons.wikimedia.org/wiki/File:GUS7910.jpg) | ElizavetaKot | CC BY-SA 4.0 |
+| [Pride Jazzy Select power chair 001](https://commons.wikimedia.org/wiki/File:Pride_Jazzy_Select_power_chair_001.JPG) | Stephen B Calvert | CC BY-SA 3.0 |
+| [Rollator 2](https://commons.wikimedia.org/wiki/File:Rollator_2.jpg) | Bestrossi | Public domain |
+| [Walker. frame](https://commons.wikimedia.org/wiki/File:Walker._frame.jpg) | High Plains Drifter (English Wikipedia) | Public domain |
+| [Foldable ramp Manchester Piccadilly Station](https://commons.wikimedia.org/wiki/File:Foldable_ramp_Manchester_Piccadilly_Station.jpg) | Auledas | CC BY-SA 4.0 |
+| [Rollator-carbon](https://commons.wikimedia.org/wiki/File:Rollator-carbon.jpg) | Oksdfjkllrwe | CC BY-SA 4.0 |
+| [Wheelchair and temporary train ramp in Tokyo 2019 5 25](https://commons.wikimedia.org/wiki/File:Wheelchair_and_temporary_train_ramp_in_Tokyo_2019_5_25.jpeg) | Nesnad | CC BY 4.0 |
+| [Stryker Prime TC wheelchair](https://commons.wikimedia.org/wiki/File:Stryker_Prime_TC_wheelchair.jpg) | SuddenFrost | CC BY-SA 4.0 |
+| [Rear ramp load of wheelchair, QDN Office, Hamilton Place Bowen Hills IMGP8391](https://commons.wikimedia.org/wiki/File:Rear_ramp_load_of_wheelchair,_QDN_Office,_Hamilton_Place_Bowen_Hills_IMGP8391.jpg) | John Robert McPherson | CC BY-SA 4.0 |
+| [SOLD Shower chair, bath transfer bench, toilet riser (4861775529)](https://commons.wikimedia.org/wiki/File:SOLD_Shower_chair,_bath_transfer_bench,_toilet_riser_(4861775529).jpg) | The Living Room | CC BY 2.0 |
+| [Grab bar](https://commons.wikimedia.org/wiki/File:Grab_bar.jpg) | Gramody | CC BY-SA 2.0 |
+| [My rollator](https://commons.wikimedia.org/wiki/File:My_rollator.jpg) | Barbara Hobbs | CC BY 2.0 |
+| [Axillary Crutches](https://commons.wikimedia.org/wiki/File:Axillary_Crutches.jpg) | Jessica Fisher | CC BY-SA 4.0 |
+| [Transfer bench](https://commons.wikimedia.org/wiki/File:Transfer_bench.jpg) | Roger Mommaerts | CC BY-SA 2.0 |
+| [Tag A5 Treppensteiger](https://commons.wikimedia.org/wiki/File:Tag_A5_Treppensteiger.jpg) | Klaus-Dieter Keller | CC BY-SA 3.0 |
+| [Walker extended](https://commons.wikimedia.org/wiki/File:Walker_extended.JPG) | BrokenSphere | CC BY-SA 3.0 |
+| [Age-friendly tools 3](https://commons.wikimedia.org/wiki/File:Age-friendly_tools_3.jpg) | Ashashyou | CC BY-SA 3.0 |
+| [UNAwheel Mini Active wheelchair power add-on in Los Angeles](https://commons.wikimedia.org/wiki/File:UNAwheel_Mini_Active_wheelchair_power_add-on_in_Los_Angeles.jpg) | Nick Yudin | CC BY-SA 4.0 |
+| [Winnie Walker EXP Steel Rollator 002 CR](https://commons.wikimedia.org/wiki/File:Winnie_Walker_EXP_Steel_Rollator_002_CR.JPG) | Stephen B Calvert | CC BY-SA 3.0 |
+| [Escape-Chair on stair case](https://commons.wikimedia.org/wiki/File:Escape-Chair_on_stair_case.jpg) | Joep Cuijpers | CC BY-SA 4.0 |
 
 ## Deployment
 
@@ -321,6 +400,7 @@ All routes start with `/api`. 🔒 = needs a token (401 without one). The role i
 | GET | `/places/:id/reviews` | anyone | reviews of a place |
 | POST | `/places/:id/reviews` | 🔒 user | one review per user and place |
 | PATCH / DELETE | `/reviews/:id` | 🔒 author | edit / delete my review |
+| PUT / DELETE | `/reviews/:id/reply` | 🔒 venue, owner of the place | write or change / delete my reply to a review |
 | GET | `/listings?type=&mode=&area=` | anyone | search listings |
 | GET | `/listings/mine` | 🔒 supplier | my listings |
 | GET | `/listings/:id` | anyone | one listing with the supplier's contact |
@@ -335,8 +415,8 @@ All routes start with `/api`. 🔒 = needs a token (401 without one). The role i
 ## Tests
 
 ```bash
-cd server && npm test   # API: 401, 400, 404, helmet headers (no database needed)
-cd client && npm test   # components: PlaceForm, Stars
+cd server && npm test   # API: 401, 400, 404, helmet headers, reply needs a token (no database needed)
+cd client && npm test   # components: PlaceForm, Stars; distances for Near me
 ```
 
 Both use Vitest. The server tests import `app.js` with supertest, so they need no port and no database.
@@ -356,6 +436,6 @@ Passwords are hashed with bcrypt, every private route needs a token, and every e
 | `DB connection failed` … timeout | allow your IP in Atlas → Network Access |
 | `Missing env var: …` when the server starts | that variable is missing in `server/.env` |
 | `429 Too many attempts` at login | 5 tries per 15 minutes; wait, or restart the server while developing |
-| CORS error in the browser console | `CLIENT_ORIGIN` must be exactly `http://localhost:5173`, no `/` at the end |
+| CORS error in the browser console | `CLIENT_ORIGIN` must be exactly the address of the client, no `/` at the end |
 | Requests go to `undefined/api/...` | `VITE_API_URL` is missing in `client/.env`, then restart `npm run dev` |
 | "Address not found on the map" | write a fuller address, e.g. `Rue Monot, Beirut` |

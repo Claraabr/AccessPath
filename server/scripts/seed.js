@@ -1,8 +1,8 @@
 // Demo data, so the map and the lists are not empty during the demo:
-// 47 places in 22 towns of Lebanon (each one with its own venue account, a cover photo
-// and a photo of one of its criteria),
-// 8 visitors who leave reviews (2 to 4 per place), 3 equipment suppliers with 14 listings,
-// and a few requests.
+// 71 places in 24 towns of Lebanon (each one with its own venue account, a cover photo
+// and a photo of one of its criteria), so every category has places with each criterion,
+// 8 visitors who leave reviews (2 to 4 per place, some answered by the owner), 6 equipment suppliers with 25 listings
+// from Tripoli to Saida (each with a photo and its position, for "Near me"), and 10 requests.
 // The business names are made up on purpose (no fake reviews about real businesses),
 // but the towns and the street photos are real.
 // Photos: Wikimedia Commons, free licenses, credits in the README. No photo is used twice.
@@ -50,6 +50,44 @@ const PLACES = [
   ['Achrafieh Medical Center', 'hospital', 'Achrafieh, Beirut', 33.8835, 35.5235,
     [true, true, true, true], 'Achrafieh.jpg',
     'elevator', 'Interior of a vintage Montgomery elevator with a modified controller.jpg'],
+  ['Zaitunay Bay Seafood', 'restaurant', 'Zaitunay Bay, Beirut', 33.9015, 35.4955,
+    [true, true, true, true], 'Zaitunay Bay (1).jpg', 'elevator',
+    'Hakata Bus Terminal the interior of the elevator passing through the 5th floor Hakata-eki-chūōgai Hakata-ku Fukuoka 20240806.jpg'],
+  ['Saifi Corner Cafe', 'cafe', 'Saifi Village, Beirut', 33.8955, 35.51,
+    [true, true, true, false], 'Beirut 002.jpg', 'elevator', 'Lift doors at Tyntesfield.jpg'],
+  ['Badaro Kitchen', 'restaurant', 'Badaro Street, Beirut', 33.8745, 35.515,
+    [true, true, true, false], 'Badaro nightlife.jpeg', 'toilets',
+    'Accessible toilet Cherry Street Sports Club 68 Cherry St Ballina NSW L1010056.jpg'],
+  ['Corniche Sunset Cafe', 'cafe', 'Corniche, Ras Beirut', 33.8995, 35.472,
+    [true, true, true, true], 'Corniche Beirut at sunset, seaside promenade, Beirut, Lebanon.jpg', 'parking',
+    'Blue Disc Parking Area Markings Blue Paint.JPG'],
+  ['Manara Rooftop Cafe', 'cafe', 'Manara, Beirut', 33.901, 35.469,
+    [true, true, true, false], 'The Corniche Beirut, Beirut, Lebanon.jpg', 'elevator',
+    'Interior of Panoramic VEK Elevator in Beton Brut Hotel (Anapa).jpg'],
+  ['Downtown City Market', 'supermarket', 'Downtown, Beirut', 33.896, 35.505,
+    [true, true, true, true], 'Downtown Beirut.jpg', 'elevator',
+    'Fukuoka Airport Domestic Passenger Terminal Bldg The elevators in the atrium Hakata-ku Fukuoka 20250304 152738.jpg'],
+  ['Saifi Concept Store', 'shop', 'Saifi, Beirut', 33.895, 35.5085,
+    [true, true, true, true], 'Passing Beirut.jpg', 'toilets', 'A closer view of the accessible toilet on the VIA Rail.jpg'],
+  ['Vasken Electronics', 'shop', 'Bliss Street, Ras Beirut', 33.8975, 35.479,
+    [true, true, false, true], 'Ras Beirut District (3).jpg', 'elevator',
+    'Red lift doors on platform 1, Bridgend railway station - geograph.org.uk - 6707903.jpg'],
+  ['Monot Pharmacy', 'pharmacy', 'Rue Monot, Achrafieh, Beirut', 33.8905, 35.513,
+    [true, true, true, true], 'Rue Monot.jpg', 'toilets',
+    'Accessible toilet Platforms 2&3 Rocklea Railway Station, Brooke Street, Rocklea P1120352.jpg'],
+  ['Corniche Rehabilitation Hospital', 'hospital', 'Corniche, Ras Beirut', 33.8985, 35.476,
+    [true, true, true, true], 'Beirut Corniche from University Tower.jpg', 'elevator', 'Elevators at point A2 - NÄL hospital 1.jpg'],
+  ['Waterfront Bank', 'bank', 'Beirut Central District', 33.9, 35.501,
+    [true, true, false, true], 'Beirut Central District, Beirut, Lebanon - panoramio.jpg', 'parking',
+    'RDW disabled parking sign, Veendam (2020) 01.jpg'],
+  ['Beirut Municipal Service Center', 'government', 'Downtown, Beirut', 33.894, 35.503,
+    [true, true, true, false], 'BeirutCentralDistrict.jpg', 'elevator', 'Dover elevator passenger controls (3 floors).jpg'],
+  ['Beirut Technical Institute', 'university', 'Achrafieh, Beirut', 33.8855, 35.5215,
+    [true, true, true, true], 'Beirut skyline.jpg', 'elevator',
+    'Lift doors, Port Talbot Parkway station - geograph.org.uk - 7728730.jpg'],
+  ['Achrafieh Public Library', 'other', 'Sassine, Achrafieh, Beirut', 33.8875, 35.5225,
+    [true, true, true, true], 'Beirut skylines 2019.jpg', 'stepFree',
+    'Wheelchair ramp up to the cathedral entrance, Coventry – start of the handrail - geograph.org.uk - 5028944.jpg'],
 
   // Bourj Hammoud
   ["Vasken's Bakery", 'restaurant', 'Armenia Street, Bourj Hammoud', 33.8925, 35.5425,
@@ -86,6 +124,8 @@ const PLACES = [
     [true, true, true, false], 'Jounieh 2.jpg', 'toilets', 'Disabled accessible toilet Haringey.jpg'],
   ['Faraya Snow Lodge', 'hotel', 'Main road, Faraya', 33.979, 35.8195,
     [true, false, true, true], 'The village of faraya.jpg', 'parking', 'Handicap Parking Space (32283094777).jpg'],
+  ['Dbayeh Hypermarket', 'supermarket', 'Highway, Dbayeh', 33.938, 35.588,
+    [true, true, true, true], 'Lebanon- Dbayeh Highway.jpg', 'parking', 'French Disabled Parking Space Sign.jpg'],
 
   // North
   ['Sea Gate Grill', 'restaurant', 'Seaside, Byblos', 34.121, 35.646,
@@ -116,6 +156,21 @@ const PLACES = [
   ['Bsharri Square Cafe', 'cafe', 'Main square, Bsharri', 34.251, 36.011,
     [true, false, false, false], 'Bsharri church and main square with a statue of angel, Bsharri, Lebanon.jpg',
     'stepFree', 'Hull Maritime Museum New Wheelchair Ramp, Kingston upon Hull Jun24.jpg'],
+  ['Byblos Garden Cafe', 'cafe', 'Near the old town, Byblos', 34.119, 35.646,
+    [true, false, true, true], 'The city of Byblos, Lebanon.jpg', 'parking',
+    'Provisional disabled parking sign, Molenlaankwartier, Rotterdam (2021) 02.jpg'],
+  ['Byblos Arcade Gift Shop', 'shop', 'Old souk, Byblos', 34.1212, 35.6472,
+    [true, false, true, false], 'Byblos historic quarter, Byblos, Lebanon.jpg', 'toilets',
+    'Accessible outdoor public toilet Botanic Gardens Aarhus.jpg'],
+  ['Vasken Supermarket', 'supermarket', 'Main road, Jbeil', 34.123, 35.652,
+    [true, true, true, true], 'Byblos - Jbeil City (2308966694).jpg', 'elevator', 'Lift doors - geograph.org.uk - 7367152.jpg'],
+  ['El Mina Seaside Restaurant', 'restaurant', 'Seafront, El Mina, Tripoli', 34.45, 35.82,
+    [true, true, true, true], 'Mina-Tripoli-1.jpg', 'parking',
+    'Michelangelostraat disabled parking sign, Prinsenland, Rotterdam (2022) 01.jpg'],
+  ['Halba Municipality', 'government', 'Municipality square, Halba', 34.543, 36.08,
+    [true, false, true, true], 'ساحة بلدية حلبا.jpg', 'toilets', 'Accessible toilet in CR400BF-0503 (20170307102356).jpg'],
+  ['Halba Central Pharmacy', 'pharmacy', 'Town center, Halba', 34.544, 36.079,
+    [true, true, false, true], 'وسط حلبا.jpg', 'elevator', 'Elevator Call Button.jpg'],
 
   // Bekaa
   ['Berdawni River Terrace', 'restaurant', 'Berdawni, Zahle', 33.853, 35.902,
@@ -130,6 +185,8 @@ const PLACES = [
     'parking', 'Handicapped parking space outside of the Combi, Aschendorf (2017).jpg'],
   ['Rashaya Old Souk Cafe', 'cafe', 'Old souk, Rashaya', 33.4985, 35.843,
     [false, false, true, false], 'Rashaya.jpg', 'toilets', 'Toilet for disabled people with wheelchairs.jpg'],
+  ['Zahle Plaza Bank', 'bank', 'Main street, Zahle', 33.848, 35.904,
+    [true, true, true, true], 'Zahlé pano.jpg', 'elevator', 'Chrysler Central Elevator 2019-10-03 20-18.jpg'],
 
   // South
   ['Old Souk Pharmacy', 'pharmacy', 'Old city, Saida', 33.563, 35.37,
@@ -150,6 +207,11 @@ const PLACES = [
   ['Al Mina Ruins Cafe', 'cafe', 'Al Mina, Tyre', 33.268, 35.1965,
     [true, false, false, false], 'Remains of ancient columns at Al Mina excavation site, Tyre, Lebanon.jpg',
     'stepFree', 'Steps, handrail and ramp, Gate No.2 - geograph.org.uk - 2613734.jpg'],
+  ['Saida Seafront Hospital', 'hospital', 'New city, Saida', 33.56, 35.38,
+    [true, true, true, true], 'SidonNewCity.jpg', 'elevator', 'Elevator at Vestfold Hospital 2.jpg'],
+  ['Old Saida Arches Restaurant', 'restaurant', 'Old city, Saida', 33.5625, 35.372,
+    [true, false, true, false], 'Old city, Sidon, Lebanon.jpg', 'stepFree',
+    'Disabled ramp to Caernarfon Castle - geograph.org.uk - 1280693.jpg'],
 ];
 
 const commonsUrl = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=800`;
@@ -344,25 +406,124 @@ const REVIEWS = [
   ['Al Mina Ruins Cafe', 'Rana', 4, 'Ramp from the street and a view of the ruins.'],
   ['Al Mina Ruins Cafe', 'Karim', 4, 'Nice stop after the visit. Parking is in the street.'],
   ['Al Mina Ruins Cafe', 'Nour', 3, 'Small place, no toilet for customers.'],
+
+  ['Zaitunay Bay Seafood', 'Rana', 5, 'A glass elevator from the marina, a ramp at the door and an accessible toilet. The fish was perfect.'],
+  ['Zaitunay Bay Seafood', 'Karim', 4, 'Reserved parking in the marina garage, then the elevator takes you up.'],
+  ['Zaitunay Bay Seafood', 'Lara', 5, 'Lots of space between the tables for the stroller, and a view of the boats.'],
+
+  ['Saifi Corner Cafe', 'Maya', 5, 'The elevator goes to the room upstairs, so I am not stuck on the ground floor anymore.'],
+  ['Saifi Corner Cafe', 'Elie', 4, 'No step at the door. Parking in Saifi is paid and a bit far.'],
+
+  ['Badaro Kitchen', 'Hadi', 4, 'Elevator to the terrace and a large accessible toilet. Busy on weekends.'],
+  ['Badaro Kitchen', 'Nour', 4, 'We booked a table on the ground floor, easy with the stroller.'],
+  ['Badaro Kitchen', 'Marc', 5, 'My father loved it. The staff knew how to help without making a fuss.'],
+
+  ['Corniche Sunset Cafe', 'Rana', 5, 'Reserved parking at the door, a flat entrance and the sea in front.'],
+  ['Corniche Sunset Cafe', 'Elie', 5, 'The terrace is level with the Corniche, my grandmother walked in with her walker.'],
+  ['Corniche Sunset Cafe', 'Karim', 4, 'The toilet is accessible, but it is far at the back.'],
+
+  ['Manara Rooftop Cafe', 'Rana', 5, 'An elevator straight up to the rooftop. Best sunset in Beirut.'],
+  ['Manara Rooftop Cafe', 'Nour', 4, 'No step anywhere. Parking is in the street.'],
+
+  ['Downtown City Market', 'Nour', 5, 'A big elevator from the parking, wide aisles and a baby changing room.'],
+  ['Downtown City Market', 'Hadi', 4, 'Everything is accessible, some shelves are a bit high for me.'],
+  ['Downtown City Market', 'Maya', 5, 'One cashier has a low counter, rare in Beirut.'],
+
+  ['Saifi Concept Store', 'Lara', 5, 'Flat entrance, an elevator to the kids floor and a toilet with a changing table.'],
+  ['Saifi Concept Store', 'Nour', 4, 'Nice design shop with wide aisles.'],
+
+  ['Vasken Electronics', 'Hadi', 5, 'Vasken took the time to set up my new phone with me. Elevator to the second floor.'],
+  ['Vasken Electronics', 'Elie', 4, 'Parking right in front, and they carried the TV to the car.'],
+
+  ['Monot Pharmacy', 'Karim', 4, 'Ramp at the door and a bench to sit while you wait.'],
+  ['Monot Pharmacy', 'Lara', 5, 'Open late and easy with the stroller.'],
+
+  ['Corniche Rehabilitation Hospital', 'Hadi', 5, 'Made for wheelchairs: wide doors, elevators everywhere, adapted toilets.'],
+  ['Corniche Rehabilitation Hospital', 'Marc', 5, 'My father did his rehabilitation here. Reserved parking right at the entrance.'],
+  ['Corniche Rehabilitation Hospital', 'Elie', 4, 'Very accessible, the waiting room gets crowded.'],
+
+  ['Waterfront Bank', 'Maya', 4, 'Automatic doors, an elevator, and the ATM is at wheelchair height.'],
+  ['Waterfront Bank', 'Marc', 3, 'No toilet for clients, otherwise fine.'],
+
+  ['Beirut Municipal Service Center', 'Rana', 4, 'A ramp and an elevator to the counters upstairs. Parking is the hard part.'],
+  ['Beirut Municipal Service Center', 'Karim', 3, 'The building is accessible, but the line was long.'],
+
+  ['Beirut Technical Institute', 'Maya', 5, 'Every building is connected with elevators and ramps.'],
+  ['Beirut Technical Institute', 'Rana', 4, 'Accessible toilets on each floor. The campus is on a slope though.'],
+
+  ['Achrafieh Public Library', 'Lara', 5, 'Ramp at the door, an elevator to every floor and a kids corner.'],
+  ['Achrafieh Public Library', 'Marc', 4, 'Quiet and easy to move around with a wheelchair.'],
+  ['Achrafieh Public Library', 'Rana', 5, 'The shelves on the ground floor are low enough for me.'],
+
+  ['Dbayeh Hypermarket', 'Marc', 5, 'Reserved parking near the entrance, and wheelchairs to borrow inside.'],
+  ['Dbayeh Hypermarket', 'Lara', 5, 'Huge aisles, perfect with the double stroller.'],
+  ['Dbayeh Hypermarket', 'Karim', 4, 'Very busy on Saturdays, go in the morning.'],
+
+  ['Byblos Garden Cafe', 'Elie', 4, 'Flat garden, accessible toilet and parking. Shade everywhere.'],
+  ['Byblos Garden Cafe', 'Hadi', 4, 'Easy to get in, the gravel path is a bit bumpy.'],
+
+  ['Byblos Arcade Gift Shop', 'Maya', 4, 'Unlike the rest of the souk, this shop has no step and even a toilet.'],
+  ['Byblos Arcade Gift Shop', 'Marc', 4, 'Wide door, my father could get in with his wheelchair.'],
+
+  ['Vasken Supermarket', 'Lara', 5, 'Vasken opened a big supermarket in Jbeil: elevator from the parking and wide aisles.'],
+  ['Vasken Supermarket', 'Karim', 5, 'Everything is accessible, and the staff help you to the car.'],
+  ['Vasken Supermarket', 'Rana', 4, 'Good, but the bakery corner gets crowded.'],
+
+  ['El Mina Seaside Restaurant', 'Nour', 5, 'Parking next to the door and a ramp to the sea terrace.'],
+  ['El Mina Seaside Restaurant', 'Hadi', 5, 'Fresh fish and a real accessible toilet.'],
+  ['El Mina Seaside Restaurant', 'Elie', 4, 'A bit noisy, but very easy for my grandmother.'],
+
+  ['Halba Municipality', 'Karim', 4, 'Ramp at the entrance and the counters are on the ground floor.'],
+  ['Halba Municipality', 'Maya', 3, 'Accessible toilet, but no elevator for the offices upstairs.'],
+
+  ['Halba Central Pharmacy', 'Marc', 4, 'Elevator to the floor with the medical supplies.'],
+  ['Halba Central Pharmacy', 'Lara', 4, 'Parking in front and quick service.'],
+
+  ['Zahle Plaza Bank', 'Maya', 4, 'Elevator, parking and an accessible toilet.'],
+  ['Zahle Plaza Bank', 'Karim', 4, 'An employee came out to the car to help me.'],
+
+  ['Saida Seafront Hospital', 'Rana', 5, 'Everything is accessible, even the parking garage.'],
+  ['Saida Seafront Hospital', 'Nour', 4, 'Clean accessible toilets and big elevators.'],
+
+  ['Old Saida Arches Restaurant', 'Hadi', 4, 'A gentle ramp under the arches and an accessible toilet, in the old city!'],
+  ['Old Saida Arches Restaurant', 'Elie', 4, 'The alleys to get there are narrow, but the restaurant itself is easy.'],
 ];
 
-// Several of each type, in and around Beirut, so every search gives results
-const SUPPLIERS = ['Georges Medical Supply', 'Mobility Lebanon', 'Cedar Rehab Equipment'];
+// Several of each type all over Lebanon, so every search and "Near me" gives results.
+// Each listing: supplier, title, type, rent or sale, price, area, lat, lng, photo
+const SUPPLIERS = [
+  'Georges Medical Supply', 'Mobility Lebanon', 'Cedar Rehab Equipment',
+  'North Mobility Care', 'South Rehab Supply', 'Bekaa Medical Equipment',
+];
 const LISTINGS = [
-  [0, 'Portable ramp 2 m', 'ramp', 'rent', 25, 'Achrafieh, Beirut'],
-  [0, 'Modular ramp 4 m', 'ramp', 'rent', 40, 'Achrafieh, Beirut'],
-  [0, 'Threshold ramp for one step', 'ramp', 'sale', 35, 'Achrafieh, Beirut'],
-  [0, 'Folding wheelchair', 'wheelchair', 'sale', 180, 'Achrafieh, Beirut'],
-  [0, 'Wheelchair for a week', 'wheelchair', 'rent', 15, 'Achrafieh, Beirut'],
-  [1, 'Stair climber for apartments', 'stair-climber', 'rent', 60, 'Hamra, Beirut'],
-  [1, 'Electric wheelchair', 'wheelchair', 'rent', 45, 'Hamra, Beirut'],
-  [1, 'Walker with seat', 'walker', 'sale', 45, 'Hamra, Beirut'],
-  [1, 'Light walker', 'walker', 'rent', 8, 'Hamra, Beirut'],
-  [1, 'Aluminium ramp 3 m', 'ramp', 'sale', 220, 'Hamra, Beirut'],
-  [2, 'Folding ramp 1.5 m', 'ramp', 'rent', 20, 'Jounieh'],
-  [2, 'Transport wheelchair', 'wheelchair', 'sale', 150, 'Jounieh'],
-  [2, 'Shower chair', 'other', 'sale', 30, 'Jdeideh'],
-  [2, 'Portable stair handrail', 'other', 'rent', 10, 'Jdeideh'],
+  [0, 'Portable ramp 2 m', 'ramp', 'rent', 25, 'Achrafieh, Beirut', 33.8886, 35.5195,
+    'Station worker with portable wheelchair ramp and wheelchair user - Tokyo - Akihabara stn Sep 20 2019 02-13PM.jpeg'],
+  [0, 'Modular ramp 4 m', 'ramp', 'rent', 40, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Modular Wheelchair Ramp - Upside Innovations.jpg'],
+  [0, 'Threshold ramp for one step', 'ramp', 'sale', 35, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Temporary access ramp, Brisbane 01.jpg'],
+  [0, 'Folding wheelchair', 'wheelchair', 'sale', 180, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Medline F-1 manual wheelchair 1.JPG'],
+  [0, 'Wheelchair for a week', 'wheelchair', 'rent', 15, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Blue folding lightweight wheelchair.jpg'],
+  [1, 'Stair climber for apartments', 'stair-climber', 'rent', 60, 'Hamra, Beirut', 33.8963, 35.4818, 'GUS7910.jpg'],
+  [1, 'Electric wheelchair', 'wheelchair', 'rent', 45, 'Hamra, Beirut', 33.8963, 35.4818, 'Pride Jazzy Select power chair 001.JPG'],
+  [1, 'Walker with seat', 'walker', 'sale', 45, 'Hamra, Beirut', 33.8963, 35.4818, 'Rollator 2.jpg'],
+  [1, 'Light walker', 'walker', 'rent', 8, 'Hamra, Beirut', 33.8963, 35.4818, 'Walker. frame.jpg'],
+  [1, 'Aluminium ramp 3 m', 'ramp', 'sale', 220, 'Hamra, Beirut', 33.8963, 35.4818, 'Foldable ramp Manchester Piccadilly Station.jpg'],
+  [1, 'Carbon rollator', 'walker', 'sale', 260, 'Hamra, Beirut', 33.8963, 35.4818, 'Rollator-carbon.jpg'],
+  [2, 'Folding ramp 1.5 m', 'ramp', 'rent', 20, 'Jounieh', 33.9808, 35.6178, 'Wheelchair and temporary train ramp in Tokyo 2019 5 25.jpeg'],
+  [2, 'Transport wheelchair', 'wheelchair', 'sale', 150, 'Jounieh', 33.9808, 35.6178, 'Stryker Prime TC wheelchair.jpg'],
+  [2, 'Van ramp for a wheelchair', 'ramp', 'rent', 35, 'Jounieh', 33.9808, 35.6178,
+    'Rear ramp load of wheelchair, QDN Office, Hamilton Place Bowen Hills IMGP8391.jpg'],
+  [2, 'Shower chair', 'other', 'sale', 30, 'Jdeideh', 33.889, 35.558, 'SOLD Shower chair, bath transfer bench, toilet riser (4861775529).jpg'],
+  [2, 'Grab bars for the bathroom (set of 2)', 'other', 'sale', 25, 'Jdeideh', 33.889, 35.558, 'Grab bar.jpg'],
+  [3, 'Rollator with brakes', 'walker', 'rent', 6, 'Tripoli', 34.4335, 35.838, 'My rollator.jpg'],
+  [3, 'Crutches (pair)', 'other', 'rent', 3, 'Tripoli', 34.4335, 35.838, 'Axillary Crutches.jpg'],
+  [3, 'Transfer bench for the bath', 'other', 'sale', 40, 'Tripoli', 34.4335, 35.838, 'Transfer bench.jpg'],
+  [4, 'Stair climber', 'stair-climber', 'rent', 55, 'Saida', 33.5571, 35.3729, 'Tag A5 Treppensteiger.jpg'],
+  [4, 'Walking frame', 'walker', 'sale', 35, 'Saida', 33.5571, 35.3729, 'Walker extended.JPG'],
+  [4, 'Raised toilet seat', 'other', 'sale', 20, 'Saida', 33.5571, 35.3729, 'Age-friendly tools 3.jpg'],
+  [5, 'Electric add-on for a wheelchair', 'wheelchair', 'rent', 30, 'Zahle', 33.8463, 35.902,
+    'UNAwheel Mini Active wheelchair power add-on in Los Angeles.jpg'],
+  [5, 'Walker with seat', 'walker', 'rent', 7, 'Zahle', 33.8463, 35.902, 'Winnie Walker EXP Steel Rollator 002 CR.JPG'],
+  [5, 'Evacuation stair chair', 'stair-climber', 'sale', 450, 'Zahle', 33.8463, 35.902, 'Escape-Chair on stair case.jpg'],
 ];
 
 // The email of a demo account: "Hotel Cedar Bay" -> hotel-cedar-bay@demo.accesspath.lb
@@ -403,32 +564,78 @@ for (const [name, category, address, lat, lng, criteria, cover, accessKey, acces
 const visitors = {};
 for (const name of VISITORS) visitors[name] = await makeUser(name, 'user');
 
+const reviews = {}; // "place|visitor" -> the review, to add the replies below
 for (const [placeName, visitorName, rating, comment] of REVIEWS) {
-  await Review.create({ placeId: places[placeName]._id, userId: visitors[visitorName]._id, rating, comment });
+  reviews[`${placeName}|${visitorName}`] = await Review.create({
+    placeId: places[placeName]._id, userId: visitors[visitorName]._id, rating, comment,
+  });
+}
+
+// A few replies of the owners, like on Google Maps. Some reviews stay without a reply,
+// so "My reviews" has some waiting (log in as kaslik-shoe-gallery to see both)
+const REPLIES = [
+  ["Vasken's Bakery", 'Hadi', 'Thank you Hadi! The door is always open for you, the cheese manakish is waiting.'],
+  ['Kaslik Shoe Gallery', 'Nour', 'We are sorry Nour. We rented a ramp on AccessFix last week, please come back and tell us.'],
+  ['Kaslik Shoe Gallery', 'Hadi', 'The ramp is here now! Thank you for your patience.'],
+  ['Chez Vasken', 'Rana', 'You are right Rana, we asked for a ramp on AccessFix. It should be installed this week.'],
+  ['Hotel Cedar Bay', 'Marc', 'Thank you Marc. We are adding two reserved spots closer to the entrance this month.'],
+  ['Phoenician Wall Guesthouse', 'Marc', 'We understand. We asked a supplier for a ramp at the entrance, and we are looking for a solution for the rooms.'],
+  ['Old Saida Coffee House', 'Maya', 'Thank you for telling us. We are trying a stair climber this week, we hope to welcome you soon.'],
+  ['Vasken Grand Hotel', 'Maya', 'Thank you Maya, it was a pleasure to have you with us.'],
+  ['Temple View Guesthouse', 'Maya', 'We are sorry. We are looking for a stair climber for the summer and will update our page.'],
+  ['Sarkis Market', 'Maya', 'Thanks Maya, we will make the ramp less steep when we redo the entrance in the spring.'],
+  ["Vasken's Pharmacy", 'Elie', 'Say hello to your grandmother from all of us!'],
+  ['Corniche Sunset Cafe', 'Karim', 'Thank you Karim, we are moving the accessible toilet closer to the terrace this winter.'],
+  ['Hamra Fresh Market', 'Karim', 'Thank you Karim. Two parking spots in front will be reserved from next month.'],
+  ['Byblos Souk Crafts', 'Rana', 'We are sorry Rana. A small ramp is on its way, we will update our page as soon as it is here.'],
+];
+for (const [placeName, visitorName, text] of REPLIES) {
+  const review = reviews[`${placeName}|${visitorName}`];
+  review.reply = text;
+  review.repliedAt = new Date();
+  await review.save();
 }
 
 const suppliers = [];
 for (const name of SUPPLIERS) suppliers.push(await makeUser(name, 'supplier'));
 
 const listings = [];
-for (const [s, title, type, mode, price, area] of LISTINGS) {
-  listings.push(await Listing.create({ ownerId: suppliers[s]._id, title, type, mode, price, area }));
+for (const [s, title, type, mode, price, area, lat, lng, photo] of LISTINGS) {
+  listings.push(await Listing.create({
+    ownerId: suppliers[s]._id, title, type, mode, price, area, lat, lng, photoUrl: commonsUrl(photo),
+  }));
 }
 
-// 3. A few requests, so "My requests" and "Requests received" are not empty
-await Request.create({
-  listingId: listings[0]._id, seekerId: visitors.Rana._id,
-  message: 'For a wedding on Saturday in Broummana, can you deliver?',
-});
-await Request.create({
-  listingId: listings[0]._id, seekerId: places['Kaslik Shoe Gallery'].ownerId, status: 'accepted',
-  message: 'We have two steps at the entrance, we would like to rent it for a month.',
-});
-await Request.create({
-  listingId: listings[3]._id, seekerId: visitors.Marc._id, status: 'declined',
-  message: 'Is it still available?',
-});
+// 3. Requests, so "My requests" and "Requests received" are not empty.
+// People with reduced mobility ask for themselves or a relative,
+// businesses ask for their place. Each one: who asks, listing number in LISTINGS, status, message
+const REQUESTS = [
+  [visitors.Rana, 0, 'pending',
+    'I use a wheelchair and there are two steps at the entrance of my building in Achrafieh. Can I rent it for a month?'],
+  [visitors.Rana, 22, 'accepted',
+    'I am visiting my family in Zahle next week and the streets there are steep. Can I rent it for 5 days?'],
+  [visitors.Marc, 6, 'accepted',
+    'For my father, he cannot push his wheelchair for long anymore. We would need it for two weeks.'],
+  [visitors.Elie, 16, 'pending',
+    'For my grandmother in Tripoli, she needs a walker with a seat to rest on.'],
+  [visitors.Karim, 17, 'declined',
+    'I broke my ankle. Do you have a smaller size?'],
+  [places['Kaslik Shoe Gallery'].ownerId, 11, 'accepted',
+    'We have two steps at our entrance in Kaslik. We would like to rent it while we build a permanent ramp.'],
+  [places['Chez Vasken'].ownerId, 2, 'pending',
+    'One big step at the door of our cafe in Gemmayzeh. Can you install it this week?'],
+  [places['Phoenician Wall Guesthouse'].ownerId, 9, 'pending',
+    'Our guesthouse in Batroun has steps at the entrance. Can you deliver to Batroun?'],
+  [places['Temple View Guesthouse'].ownerId, 5, 'pending',
+    'Our rooms are upstairs and we have no elevator. Can we rent a stair climber for the summer?'],
+  [places['Old Saida Coffee House'].ownerId, 19, 'accepted',
+    'Three steps at our door in the old city. Can we try the stair climber for a week?'],
+];
+for (const [seeker, l, status, message] of REQUESTS) {
+  const seekerId = seeker._id ?? seeker; // a visitor account, or the owner id of a place
+  await Request.create({ listingId: listings[l]._id, seekerId, status, message });
+}
 
-console.log(`${PLACES.length} places, ${VISITORS.length} visitors, ${REVIEWS.length} reviews, ${listings.length} listings added`);
+console.log(`${PLACES.length} places, ${VISITORS.length} visitors, ${REVIEWS.length} reviews (${REPLIES.length} with a reply), ${listings.length} listings, ${REQUESTS.length} requests added`);
 console.log(`Log in with any demo email (e.g. ${demoEmail('Rana')}) and the password ${PASSWORD}`);
 await mongoose.disconnect();

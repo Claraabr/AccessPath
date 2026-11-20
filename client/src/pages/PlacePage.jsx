@@ -3,9 +3,10 @@ import { useAuth } from '../auth/AuthContext.jsx';
 import { useApi } from '../hooks/useApi.js';
 import { apiFetch } from '../api/client.js';
 import { PlacesMap } from '../components/PlacesMap.jsx';
-import { CriteriaBadges } from '../components/CriteriaBadges.jsx';
+import { CriteriaBadges, AccessPhotos } from '../components/CriteriaBadges.jsx';
 import { Stars } from '../components/Stars.jsx';
 import { ReviewForm } from '../components/ReviewForm.jsx';
+import { AccessFixSuggestions } from '../components/AccessFixSuggestions.jsx';
 import { sizedPhoto } from '../api/upload.js';
 
 // The page of a place, like a Google Maps card: photos, name, rating, accessibility, map, reviews.
@@ -59,16 +60,28 @@ export function PlacePage({ id, go, ownerActions }) {
         {ownerActions}
       </div>
 
+      {/* Cover photo under the name, like on Google Maps. At the top of the page, so not lazy */}
+      {place.photos?.length > 0 && (
+        <img src={sizedPhoto(place.photos[0], 1200)} alt={place.name} className="place-hero" height="300" />
+      )}
+
       <h2 className="section-title">Accessibility, as declared by the place</h2>
       <CriteriaBadges place={place} large />
+      {/* The venue looking at its own page: equipment that can fix what is missing */}
+      {ownerActions && <AccessFixSuggestions place={place} go={go} />}
+      <AccessPhotos place={place} />
 
-      {place.photos?.length > 0 && (
-        <div className="gallery">
-          {place.photos.map((url, i) => (
-            // shown 220px high, so a 600px wide copy is plenty for a landscape photo
-            <img key={url} src={sizedPhoto(url, 600)} alt={`${place.name}, photo ${i + 1}`} height="220" />
-          ))}
-        </div>
+      {/* The other photos of the place, after the cover */}
+      {place.photos?.length > 1 && (
+        <>
+          <h2 className="section-title">More photos</h2>
+          <div className="gallery">
+            {place.photos.slice(1).map((url, i) => (
+              // shown 220px high, so a 600px wide copy is plenty for a landscape photo
+              <img key={url} src={sizedPhoto(url, 600)} alt={`${place.name}, photo ${i + 2}`} height="220" />
+            ))}
+          </div>
+        </>
       )}
 
       <PlacesMap places={[place]} />
@@ -100,6 +113,15 @@ export function PlacePage({ id, go, ownerActions }) {
               </div>
               {r.comment && <p>{r.comment}</p>}
               {r.photoUrl && <img src={r.photoUrl} alt={`Photo by ${r.userId?.name ?? 'a user'}`} className="review-photo" />}
+              {r.reply && (
+                <div className="owner-reply">
+                  <p className="owner-reply-head">
+                    <strong>Reply from the owner</strong>
+                    <span className="muted">{new Date(r.repliedAt).toLocaleDateString()}</span>
+                  </p>
+                  <p>{r.reply}</p>
+                </div>
+              )}
               {r.userId?._id === user?.id && (
                 <div className="row">
                   <button className="secondary" onClick={() => setEditingId(r._id)}>Edit my review</button>

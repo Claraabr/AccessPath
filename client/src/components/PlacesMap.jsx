@@ -8,22 +8,23 @@ const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY;
 // Tiles are asked as .webp instead of .png: same map, about a third lighter (Lighthouse, session 22)
 const MAPTILER_MAP = import.meta.env.VITE_MAPTILER_MAP || 'streets-v2';
 
-// The places are all over Lebanon: zoom the map so that every marker is visible.
-// Runs again when the search gives other places.
-function FitToPlaces({ places }) {
+// The places are all over Lebanon: zoom the map so that every marker is visible
+// (and the user, after "Near me"). Runs again when the search gives other places.
+function FitToPlaces({ places, me }) {
   const map = useMap();
   useEffect(() => {
-    if (places.length > 1) {
-      map.fitBounds(places.map((p) => [p.lat, p.lng]), { padding: [30, 30] });
-    }
-  }, [map, places]);
+    const points = places.map((p) => [p.lat, p.lng]);
+    if (me) points.push([me.lat, me.lng]);
+    if (points.length > 1) map.fitBounds(points, { padding: [30, 30] });
+  }, [map, places, me]);
   return null;
 }
 
 // Map of places with Leaflet
 // Background tiles: MapTiler "Streets" (free account, key in .env)
 // No key -> fall back to the standard OpenStreetMap tiles
-export function PlacesMap({ places, onOpen }) {
+// me = the position of the user after "Near me", shown as a yellow dot
+export function PlacesMap({ places, onOpen, me }) {
   // One place -> zoom on it; several -> FitToPlaces shows them all (Beirut before the first fit)
   const single = places.length === 1;
   const center = single ? [places[0].lat, places[0].lng] : BEIRUT;
@@ -45,7 +46,16 @@ export function PlacesMap({ places, onOpen }) {
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       )}
-      <FitToPlaces places={places} />
+      <FitToPlaces places={places} me={me} />
+      {me && (
+        <CircleMarker
+          center={[me.lat, me.lng]}
+          radius={9}
+          pathOptions={{ color: '#16262b', weight: 3, fillColor: '#ffcc33', fillOpacity: 1 }}
+        >
+          <Popup>You are here</Popup>
+        </CircleMarker>
+      )}
       {places.map((p) => (
         <CircleMarker
           key={p._id}

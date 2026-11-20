@@ -12,6 +12,9 @@ const listingSchema = new mongoose.Schema(
     price: { type: Number, required: true, min: 0 },
     area: { type: String, required: true, trim: true },
     photoUrl: { type: String, default: '' },
+    // Position of the area, found with Nominatim, for "Near me". Empty if the area was not found
+    lat: { type: Number },
+    lng: { type: Number },
   },
   { timestamps: true }
 );

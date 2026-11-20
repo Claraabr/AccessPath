@@ -4,7 +4,7 @@ Lighthouse audit done for session 22 (Performance & Testing).
 
 ## How we measured
 
-- Production build, not the dev server: `npm run build && npm run preview` in `client/`, then `http://localhost:4173/`
+- Production build, not the dev server: `npm run build && npm run preview` in `client/`, then the address Vite shows (port 4173)
 - Chrome incognito window, no extensions
 - DevTools → Lighthouse → Mode: Navigation, Device: Mobile, Categories: Performance + Accessibility
 - Page audited: the home page of a `user` account (search form + map + list of places), logged in
