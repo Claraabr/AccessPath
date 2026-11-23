@@ -1,8 +1,9 @@
 // Demo data, so the map and the lists are not empty during the demo:
-// 71 places in 24 towns of Lebanon (each one with its own venue account, a cover photo
+// 84 places in 30 towns of Lebanon (each one with its own venue account, a cover photo
 // and a photo of one of its criteria), so every category has places with each criterion,
-// 9 visitors who leave reviews (2 to 5 per place, some answered by the owner), 6 equipment suppliers with 25 listings
-// from Tripoli to Saida (each with a photo and its position, for "Near me"), and 12 requests.
+// 13 of them around Mansourieh and Mar Roukoz, where the demo takes place,
+// 9 visitors who leave reviews (2 to 5 per place, some answered by the owner), 6 equipment suppliers with 34 listings
+// from Tripoli to Saida (each with a photo and its position, for "Near me"), and 15 requests.
 // The 3 accounts of the demo: vasken-sarkis (visitor), vasken-s-bakery (business), mobility-vs (supplier).
 // The business names are made up on purpose (no fake reviews about real businesses),
 // but the towns and the street photos are real.
@@ -103,6 +104,41 @@ const PLACES = [
   ['Vasken Toys and Gifts', 'shop', 'Armenia Street, Bourj Hammoud', 33.8918, 35.544,
     [true, false, false, false], 'Beirut Bourj Hammoud - 2018 - 10.jpg',
     'stepFree', '7-Eleven Dongji Store wheelchair ramp 20221020.jpg'],
+
+  // Mansourieh, Mar Roukoz and the towns around
+  ['Mansourieh View Restaurant', 'restaurant', 'Main road, Mansourieh', 33.8652, 35.577,
+    [true, true, true, true], 'Beirut-lebanon-mansourieh-el-matn-المنصورية-المتن-2-1-2019-6-41-04-am-l.jpg',
+    'elevator', 'Brisbane City Hall lift interior.jpg'],
+  ['Mar Roukoz Student Cafe', 'cafe', 'Mar Roukoz, Dekwaneh', 33.864, 35.561,
+    [true, false, true, false], 'Beirut seen from Mansourieh.jpg', 'toilets', 'Acessible toilet with handles.jpg'],
+  ['Mansourieh Family Pharmacy', 'pharmacy', 'Main street, Mansourieh', 33.8668, 35.5735,
+    [true, false, false, true], 'Mansourieh, Mount-Lebanon.jpg', 'parking', 'Parking space for disabled motorists.jpg'],
+  ['Aqueduct Garden Cafe', 'cafe', 'Zbaydeh, Mansourieh', 33.8545, 35.576,
+    [false, false, false, false], 'Zbaydeh-Mansourieh.jpg', 'stepFree', 'Wuppertal Gemarker Str 0004.jpg'],
+  ['Wessin Street Shoes', 'shop', 'General Wessin Street, Dekwaneh', 33.8715, 35.547,
+    [false, false, false, false], 'General Wessin Street, Dekwaneh, Lebanon.jpg',
+    'stepFree', 'Aachen, Münsterplatz, Domlädchen -- 2016 -- 2730.jpg'],
+  ['Dekwaneh Hill Market', 'supermarket', 'Main road, Dekwaneh', 33.869, 35.552,
+    [true, false, true, true], 'Dekouaneh, Lebanon - panoramio.jpg', 'stepFree', 'Access Ramp 2.JPG'],
+  ['Mkalles Savings Bank', 'bank', 'Mkalles roundabout', 33.8655, 35.547,
+    [true, true, false, true], 'Jisr al bacha from mkales - panoramio.jpg',
+    'elevator', 'Elevator interior Buffalo City Hall NY 2025-09-09 09-55-06 1.jpg'],
+  ['Mkalles Rehabilitation Clinic', 'hospital', 'Main road, Mkalles', 33.864, 35.55,
+    [true, true, true, true], 'Winter season - panoramio.jpg', 'toilets', 'DSCN7958 Disabled toilet in Auckland Art Gallery.jpg'],
+  ['Bauchrieh Night Grill', 'restaurant', 'Main street, Bauchrieh', 33.8812, 35.5648,
+    [false, false, true, false], 'Bouchrieh quiet street at night - panoramio.jpg',
+    'stepFree', 'Korfu (GR), Korfu, Altstadt -- 2018 -- 1338.jpg'],
+  ['Sin el Fil Service Center', 'government', 'Main road, Sin el Fil', 33.8775, 35.5405,
+    [true, true, true, true], 'Sin el Fil, Lebanon - panoramio.jpg',
+    'stepFree', 'Rampa para personas con discapacidad en Oficinas del DIF Tlaxcala.jpg'],
+  ['Clock Square Pharmacy', 'pharmacy', 'Clock square, Jdeideh', 33.892, 35.5625,
+    [true, false, false, false], 'World time in jdaide - panoramio.jpg', 'stepFree', 'Public health ramp.jpg'],
+  ['Jdeideh Highway Hypermarket', 'supermarket', 'Highway, Jdeideh', 33.8963, 35.565,
+    [true, true, true, true], "L'autostrade - panoramio (1).jpg",
+    'parking', 'Disabled parking spaces in car park in Brisbane, 2023.jpg'],
+  ['Pine Hill Guesthouse', 'hotel', 'Near Mar Shaaya, Broummana', 33.8636, 35.6045,
+    [true, false, true, true], 'Mar Shaayah Monastery (4039803822).jpg',
+    'parking', 'Disabled parking space, Omagh Arts Centre - geograph.org.uk - 4885378.jpg'],
 
   // Mount Lebanon
   ["Vasken's Sweets", 'restaurant', 'Main road, Antelias', 33.9145, 35.5875,
@@ -492,6 +528,53 @@ const REVIEWS = [
 
   ['Old Saida Arches Restaurant', 'Hadi', 4, 'A gentle ramp under the arches and an accessible toilet, in the old city!'],
   ['Old Saida Arches Restaurant', 'Elie', 4, 'The alleys to get there are narrow, but the restaurant itself is easy.'],
+
+  ['Mansourieh View Restaurant', 'Marc', 5, 'Elevator from the parking to the dining room, and the view over Beirut is amazing.'],
+  ['Mansourieh View Restaurant', 'Rana', 5, 'Accessible toilet, wide doors and parking right next to the entrance.'],
+  ['Mansourieh View Restaurant', 'Lara', 4, 'Easy with the stroller. Book early on Sundays, it is always full.'],
+  ['Mansourieh View Restaurant', 'Vasken Sarkis', 5, 'Took my parents here for their anniversary. My father did not have to climb a single step.'],
+
+  ['Mar Roukoz Student Cafe', 'Karim', 4, 'Right next to the campus. Flat entrance and an accessible toilet, but you have to park on the street.'],
+  ['Mar Roukoz Student Cafe', 'Nour', 4, 'Good coffee between two classes, and there is space between the tables.'],
+  ['Mar Roukoz Student Cafe', 'Hadi', 5, 'I come with my wheelchair every morning before class. No step anywhere.'],
+
+  ['Mansourieh Family Pharmacy', 'Elie', 4, 'Reserved parking at the door, my grandmother does not have to walk far.'],
+  ['Mansourieh Family Pharmacy', 'Maya', 3, 'Easy to get in, but the counter is high and there is no toilet.'],
+
+  ['Aqueduct Garden Cafe', 'Rana', 2, 'Beautiful spot near the old aqueduct, but there are steps from the road down to the terrace.'],
+  ['Aqueduct Garden Cafe', 'Marc', 2, 'My father stayed in the car. Steps at the entrance and nowhere to park.'],
+  ['Aqueduct Garden Cafe', 'Lara', 3, 'Lovely for a walk, but I had to carry the stroller down the stairs.'],
+
+  ['Wessin Street Shoes', 'Nour', 2, 'One high step at the door and the shop is narrow.'],
+  ['Wessin Street Shoes', 'Hadi', 2, 'I could not get in. The owner brought the shoes out to the sidewalk so I could try them.'],
+  ['Wessin Street Shoes', 'Elie', 3, 'Nice shoes for my grandmother, but she needed help with the step.'],
+
+  ['Dekwaneh Hill Market', 'Karim', 4, 'Ramp at the door and parking in front. The aisles are a bit tight.'],
+  ['Dekwaneh Hill Market', 'Maya', 4, 'Clean accessible toilet at the back, which is rare for a supermarket.'],
+  ['Dekwaneh Hill Market', 'Vasken Sarkis', 4, 'I do the shopping for my neighbour here, the ramp makes it easy with the trolley.'],
+
+  ['Mkalles Savings Bank', 'Rana', 4, 'Elevator to the first floor and parking for clients.'],
+  ['Mkalles Savings Bank', 'Marc', 3, 'Good access, but no toilet while you wait.'],
+
+  ['Mkalles Rehabilitation Clinic', 'Elie', 5, 'Everything is made for wheelchairs, from the parking to the physiotherapy room.'],
+  ['Mkalles Rehabilitation Clinic', 'Hadi', 5, 'Large elevators and accessible toilets on every floor.'],
+  ['Mkalles Rehabilitation Clinic', 'Karim', 4, 'I came for my knee. Easy to move around with crutches.'],
+
+  ['Bauchrieh Night Grill', 'Maya', 2, 'Good grill, but two steps at the door. Once inside, the toilet is accessible.'],
+  ['Bauchrieh Night Grill', 'Karim', 3, 'The waiters helped me up the steps with my crutches.'],
+
+  ['Sin el Fil Service Center', 'Nour', 4, 'Ramp at the entrance and the counters are low.'],
+  ['Sin el Fil Service Center', 'Marc', 5, 'Elevator, toilet and parking, everything my father needed for his papers.'],
+
+  ['Clock Square Pharmacy', 'Lara', 4, 'Small ramp at the door, easy with the stroller.'],
+  ['Clock Square Pharmacy', 'Rana', 3, 'I can get in, but parking near the square is impossible.'],
+
+  ['Jdeideh Highway Hypermarket', 'Elie', 5, 'Reserved parking near the elevator and wide aisles.'],
+  ['Jdeideh Highway Hypermarket', 'Nour', 4, 'Very easy with the stroller, but crowded on Saturdays.'],
+  ['Jdeideh Highway Hypermarket', 'Hadi', 5, 'Accessible toilet, and the staff help you to the car.'],
+
+  ['Pine Hill Guesthouse', 'Lara', 4, 'Quiet, under the pines. Parking at the door and the rooms are on the ground floor.'],
+  ['Pine Hill Guesthouse', 'Maya', 4, 'No elevator, but we did not need one. The accessible bathroom is large.'],
 ];
 
 // Several of each type all over Lebanon, so every search and "Near me" gives results.
@@ -529,6 +612,16 @@ const LISTINGS = [
     'UNAwheel Mini Active wheelchair power add-on in Los Angeles.jpg'],
   [5, 'Walker with seat', 'walker', 'rent', 7, 'Zahle', 33.8463, 35.902, 'Winnie Walker EXP Steel Rollator 002 CR.JPG'],
   [5, 'Evacuation stair chair', 'stair-climber', 'sale', 450, 'Zahle', 33.8463, 35.902, 'Escape-Chair on stair case.jpg'],
+  // Around Mansourieh and Mar Roukoz
+  [1, 'Portable ramp for two steps', 'ramp', 'rent', 20, 'Mansourieh', 33.8668, 35.5745, 'Rolstoel helling NMBS I.JPG'],
+  [1, 'Stair climber with a seat', 'stair-climber', 'rent', 50, 'Mansourieh', 33.8668, 35.5745, 'Trappemaskine kinco.jpg'],
+  [1, 'Rollator with seat and basket', 'walker', 'rent', 7, 'Dekwaneh', 33.8705, 35.5455, 'Modern Rollator.jpg'],
+  [0, 'Light folding wheelchair', 'wheelchair', 'rent', 12, 'Mkalles', 33.8645, 35.5485, 'Leichtgewicht Rollstuhl.jpg'],
+  [0, 'Active wheelchair', 'wheelchair', 'sale', 420, 'Sin el Fil', 33.8745, 35.5405, 'Küschall wheelchair.jpg'],
+  [0, 'Folding shower seat', 'other', 'sale', 35, 'Sin el Fil', 33.8745, 35.5405, 'Foldable Shower Seat.jpg'],
+  [2, 'Electric wheelchair', 'wheelchair', 'rent', 40, 'Fanar', 33.8795, 35.568, 'Electric-powered wheelchair Belize1.jpg'],
+  [2, 'Walker with big wheels', 'walker', 'sale', 95, 'Jdeideh', 33.889, 35.558, 'Dolomite Maxi 550 rollator.JPG'],
+  [2, 'Hand stair climber', 'stair-climber', 'sale', 380, 'Fanar', 33.8795, 35.568, 'Treppensteiger.jpg'],
 ];
 
 // The email of a demo account: "Hotel Cedar Bay" -> hotel-cedar-bay@demo.accesspath.lb
@@ -593,6 +686,8 @@ const REPLIES = [
   ['Corniche Sunset Cafe', 'Karim', 'Thank you Karim, we are moving the accessible toilet closer to the terrace this winter.'],
   ['Hamra Fresh Market', 'Karim', 'Thank you Karim. Two parking spots in front will be reserved from next month.'],
   ['Byblos Souk Crafts', 'Rana', 'We are sorry Rana. A small ramp is on its way, we will update our page as soon as it is here.'],
+  ['Wessin Street Shoes', 'Hadi', 'Thank you Hadi. We asked Mobility VS for a ramp, so next time you can come in.'],
+  ['Aqueduct Garden Cafe', 'Marc', 'We are sorry Marc. We are looking at a stair climber for the terrace.'],
 ];
 for (const [placeName, visitorName, text] of REPLIES) {
   const review = reviews[`${placeName}|${visitorName}`];
@@ -639,6 +734,12 @@ const REQUESTS = [
     'Our rooms are upstairs and we have no elevator. Can we rent a stair climber for the summer?'],
   [places['Old Saida Coffee House'].ownerId, 19, 'accepted',
     'Three steps at our door in the old city. Can we try the stair climber for a week?'],
+  [places['Wessin Street Shoes'].ownerId, 25, 'pending',
+    'One high step at our door on General Wessin Street. Can we rent the ramp while we build a real one?'],
+  [places['Aqueduct Garden Cafe'].ownerId, 26, 'pending',
+    'Our terrace is down a flight of steps. Can we try the stair climber for a weekend?'],
+  [visitors.Karim, 28, 'accepted',
+    'For my brother, he just came back from the hospital. Two weeks would be enough.'],
 ];
 for (const [seeker, l, status, message] of REQUESTS) {
   const seekerId = seeker._id ?? seeker; // a visitor account, or the owner id of a place

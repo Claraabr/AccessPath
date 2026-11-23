@@ -168,7 +168,7 @@ cd server
 node scripts/seed.js
 ```
 
-This adds 71 places in 24 towns of Lebanon, from Tripoli, Halba, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, banks, hospitals, universities, public offices and a library, each with its accessibility, a cover photo and a photo of one of its criteria. Every category has places with each criterion, so a search like "cafe with an elevator" gives results. It also adds 9 visitors who left 199 reviews (2 to 5 per place, some with a reply of the owner), 6 equipment suppliers with 25 listings from Tripoli to Saida (each with a photo and a position for "Near me"), and 12 requests: people who need equipment for themselves or a relative, and businesses that need it for their place. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+This adds 84 places in 30 towns of Lebanon, from Tripoli, Halba, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between, and 13 around Mansourieh and Mar Roukoz, where the demo takes place: hotels, supermarkets, restaurants, cafes, shops, pharmacies, banks, hospitals, universities, public offices and a library, each with its accessibility, a cover photo and a photo of one of its criteria. Every category has places with each criterion, so a search like "cafe with an elevator" gives results. It also adds 9 visitors who left 233 reviews (2 to 5 per place, some with a reply of the owner), 6 equipment suppliers with 34 listings from Tripoli to Saida (each with a photo and a position for "Near me"), and 15 requests: people who need equipment for themselves or a relative, and businesses that need it for their place. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
 
 | Role | Email |
 |---|---|
@@ -324,6 +324,32 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [Chrysler Central Elevator 2019-10-03 20-18](https://commons.wikimedia.org/wiki/File:Chrysler_Central_Elevator_2019-10-03_20-18.jpg) | Axel Tschentscher | CC BY-SA 4.0 |
 | [Elevator at Vestfold Hospital 2](https://commons.wikimedia.org/wiki/File:Elevator_at_Vestfold_Hospital_2.jpg) | Peter Fiskerstrand | CC BY-SA 4.0 |
 | [Disabled ramp to Caernarfon Castle - geograph.org.uk - 1280693](https://commons.wikimedia.org/wiki/File:Disabled_ramp_to_Caernarfon_Castle_-_geograph.org.uk_-_1280693.jpg) | Eirian Evans | CC BY-SA 2.0 |
+| [Beirut-lebanon-mansourieh-el-matn-المنصورية-المتن-2-1-2019-6-41-04-am-l](https://commons.wikimedia.org/wiki/File:Beirut-lebanon-mansourieh-el-matn-%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D9%8A%D8%A9-%D8%A7%D9%84%D9%85%D8%AA%D9%86-2-1-2019-6-41-04-am-l.jpg) | Naxh | CC BY-SA 4.0 |
+| [Brisbane City Hall lift interior](https://commons.wikimedia.org/wiki/File:Brisbane_City_Hall_lift_interior.jpg) | Kgbo | CC BY-SA 4.0 |
+| [Beirut seen from Mansourieh](https://commons.wikimedia.org/wiki/File:Beirut_seen_from_Mansourieh.jpg) | Naxh | CC BY-SA 4.0 |
+| [Acessible toilet with handles](https://commons.wikimedia.org/wiki/File:Acessible_toilet_with_handles.jpg) | Jim Reynolds | CC BY 2.0 |
+| [Mansourieh, Mount-Lebanon](https://commons.wikimedia.org/wiki/File:Mansourieh,_Mount-Lebanon.jpg) | Naxh | CC BY-SA 4.0 |
+| [Parking space for disabled motorists](https://commons.wikimedia.org/wiki/File:Parking_space_for_disabled_motorists.jpg) | Tarasna0922 | CC BY-SA 4.0 |
+| [Zbaydeh-Mansourieh](https://commons.wikimedia.org/wiki/File:Zbaydeh-Mansourieh.jpg) | Unknown author | Public domain |
+| [Wuppertal Gemarker Str 0004](https://commons.wikimedia.org/wiki/File:Wuppertal_Gemarker_Str_0004.jpg) | Atamari | CC BY-SA 3.0 |
+| [General Wessin Street, Dekwaneh, Lebanon](https://commons.wikimedia.org/wiki/File:General_Wessin_Street,_Dekwaneh,_Lebanon.jpg) | Ewazen | CC BY 3.0 |
+| [Aachen, Münsterplatz, Domlädchen -- 2016 -- 2730](https://commons.wikimedia.org/wiki/File:Aachen,_M%C3%BCnsterplatz,_Doml%C3%A4dchen_--_2016_--_2730.jpg) | Dietmar Rabich | CC BY-SA 4.0 |
+| [Dekouaneh, Lebanon - panoramio](https://commons.wikimedia.org/wiki/File:Dekouaneh,_Lebanon_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [Access Ramp 2](https://commons.wikimedia.org/wiki/File:Access_Ramp_2.JPG) | Jsg1224 | CC BY-SA 3.0 |
+| [Jisr al bacha from mkales - panoramio](https://commons.wikimedia.org/wiki/File:Jisr_al_bacha_from_mkales_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [Elevator interior Buffalo City Hall NY 2025-09-09 09-55-06 1](https://commons.wikimedia.org/wiki/File:Elevator_interior_Buffalo_City_Hall_NY_2025-09-09_09-55-06_1.jpg) | G. Edward Johnson | CC BY 4.0 |
+| [Winter season - panoramio](https://commons.wikimedia.org/wiki/File:Winter_season_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [DSCN7958 Disabled toilet in Auckland Art Gallery](https://commons.wikimedia.org/wiki/File:DSCN7958_Disabled_toilet_in_Auckland_Art_Gallery.jpg) | AlasdairW | CC BY-SA 3.0 |
+| [Bouchrieh quiet street at night - panoramio](https://commons.wikimedia.org/wiki/File:Bouchrieh_quiet_street_at_night_-_panoramio.jpg) | Sami Bado | CC BY 3.0 |
+| [Korfu (GR), Korfu, Altstadt -- 2018 -- 1338](https://commons.wikimedia.org/wiki/File:Korfu_(GR),_Korfu,_Altstadt_--_2018_--_1338.jpg) | Dietmar Rabich | CC BY-SA 4.0 |
+| [Sin el Fil, Lebanon - panoramio](https://commons.wikimedia.org/wiki/File:Sin_el_Fil,_Lebanon_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [Rampa para personas con discapacidad en Oficinas del DIF Tlaxcala](https://commons.wikimedia.org/wiki/File:Rampa_para_personas_con_discapacidad_en_Oficinas_del_DIF_Tlaxcala.jpg) | Isaacvp | CC BY-SA 4.0 |
+| [World time in jdaide - panoramio](https://commons.wikimedia.org/wiki/File:World_time_in_jdaide_-_panoramio.jpg) | ansam61 | CC BY 3.0 |
+| [Public health ramp](https://commons.wikimedia.org/wiki/File:Public_health_ramp.jpg) | Robertscherini21101994 | CC BY-SA 4.0 |
+| [L'autostrade - panoramio (1)](https://commons.wikimedia.org/wiki/File:L'autostrade_-_panoramio_(1).jpg) | Evilscaught | CC BY 3.0 |
+| [Disabled parking spaces in car park in Brisbane, 2023](https://commons.wikimedia.org/wiki/File:Disabled_parking_spaces_in_car_park_in_Brisbane,_2023.jpg) | Kgbo | CC BY-SA 4.0 |
+| [Mar Shaayah Monastery (4039803822)](https://commons.wikimedia.org/wiki/File:Mar_Shaayah_Monastery_(4039803822).jpg) | Serge Melki | CC BY 2.0 |
+| [Disabled parking space, Omagh Arts Centre - geograph.org.uk - 4885378](https://commons.wikimedia.org/wiki/File:Disabled_parking_space,_Omagh_Arts_Centre_-_geograph.org.uk_-_4885378.jpg) | Kenneth Allen | CC BY-SA 2.0 |
 
 The equipment photos of the AccessFix listings also come from Wikimedia Commons:
 
@@ -354,6 +380,15 @@ The equipment photos of the AccessFix listings also come from Wikimedia Commons:
 | [UNAwheel Mini Active wheelchair power add-on in Los Angeles](https://commons.wikimedia.org/wiki/File:UNAwheel_Mini_Active_wheelchair_power_add-on_in_Los_Angeles.jpg) | Nick Yudin | CC BY-SA 4.0 |
 | [Winnie Walker EXP Steel Rollator 002 CR](https://commons.wikimedia.org/wiki/File:Winnie_Walker_EXP_Steel_Rollator_002_CR.JPG) | Stephen B Calvert | CC BY-SA 3.0 |
 | [Escape-Chair on stair case](https://commons.wikimedia.org/wiki/File:Escape-Chair_on_stair_case.jpg) | Joep Cuijpers | CC BY-SA 4.0 |
+| [Rolstoel helling NMBS I](https://commons.wikimedia.org/wiki/File:Rolstoel_helling_NMBS_I.JPG) | Spoorjan | CC BY-SA 3.0 |
+| [Trappemaskine kinco](https://commons.wikimedia.org/wiki/File:Trappemaskine_kinco.jpg) | IvarT | CC0 |
+| [Modern Rollator](https://commons.wikimedia.org/wiki/File:Modern_Rollator.jpg) | Hansimglueck70 | CC BY-SA 3.0 |
+| [Leichtgewicht Rollstuhl](https://commons.wikimedia.org/wiki/File:Leichtgewicht_Rollstuhl.jpg) | Bestrossi | Public domain |
+| [Küschall wheelchair](https://commons.wikimedia.org/wiki/File:K%C3%BCschall_wheelchair.jpg) | Tim99 | CC BY-SA 4.0 |
+| [Foldable Shower Seat](https://commons.wikimedia.org/wiki/File:Foldable_Shower_Seat.jpg) | Pizzatomatojellycattttt | CC BY-SA 4.0 |
+| [Electric-powered wheelchair Belize1](https://commons.wikimedia.org/wiki/File:Electric-powered_wheelchair_Belize1.jpg) | Memasa | CC BY-SA 3.0 |
+| [Dolomite Maxi 550 rollator](https://commons.wikimedia.org/wiki/File:Dolomite_Maxi_550_rollator.JPG) | Stephen B Calvert | CC BY-SA 3.0 |
+| [Treppensteiger](https://commons.wikimedia.org/wiki/File:Treppensteiger.jpg) | Firma Alber | CC BY-SA 3.0 |
 
 ## Deployment
 
