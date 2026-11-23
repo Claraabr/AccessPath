@@ -168,13 +168,13 @@ cd server
 node scripts/seed.js
 ```
 
-This adds 71 places in 24 towns of Lebanon, from Tripoli, Halba, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, banks, hospitals, universities, public offices and a library, each with its accessibility, a cover photo and a photo of one of its criteria. Every category has places with each criterion, so a search like "cafe with an elevator" gives results. It also adds 8 visitors who left 197 reviews (2 to 4 per place), 6 equipment suppliers with 25 listings from Tripoli to Saida (each with a photo and a position for "Near me"), and 10 requests: people who need equipment for themselves or a relative, and businesses that need it for their place. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
+This adds 71 places in 24 towns of Lebanon, from Tripoli, Halba, Ehden and Bsharri in the north to Saida, Jezzine and Tyre in the south, with Beirut, Mount Lebanon and the Bekaa in between: hotels, supermarkets, restaurants, cafes, shops, pharmacies, banks, hospitals, universities, public offices and a library, each with its accessibility, a cover photo and a photo of one of its criteria. Every category has places with each criterion, so a search like "cafe with an elevator" gives results. It also adds 9 visitors who left 199 reviews (2 to 5 per place, some with a reply of the owner), 6 equipment suppliers with 25 listings from Tripoli to Saida (each with a photo and a position for "Near me"), and 12 requests: people who need equipment for themselves or a relative, and businesses that need it for their place. The business names are made up, so no real business gets fake reviews, but the towns and the photos are real. Every demo account uses the password `demo1234`:
 
 | Role | Email |
 |---|---|
-| user | `rana@demo.accesspath.lb` |
-| venue | `hotel-cedar-bay@demo.accesspath.lb` |
-| supplier | `georges-medical-supply@demo.accesspath.lb` |
+| user | `vasken-sarkis@demo.accesspath.lb` |
+| venue | `vasken-s-bakery@demo.accesspath.lb` |
+| supplier | `mobility-vs@demo.accesspath.lb` |
 
 Running it again replaces the old demo data instead of adding it twice. To fill the online database, run it with the Atlas string: `MONGODB_URI="mongodb+srv://..." node scripts/seed.js`.
 
@@ -255,7 +255,7 @@ Each place has a photo of its street and a photo of what matters for access (the
 | [Old city, Sidon, Lebanon](https://commons.wikimedia.org/wiki/File:Old_city,_Sidon,_Lebanon.jpg) | Vyacheslav Argenberg | CC BY 4.0 |
 | [3 elevators](https://commons.wikimedia.org/wiki/File:3_elevators.jpg) | Atomicdragon136 | CC BY 3.0 |
 | [Entrance with ramp (5866504842)](https://commons.wikimedia.org/wiki/File:Entrance_with_ramp_(5866504842).jpg) | SuSanA Secretariat | CC BY 2.0 |
-| [Accessible entrance at UCMS](https://commons.wikimedia.org/wiki/File:Accessible_entrance_at_UCMS.jpg) | Dr Satendra | CC BY-SA 3.0 |
+| [Door step mosaic - geograph.org.uk - 6847739](https://commons.wikimedia.org/wiki/File:Door_step_mosaic_-_geograph.org.uk_-_6847739.jpg) | Anthony Vosper | CC BY-SA 2.0 |
 | [Disabled Parking Space in Málaga](https://commons.wikimedia.org/wiki/File:Disabled_Parking_Space_in_M%C3%A1laga.jpg) | Daniel Capilla | CC BY-SA 4.0 |
 | [Handicap toilet 2](https://commons.wikimedia.org/wiki/File:Handicap_toilet_2.jpg) | Tiia Monto | CC BY-SA 4.0 |
 | [Bibliotheque Saint-Sulpice 12](https://commons.wikimedia.org/wiki/File:Bibliotheque_Saint-Sulpice_12.JPG) | Jeangagnon | CC BY-SA 4.0 |

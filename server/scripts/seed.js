@@ -1,8 +1,9 @@
 // Demo data, so the map and the lists are not empty during the demo:
 // 71 places in 24 towns of Lebanon (each one with its own venue account, a cover photo
 // and a photo of one of its criteria), so every category has places with each criterion,
-// 8 visitors who leave reviews (2 to 4 per place, some answered by the owner), 6 equipment suppliers with 25 listings
-// from Tripoli to Saida (each with a photo and its position, for "Near me"), and 10 requests.
+// 9 visitors who leave reviews (2 to 5 per place, some answered by the owner), 6 equipment suppliers with 25 listings
+// from Tripoli to Saida (each with a photo and its position, for "Near me"), and 12 requests.
+// The 3 accounts of the demo: vasken-sarkis (visitor), vasken-s-bakery (business), mobility-vs (supplier).
 // The business names are made up on purpose (no fake reviews about real businesses),
 // but the towns and the street photos are real.
 // Photos: Wikimedia Commons, free licenses, credits in the README. No photo is used twice.
@@ -91,7 +92,8 @@ const PLACES = [
 
   // Bourj Hammoud
   ["Vasken's Bakery", 'restaurant', 'Armenia Street, Bourj Hammoud', 33.8925, 35.5425,
-    [true, false, false, false], 'Beirut Bourj Hammoud - 2018 - 08.jpg', 'stepFree', 'Accessible entrance at UCMS.jpg'],
+    [false, false, false, false], 'Beirut Bourj Hammoud - 2018 - 08.jpg', 'stepFree',
+    'Door step mosaic - geograph.org.uk - 6847739.jpg'],
   ['Sarkis Market', 'supermarket', 'Arax Street, Bourj Hammoud', 33.8908, 35.5397,
     [true, false, true, true], 'Beirut Bourj Hammoud - 2018 - 11.jpg', 'parking', 'Disabled Parking Space in Málaga.jpg'],
   ["Vasken's Pharmacy", 'pharmacy', 'Marash Street, Bourj Hammoud', 33.893, 35.541,
@@ -216,7 +218,8 @@ const PLACES = [
 
 const commonsUrl = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=800`;
 
-const VISITORS = ['Rana', 'Marc', 'Nour', 'Karim', 'Maya', 'Elie', 'Lara', 'Hadi'];
+// Vasken Sarkis is the visitor of the demo (vasken-sarkis@demo.accesspath.lb)
+const VISITORS = ['Vasken Sarkis', 'Rana', 'Marc', 'Nour', 'Karim', 'Maya', 'Elie', 'Lara', 'Hadi'];
 
 // place name, visitor name, rating, comment (a visitor reviews a place only once)
 const REVIEWS = [
@@ -224,6 +227,7 @@ const REVIEWS = [
   ['Hotel Cedar Bay', 'Marc', 4, 'Everything is accessible. The parking spots are a bit far from the entrance.'],
   ['Hotel Cedar Bay', 'Maya', 5, 'We booked the accessible room: roll-in shower and space on both sides of the bed.'],
   ['Hotel Cedar Bay', 'Hadi', 4, 'Good hotel. The terrace door is heavy, but someone always opens it.'],
+  ['Hotel Cedar Bay', 'Vasken Sarkis', 5, 'I booked a room for a friend in a wheelchair: elevator, wide doors, nothing to worry about.'],
 
   ['Hamra Fresh Market', 'Nour', 4, 'Automatic doors and no step, easy with the stroller. The aisles get narrow near the cashiers.'],
   ['Hamra Fresh Market', 'Karim', 3, 'The ramp at the entrance is fine, but no toilet and no parking. I came by taxi.'],
@@ -254,10 +258,11 @@ const REVIEWS = [
   ['Achrafieh Medical Center', 'Karim', 4, 'Long wait at the emergency, but the building is easy to move around in.'],
   ['Achrafieh Medical Center', 'Hadi', 4, 'Large elevators and accessible toilets on every floor.'],
 
-  ["Vasken's Bakery", 'Rana', 5, 'No step at the door and the best manakish in Bourj Hammoud. Ask for the cheese one.'],
-  ["Vasken's Bakery", 'Nour', 4, 'Easy to get in with a stroller. Small inside, so it gets crowded at lunch time.'],
-  ["Vasken's Bakery", 'Hadi', 5, 'The first time, Vasken came out himself to take my order. Now I just roll in.'],
+  ["Vasken's Bakery", 'Rana', 3, 'The best manakish in Bourj Hammoud, but there is one high step at the door and no ramp.'],
+  ["Vasken's Bakery", 'Nour', 3, 'I have to lift the stroller over the step. Small inside, so it gets crowded at lunch time.'],
+  ["Vasken's Bakery", 'Hadi', 3, 'The step is too high for my wheelchair, so Vasken came out himself to take my order.'],
   ["Vasken's Bakery", 'Lara', 4, 'Fresh bread from 7 in the morning. Not much space, but they move the chairs for you.'],
+  ["Vasken's Bakery", 'Vasken Sarkis', 4, 'Great cheese manakish. A friend in a wheelchair could not get in because of the step at the door.'],
 
   ['Sarkis Market', 'Marc', 4, 'Wide aisles and an accessible toilet at the back. Parking right in front.'],
   ['Sarkis Market', 'Maya', 4, 'The toilet at the back is clean. The ramp at the door is a bit steep.'],
@@ -492,14 +497,14 @@ const REVIEWS = [
 // Several of each type all over Lebanon, so every search and "Near me" gives results.
 // Each listing: supplier, title, type, rent or sale, price, area, lat, lng, photo
 const SUPPLIERS = [
-  'Georges Medical Supply', 'Mobility Lebanon', 'Cedar Rehab Equipment',
+  'Georges Medical Supply', 'Mobility VS', 'Cedar Rehab Equipment',
   'North Mobility Care', 'South Rehab Supply', 'Bekaa Medical Equipment',
 ];
 const LISTINGS = [
   [0, 'Portable ramp 2 m', 'ramp', 'rent', 25, 'Achrafieh, Beirut', 33.8886, 35.5195,
     'Station worker with portable wheelchair ramp and wheelchair user - Tokyo - Akihabara stn Sep 20 2019 02-13PM.jpeg'],
   [0, 'Modular ramp 4 m', 'ramp', 'rent', 40, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Modular Wheelchair Ramp - Upside Innovations.jpg'],
-  [0, 'Threshold ramp for one step', 'ramp', 'sale', 35, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Temporary access ramp, Brisbane 01.jpg'],
+  [1, 'Threshold ramp for one step', 'ramp', 'sale', 35, 'Hamra, Beirut', 33.8963, 35.4818, 'Temporary access ramp, Brisbane 01.jpg'],
   [0, 'Folding wheelchair', 'wheelchair', 'sale', 180, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Medline F-1 manual wheelchair 1.JPG'],
   [0, 'Wheelchair for a week', 'wheelchair', 'rent', 15, 'Achrafieh, Beirut', 33.8886, 35.5195, 'Blue folding lightweight wheelchair.jpg'],
   [1, 'Stair climber for apartments', 'stair-climber', 'rent', 60, 'Hamra, Beirut', 33.8963, 35.4818, 'GUS7910.jpg'],
@@ -572,9 +577,9 @@ for (const [placeName, visitorName, rating, comment] of REVIEWS) {
 }
 
 // A few replies of the owners, like on Google Maps. Some reviews stay without a reply,
-// so "My reviews" has some waiting (log in as kaslik-shoe-gallery to see both)
+// so "My reviews" has some waiting (log in as vasken-s-bakery to see both)
 const REPLIES = [
-  ["Vasken's Bakery", 'Hadi', 'Thank you Hadi! The door is always open for you, the cheese manakish is waiting.'],
+  ["Vasken's Bakery", 'Hadi', 'Thank you Hadi. We asked Mobility VS for a ramp, it should be here this month.'],
   ['Kaslik Shoe Gallery', 'Nour', 'We are sorry Nour. We rented a ramp on AccessFix last week, please come back and tell us.'],
   ['Kaslik Shoe Gallery', 'Hadi', 'The ramp is here now! Thank you for your patience.'],
   ['Chez Vasken', 'Rana', 'You are right Rana, we asked for a ramp on AccessFix. It should be installed this week.'],
@@ -610,6 +615,10 @@ for (const [s, title, type, mode, price, area, lat, lng, photo] of LISTINGS) {
 // People with reduced mobility ask for themselves or a relative,
 // businesses ask for their place. Each one: who asks, listing number in LISTINGS, status, message
 const REQUESTS = [
+  [visitors['Vasken Sarkis'], 8, 'pending',
+    'For a friend who just had knee surgery. Can I rent it for two weeks?'],
+  [places["Vasken's Bakery"].ownerId, 2, 'pending',
+    'We have one high step at the door of the bakery in Bourj Hammoud. Can you bring the ramp this week?'],
   [visitors.Rana, 0, 'pending',
     'I use a wheelchair and there are two steps at the entrance of my building in Achrafieh. Can I rent it for a month?'],
   [visitors.Rana, 22, 'accepted',
@@ -637,5 +646,5 @@ for (const [seeker, l, status, message] of REQUESTS) {
 }
 
 console.log(`${PLACES.length} places, ${VISITORS.length} visitors, ${REVIEWS.length} reviews (${REPLIES.length} with a reply), ${listings.length} listings, ${REQUESTS.length} requests added`);
-console.log(`Log in with any demo email (e.g. ${demoEmail('Rana')}) and the password ${PASSWORD}`);
+console.log(`Demo accounts: ${demoEmail('Vasken Sarkis')}, ${demoEmail("Vasken's Bakery")}, ${demoEmail('Mobility VS')} (password ${PASSWORD})`);
 await mongoose.disconnect();
