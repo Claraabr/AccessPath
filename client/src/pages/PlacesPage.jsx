@@ -70,7 +70,6 @@ export function PlacesPage({ go }) {
       {/* The search in a narrower box, in the middle of the page */}
       <div className="search-box">
         <h1>Search for a place</h1>
-        <p className="muted">Places in Lebanon say how accessible they are, and visitors confirm it in their reviews.</p>
         <form onSubmit={handleSearch} className="card filters">
           <div className="row">
             <label style={{ flex: 2 }}>
