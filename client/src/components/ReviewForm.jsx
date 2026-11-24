@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { apiFetch } from '../api/client.js';
-import { photosEnabled, uploadPhoto } from '../api/upload.js';
+import { uploadPhoto } from '../api/upload.js';
 
 // Used to post a review, and to edit one (review = the review to edit)
 export function ReviewForm({ placeId, review, onAdded, onCancel }) {
@@ -14,7 +14,7 @@ export function ReviewForm({ placeId, review, onAdded, onCancel }) {
     setSending(true);
     setError('');
     try {
-      // 1. Upload the photo to Cloudinary (if one was chosen), otherwise keep the old one
+      // 1. Upload the photo to our API (if one was chosen), otherwise keep the old one
       const file = form.get('photo');
       const photoUrl = file && file.size > 0 ? await uploadPhoto(file) : review?.photoUrl ?? '';
       const body = JSON.stringify({
@@ -60,12 +60,10 @@ export function ReviewForm({ placeId, review, onAdded, onCancel }) {
           placeholder="Was it easy to get in and move around?"
         />
       </label>
-      {photosEnabled && (
-        <label>
-          {review?.photoUrl ? 'New photo (optional)' : 'Photo (optional)'}
-          <input name="photo" type="file" accept="image/*" />
-        </label>
-      )}
+      <label>
+        {review?.photoUrl ? 'New photo (optional)' : 'Photo (optional)'}
+        <input name="photo" type="file" accept="image/*" />
+      </label>
       {error && <p className="error" role="alert">{error}</p>}
       <div className="row">
         <button disabled={sending}>

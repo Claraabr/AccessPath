@@ -20,7 +20,7 @@ const placeSchema = new mongoose.Schema(
     elevator: { type: Boolean, default: false },
     toilets: { type: Boolean, default: false },
     parking: { type: Boolean, default: false },
-    // Photos of the place (Cloudinary links), the first one is the cover
+    // Photos of the place (links), the first one is the cover
     photos: {
       type: [String],
       default: [],

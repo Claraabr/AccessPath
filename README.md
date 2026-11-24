@@ -48,23 +48,24 @@ Everybody has to log in before seeing the app.
 | Back end | Node.js, Express 5 (REST API under `/api`) |
 | Database | MongoDB Atlas with Mongoose |
 | Auth | bcrypt for passwords, JWT (1 hour) sent as `Authorization: Bearer`, role checks on the server |
-| Third-party APIs | Nominatim (address → coordinates), MapTiler (map tiles), Cloudinary (photo upload) |
+| Third-party APIs | Nominatim (address → coordinates), MapTiler (map tiles) |
+| Photos | sent to our own API and kept in MongoDB (`POST /api/photos`), shrunk to 1200 px in the browser first |
 
 ## Architecture
 
 ```
  Browser: React app (Vercel)
    │   map tiles ──────────────► MapTiler
-   │   photo upload ───────────► Cloudinary (only the URL is saved)
    │
    │   HTTPS + JSON, Authorization: Bearer <JWT>
    ▼
  REST API: Express on Node.js (Render)
    │   address → lat/lng ──────► Nominatim (OpenStreetMap)
+   │   photos ─────────────────► kept in MongoDB, served at /api/photos/:id
    │
    │   Mongoose
    ▼
- MongoDB Atlas: users, places, reviews, listings, requests
+ MongoDB Atlas: users, places, reviews, listings, requests, photos
 ```
 
 - The React app never talks to the database. It calls the API with `apiFetch`, which adds the token to every request.
@@ -79,7 +80,7 @@ AccessPath/
 ├── .github/workflows/ci.yml # tests on every push (GitHub Actions)
 ├── client/                  # React app (Vite)
 │   ├── src/
-│   │   ├── api/             # client.js (apiFetch), upload.js (Cloudinary)
+│   │   ├── api/             # client.js (apiFetch), upload.js (photos)
 │   │   ├── auth/            # AuthContext.jsx (who is logged in)
 │   │   ├── components/      # forms, map, badges…
 │   │   ├── hooks/           # useApi.js
@@ -87,8 +88,8 @@ AccessPath/
 │   │   └── App.jsx          # the routes (React Router), one URL per page
 │   └── .env.example
 ├── server/                  # Express API
-│   ├── models/              # User, Place, Review, Listing, Request
-│   ├── routes/              # auth, places, reviews, listings, requests
+│   ├── models/              # User, Place, Review, Listing, Request, Photo
+│   ├── routes/              # auth, places, reviews, listings, requests, photos
 │   ├── middleware/          # requireAuth (401), requireRole (403), validate (zod, 400)
 │   ├── auth/token.js        # sign / verify JWT
 │   ├── utils/               # geocode (Nominatim), escapeRegex
@@ -102,7 +103,7 @@ AccessPath/
 
 ## Data model
 
-Five MongoDB collections (Mongoose models in `server/models/`). Every document also has `createdAt` and `updatedAt`.
+Six MongoDB collections (Mongoose models in `server/models/`). Every document also has `createdAt` and `updatedAt`.
 
 | Model | Fields | Links |
 |---|---|---|
@@ -111,6 +112,7 @@ Five MongoDB collections (Mongoose models in `server/models/`). Every document a
 | `Review` | rating (1–5), comment, photoUrl, reply and repliedAt (the answer of the owner) | `placeId` → Place, `userId` → User (one review per user and place) |
 | `Listing` | title, type (ramp, wheelchair…), mode (`rent` / `sale`), price, area, photoUrl, lat, lng (found from the area) | `ownerId` → User (a supplier) |
 | `Request` | message, status (`pending` / `accepted` / `declined`) | `listingId` → Listing, `seekerId` → User (a user or a venue) |
+| `Photo` | contentType (JPEG, PNG or WebP), data (the image itself) | `ownerId` → User (who sent it) |
 
 Deleting a place deletes its reviews; deleting a listing deletes its requests.
 
@@ -173,8 +175,6 @@ Open `client/.env`:
 | `VITE_API_URL` | the address of the API: on your computer, your own server on port 3000 |
 | `VITE_MAPTILER_KEY` | a free key from [cloud.maptiler.com](https://cloud.maptiler.com) → API Keys. Empty = standard OpenStreetMap tiles |
 | `VITE_MAPTILER_MAP` | optional, the id of a map customized in English. Empty = `streets-v2` |
-| `VITE_CLOUDINARY_CLOUD_NAME` | your Cloudinary cloud name. Empty = no photo field |
-| `VITE_CLOUDINARY_UPLOAD_PRESET` | the name of an **unsigned** upload preset (Cloudinary → Settings → Upload) |
 
 Everything that starts with `VITE_` is sent to the browser, so it never holds a secret. The secrets (database password, JWT secret) stay in `server/.env`.
 
@@ -450,7 +450,7 @@ Render gives the port in `PORT`, the server reads it. Check: `https://<api>.onre
 | Root directory | `client` |
 | Build command | `npm run build` |
 | Output directory | `dist` |
-| Environment | `VITE_API_URL` (the Render URL, no `/` at the end), `VITE_MAPTILER_KEY`, `VITE_MAPTILER_MAP`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_CLOUDINARY_UPLOAD_PRESET` |
+| Environment | `VITE_API_URL` (the Render URL, no `/` at the end), `VITE_MAPTILER_KEY`, `VITE_MAPTILER_MAP` |
 
 `client/vercel.json` sends every URL to `index.html`, so refreshing `/places/…` or `/accessfix` does not give a 404. `VITE_` variables are read at build time: after changing one, redeploy.
 
@@ -482,11 +482,13 @@ All routes start with `/api`. 🔒 = needs a token (401 without one). The role i
 | GET | `/requests/received` | 🔒 supplier | requests on my listings |
 | PATCH | `/requests/:id` | 🔒 supplier, owner | `{ "status": "accepted" }` or `"declined"` |
 | DELETE | `/requests/:id` | 🔒 sender | cancel a pending request |
+| POST | `/photos` | 🔒 | send a photo (the body is the image, JPEG, PNG or WebP, 2 MB max), returns its URL |
+| GET | `/photos/:id` | anyone | the photo itself, so `<img src>` works |
 
 ## Tests
 
 ```bash
-cd server && npm test   # API: 401, 400, 404, helmet headers, reply needs a token (no database needed)
+cd server && npm test   # API: 401, 400, 404, helmet headers, reply and photo need a token, not a photo -> 400 (no database needed)
 cd client && npm test   # components: PlaceForm, Stars; distances for Near me
 ```
 

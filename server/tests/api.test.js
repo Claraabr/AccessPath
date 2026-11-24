@@ -65,6 +65,31 @@ describe('reviews', () => {
   });
 });
 
+describe('photos', () => {
+  it('needs a token to send a photo', async () => {
+    const res = await request(app)
+      .post('/api/photos')
+      .set('Content-Type', 'image/jpeg')
+      .send(Buffer.from('not really a photo'));
+    expect(res.status).toBe(401);
+  });
+
+  it('refuses a file that is not a photo', async () => {
+    const token = jwt.sign({ sub: '6b007ef8c4e4ddecfc17cbaa' }, 'test-secret');
+    const res = await request(app)
+      .post('/api/photos')
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'text/plain')
+      .send('hello');
+    expect(res.status).toBe(400);
+  });
+
+  it('refuses a photo id that is not an id', async () => {
+    const res = await request(app).get('/api/photos/not-an-id');
+    expect(res.status).toBe(400);
+  });
+});
+
 describe('the app', () => {
   it('answers a broken JSON body with 400, not 500', async () => {
     const res = await request(app)

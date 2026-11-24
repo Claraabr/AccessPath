@@ -125,3 +125,4 @@ curl -i -X DELETE $API/api/reviews/<review of A> -H "Authorization: Bearer $TOKE
 - A broken JSON body answered `500`, it now answers `400`.
 - An unknown route answered Express's HTML 404 page, it now answers `404 {"error":"Not found"}`.
 - A body over 10 kb answers `413`.
+- Photo upload (`POST /api/photos`): a token is needed, only JPEG, PNG and WebP are read, 2 MB at most (`413` above), anything else answers `400`. The photo is served with `Cross-Origin-Resource-Policy: cross-origin` only on that route, so the React app on Vercel can show it while helmet keeps the stricter default everywhere else.

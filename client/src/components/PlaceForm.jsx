@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PLACE_CATEGORIES, CRITERIA, ACCESS_PHOTO_TEXT } from '../constants.js';
-import { photosEnabled, uploadPhoto, sizedPhoto } from '../api/upload.js';
+import { uploadPhoto, sizedPhoto } from '../api/upload.js';
 
 const MAX_PHOTOS = 10;
 
@@ -20,7 +20,7 @@ export function PlaceForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
     setSending(true);
     setError('');
     try {
-      // New photos chosen -> upload them to Cloudinary, one by one
+      // New photos chosen -> upload them to our API, one by one
       const files = form.getAll('photos').filter((f) => f && f.size > 0);
       if (photos.length + files.length > MAX_PHOTOS) {
         throw new Error(`${MAX_PHOTOS} photos at most`);
@@ -80,54 +80,50 @@ export function PlaceForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
               {label}
             </label>
             {/* A photo shows visitors what it really looks like, even when the answer is no (the steps) */}
-            {photosEnabled && (
-              <div className="access-photo-edit">
-                {accessPhotos[key] && (
-                  <>
-                    <img src={sizedPhoto(accessPhotos[key], 280)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} />
-                    <button
-                      type="button"
-                      className="secondary"
-                      onClick={() => setAccessPhotos({ ...accessPhotos, [key]: '' })}
-                    >
-                      Remove
-                    </button>
-                  </>
-                )}
-                <label>
-                  {accessPhotos[key] ? 'Replace the photo' : `Photo of ${ACCESS_PHOTO_TEXT[key]} (optional)`}
-                  <input name={`photo-${key}`} type="file" accept="image/*" />
-                </label>
-              </div>
-            )}
-          </div>
-        ))}
-      </fieldset>
-      {photosEnabled && (
-        <fieldset>
-          <legend>Other photos (the first one is the cover)</legend>
-          {photos.length > 0 && (
-            <div className="photo-edit">
-              {photos.map((url, i) => (
-                <div key={url}>
-                  <img src={url} alt={`Photo ${i + 1} of the place`} />
+            <div className="access-photo-edit">
+              {accessPhotos[key] && (
+                <>
+                  <img src={sizedPhoto(accessPhotos[key], 280)} alt={`Photo of ${ACCESS_PHOTO_TEXT[key]}`} />
                   <button
                     type="button"
                     className="secondary"
-                    onClick={() => setPhotos(photos.filter((p) => p !== url))}
+                    onClick={() => setAccessPhotos({ ...accessPhotos, [key]: '' })}
                   >
                     Remove
                   </button>
-                </div>
-              ))}
+                </>
+              )}
+              <label>
+                {accessPhotos[key] ? 'Replace the photo' : `Photo of ${ACCESS_PHOTO_TEXT[key]} (optional)`}
+                <input name={`photo-${key}`} type="file" accept="image/*" />
+              </label>
             </div>
-          )}
-          <label>
-            Add photos
-            <input name="photos" type="file" accept="image/*" multiple />
-          </label>
-        </fieldset>
-      )}
+          </div>
+        ))}
+      </fieldset>
+      <fieldset>
+        <legend>Other photos (the first one is the cover)</legend>
+        {photos.length > 0 && (
+          <div className="photo-edit">
+            {photos.map((url, i) => (
+              <div key={url}>
+                <img src={url} alt={`Photo ${i + 1} of the place`} />
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setPhotos(photos.filter((p) => p !== url))}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <label>
+          Add photos
+          <input name="photos" type="file" accept="image/*" multiple />
+        </label>
+      </fieldset>
       {error && <p className="error" role="alert">{error}</p>}
       <div className="row">
         <button disabled={sending}>{sending ? 'Saving…' : submitLabel}</button>

@@ -8,6 +8,7 @@ import placesRouter from './routes/places.js';
 import reviewsRouter from './routes/reviews.js';
 import listingsRouter from './routes/listings.js';
 import requestsRouter from './routes/requests.js';
+import photosRouter from './routes/photos.js';
 
 // Turns { $ne: ... } and other operators sent by a client into plain values (session 21)
 mongoose.set('sanitizeFilter', true);
@@ -55,6 +56,7 @@ app.use('/api/places', placesRouter);
 app.use('/api/reviews', reviewsRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/requests', requestsRouter);
+app.use('/api/photos', photosRouter);
 
 // No route matched -> 404 in JSON
 app.use((req, res) => {

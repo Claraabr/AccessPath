@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { EQUIPMENT_TYPES } from '../constants.js';
-import { photosEnabled, uploadPhoto } from '../api/upload.js';
+import { uploadPhoto } from '../api/upload.js';
 
 // Used to post a listing and to edit one (initial = the listing to edit)
 export function ListingForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
@@ -65,12 +65,10 @@ export function ListingForm({ initial = {}, submitLabel, onSubmit, onCancel }) {
           <input name="area" required placeholder="e.g. Beirut" defaultValue={initial.area} />
         </label>
       </div>
-      {photosEnabled && (
-        <label>
-          Photo (optional)
-          <input name="photo" type="file" accept="image/*" />
-        </label>
-      )}
+      <label>
+        Photo (optional)
+        <input name="photo" type="file" accept="image/*" />
+      </label>
       {error && <p className="error" role="alert">{error}</p>}
       <div className="row">
         <button disabled={sending}>{sending ? 'Saving…' : submitLabel}</button>

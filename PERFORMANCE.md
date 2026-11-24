@@ -54,6 +54,10 @@ The images listed were not our photos but the map tiles from MapTiler, sent as P
    below the search form. The gallery at the top of a place page is not lazy, since it is
    the first thing you see.
 
+   Later, Cloudinary turned out not to accept accounts from Lebanon, so photos now go to our own
+   API (`POST /api/photos`). To keep them light, the browser draws each photo at 1200 px at most
+   and sends a JPEG (`upload.js`), and the API lets the browser cache it for a year.
+
 ## After
 
 | | Before (run 2) | After |
