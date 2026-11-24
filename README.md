@@ -14,6 +14,20 @@ AccessPath helps people with reduced mobility in Lebanon check whether a place i
 Capstone project for 020WBPES3 – Web Programming (ESIB, USJ).
 Team: Clara Abou Rjeily (230718), Denise Aboukhater (240810).
 
+## Features
+
+- **Accounts with a role.** Sign up as a visitor, a business or a supplier, then log in. The session lasts one hour; after that the app logs you out and asks you to log in again.
+- **Search places** by name, category and the four criteria (step-free entrance, elevator, accessible toilets, parking). The results show on a map and in a list.
+- **Near me.** The browser gives your position and the places, or the equipment, come closest first, with the distance.
+- **Place page.** Each criterion with its photo, the other photos of the place, and the reviews with the owner's replies.
+- **Reviews.** A visitor rates a place from 1 to 5 with a comment and a photo, and can edit or delete their review (one per place).
+- **My place (business).** Set up one place, edit its details, photos and criteria, or delete it. The address is turned into a point on the map.
+- **My reviews (business).** Read the reviews of your place, reply, change or delete a reply, and see the ones still waiting for an answer.
+- **AccessFix suggestions.** A place with no step-free entrance or no elevator sees the ramps or stair climbers closest to it.
+- **AccessFix marketplace.** Suppliers post, edit and delete listings to rent or sell equipment. Anyone can search them by type, rent or sale, and area.
+- **Requests.** Visitors and businesses ask to rent or buy and can cancel while it is pending. Suppliers accept or decline.
+- **Responsive.** On a computer the menu is a column of icons that opens on hover; on a phone it folds behind a Menu button.
+
 ## Accounts and roles
 
 You choose your role when you sign up.
@@ -35,6 +49,28 @@ Everybody has to log in before seeing the app.
 | Database | MongoDB Atlas with Mongoose |
 | Auth | bcrypt for passwords, JWT (1 hour) sent as `Authorization: Bearer`, role checks on the server |
 | Third-party APIs | Nominatim (address → coordinates), MapTiler (map tiles), Cloudinary (photo upload) |
+
+## Architecture
+
+```
+ Browser: React app (Vercel)
+   │   map tiles ──────────────► MapTiler
+   │   photo upload ───────────► Cloudinary (only the URL is saved)
+   │
+   │   HTTPS + JSON, Authorization: Bearer <JWT>
+   ▼
+ REST API: Express on Node.js (Render)
+   │   address → lat/lng ──────► Nominatim (OpenStreetMap)
+   │
+   │   Mongoose
+   ▼
+ MongoDB Atlas: users, places, reviews, listings, requests
+```
+
+- The React app never talks to the database. It calls the API with `apiFetch`, which adds the token to every request.
+- In the API, a protected route first goes through `requireAuth` (who are you? 401), then `requireRole` when only some roles may use it (403). Signup and login also go through `validate` (zod, 400). The route itself only touches what belongs to `req.userId` (404 otherwise).
+- The server keeps no session: the JWT is sent with every request.
+- A push to `main` runs the tests on GitHub Actions. Render deploys the API only after they pass; Vercel rebuilds the client.
 
 ## Project structure
 
@@ -405,7 +441,7 @@ Three hosts, one app: the database on **MongoDB Atlas**, the API on **Render**, 
 | Start command | `npm start` |
 | Environment | `MONGODB_URI` (Atlas string), `JWT_SECRET` (a new long random string, not the dev one), `CLIENT_ORIGIN` (the Vercel URL, no `/` at the end), `NODE_ENV=production` |
 
-Render gives the port in `PORT`, the server reads it. Check: `https://<api>.onrender.com/api/health` answers `{"status":"ok"}`. The free plan sleeps when nobody uses it, so the first request can take about 30 seconds.
+Render gives the port in `PORT`, the server reads it. Check: `https://<api>.onrender.com/api/health` answers `{"status":"ok"}`. The free plan sleeps when nobody uses it, so the first request can take about 50 seconds.
 
 **Vercel** (connected to this repo):
 
