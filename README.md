@@ -97,6 +97,7 @@ AccessPath/
 │   ├── app.js               # the Express app: helmet, rate limits, routes
 │   ├── server.js            # checks .env, connects to MongoDB, listens
 │   └── .env.example
+├── docs/wireframes/         # the first screens, drawn in Figma
 ├── SECURITY.md              # the security lab: attacks, fixes, results
 └── PERFORMANCE.md           # the Lighthouse audit: scores before, fixes, after
 ```
@@ -129,6 +130,42 @@ Each role has its own home page and menu. On a computer the menu is a thin colum
 | `/my-reviews` | – | the reviews of my place: reply, edit or delete my reply, see the ones waiting | – |
 | `/my-requests` | the requests I sent | the requests I sent | – |
 | `/received` | – | – | accept or decline requests |
+
+## Wireframes
+
+The first version of the screens, drawn in Figma before coding ([prototype](https://www.figma.com/proto/UP7gTGXDShPCbOrdgUSDTp/AccessPath-%E2%80%94-Prototype-pitch?node-id=22-229&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)). The labels are in French; the images are in [`docs/wireframes/`](docs/wireframes).
+
+| Wireframe | In the app |
+|---|---|
+| [01 Home and search](docs/wireframes/01-home-search.png) | `/` for a visitor: search, filters, map, Near me |
+| [02 Place page](docs/wireframes/02-place-page.png) | `/places/:id`: the four criteria with their photos |
+| [03 AccessFix, rent equipment](docs/wireframes/03-accessfix-rent-equipment.png) | `/accessfix`: search listings, Near me |
+| [04 WhatsApp assistant](docs/wireframes/04-whatsapp-assistant.png) | not built (an idea for later) |
+| [05 Business space](docs/wireframes/05-business-space.png) | `/` for a venue: my place, AccessFix suggestions |
+| [06 Log in / sign up](docs/wireframes/06-login-signup.png) | the login and signup screen, with the role |
+| [07 Place reviews](docs/wireframes/07-place-reviews.png) | reviews and owner replies on the place page |
+| [08 AccessFix listing](docs/wireframes/08-accessfix-listing.png) | `/accessfix/:id`: ask to rent or buy |
+| [09 My requests](docs/wireframes/09-accessfix-my-requests.png) | `/my-requests` |
+| [10 Supplier, my listings](docs/wireframes/10-supplier-my-listings.png) | `/` for a supplier: post, edit, delete |
+| [11 Supplier, requests received](docs/wireframes/11-supplier-requests-received.png) | `/received`: accept or decline |
+| [12 Business, edit my place](docs/wireframes/12-business-edit-place.png) | Edit on my place: details, criteria, photos |
+
+<p><img src="docs/wireframes/01-home-search.png" width="150" alt=""> <img src="docs/wireframes/02-place-page.png" width="150" alt=""> <img src="docs/wireframes/03-accessfix-rent-equipment.png" width="150" alt=""> <img src="docs/wireframes/04-whatsapp-assistant.png" width="150" alt=""></p>
+<p><img src="docs/wireframes/05-business-space.png" width="150" alt=""> <img src="docs/wireframes/06-login-signup.png" width="150" alt=""> <img src="docs/wireframes/07-place-reviews.png" width="150" alt=""> <img src="docs/wireframes/08-accessfix-listing.png" width="150" alt=""></p>
+<p><img src="docs/wireframes/09-accessfix-my-requests.png" width="150" alt=""> <img src="docs/wireframes/10-supplier-my-listings.png" width="150" alt=""> <img src="docs/wireframes/11-supplier-requests-received.png" width="150" alt=""> <img src="docs/wireframes/12-business-edit-place.png" width="150" alt=""></p>
+
+## Milestones
+
+Each milestone has a Git tag on the commit that completes it. The repository history starts on 15 November with one commit that already contains milestones 1 to 3. The tags were added on 26 November to mark those commits, and the wireframes above were added to the repository the same day.
+
+| Milestone | Tag | Commit | Date | What it contains |
+|---|---|---|---|---|
+| 1. Scaffold, wireframes, schema | `milestone-1` | `c95101f` | 15 Nov | React app with routing, Express with `/api/health`, MongoDB through `MONGODB_URI`, `.env` in `.gitignore`, the five models |
+| 2. Core back end | `milestone-2` | `c95101f` | 15 Nov | signup and login with bcrypt, JWT, `requireAuth` (401) and `requireRole` (403), CRUD routes, zod validation |
+| 3. Front end integrated | `milestone-3` | `c95101f` | 15 Nov | React calls the API, login and logout, search, reviews, AccessFix, Nominatim and the map, a fluid layout (wrapping rows and grids; the phone media queries came on 18 Nov) |
+| 4. Deployment | `milestone-4` | `bafbb9f` | 18 Nov | client on Vercel, API on Render, database on Atlas, secrets in the hosts' environment, live URLs at the top of this README |
+
+Later commits added Near me, owner replies, AccessFix suggestions, CI, the security and performance reports and the photo upload.
 
 ## Run it on your computer
 
