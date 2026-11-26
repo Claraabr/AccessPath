@@ -272,6 +272,9 @@ ul.access-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)
 .access-tiles li svg { width: 22px; height: 22px; flex: none; }
 .access-tiles li strong { font-weight: 600; line-height: 1.25; }
 .access-tiles .answer { margin-left: auto; }
+.access-tiles li { flex-wrap: wrap; }
+.access-tiles .found { flex-basis: 100%; font-size: 13px; opacity: 0.9; }
+.review-found { margin: 4px 0; font-size: 14px; }
 .access-tiles li.yes { background: var(--green); color: var(--white); border: 1px solid var(--green); }
 .access-tiles li.no { background: var(--white); color: var(--muted); border: 1px dashed #9aa7aa; }
 
@@ -401,3 +404,10 @@ button.title-link:hover { background: none; text-decoration-color: var(--green);
   ul.access-tiles { grid-template-columns: 1fr; }
   .access-photo-edit { padding-left: 0; }
 }
+
+/* Guest view (not logged in): a top bar with Places, AccessFix and Log in */
+.guest-header { justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.guest-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.guest-nav button { background: none; border: 1px solid transparent; color: var(--white); font-weight: 600; }
+.guest-nav button:hover, .guest-nav button:focus-visible { border-color: var(--white); }
+.guest-note { margin: 32px 0 0; color: var(--muted); }

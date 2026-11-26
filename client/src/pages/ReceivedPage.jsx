@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useApi } from '../hooks/useApi.js';
 import { apiFetch } from '../api/client.js';
 import { StatusBadge } from '../components/StatusBadge.jsx';
@@ -6,9 +7,16 @@ import { StatusBadge } from '../components/StatusBadge.jsx';
 export function ReceivedPage() {
   const { data: requests, loading, error, reload } = useApi('/api/requests/received');
 
+  const [actionError, setActionError] = useState('');
+
   async function answer(id, status) {
-    await apiFetch(`/api/requests/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
-    reload();
+    setActionError('');
+    try {
+      await apiFetch(`/api/requests/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+      reload();
+    } catch (err) {
+      setActionError(err.message);
+    }
   }
 
   return (
@@ -16,6 +24,7 @@ export function ReceivedPage() {
       <h1>Requests received</h1>
       {loading && !requests && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
+      {actionError && <p className="error" role="alert">{actionError}</p>}
       {requests && requests.length === 0 && <p className="muted">No requests yet.</p>}
       {requests && requests.map((r) => (
         <article key={r._id} className="card">

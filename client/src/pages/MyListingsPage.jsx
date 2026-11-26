@@ -8,6 +8,7 @@ import { Price } from '../components/Price.jsx';
 export function MyListingsPage() {
   const { data: listings, loading, error, reload } = useApi('/api/listings/mine');
   const [editingId, setEditingId] = useState(null);
+  const [actionError, setActionError] = useState('');
 
   async function createListing(data) {
     await apiFetch('/api/listings', { method: 'POST', body: JSON.stringify(data) });
@@ -22,8 +23,13 @@ export function MyListingsPage() {
 
   async function deleteListing(id) {
     if (!window.confirm('Delete this listing and its requests?')) return;
-    await apiFetch(`/api/listings/${id}`, { method: 'DELETE' });
-    reload();
+    setActionError('');
+    try {
+      await apiFetch(`/api/listings/${id}`, { method: 'DELETE' });
+      reload();
+    } catch (err) {
+      setActionError(err.message);
+    }
   }
 
   return (
@@ -36,6 +42,7 @@ export function MyListingsPage() {
 
       {loading && !listings && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
+      {actionError && <p className="error" role="alert">{actionError}</p>}
       {listings && listings.length === 0 && <p className="muted">You have no listings yet.</p>}
       {listings && listings.map((l) => (
         <article key={l._id} className="card">

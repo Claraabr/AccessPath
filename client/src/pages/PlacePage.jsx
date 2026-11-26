@@ -8,6 +8,7 @@ import { Stars } from '../components/Stars.jsx';
 import { ReviewForm } from '../components/ReviewForm.jsx';
 import { AccessFixSuggestions } from '../components/AccessFixSuggestions.jsx';
 import { sizedPhoto } from '../api/upload.js';
+import { CRITERIA } from '../constants.js';
 
 // The page of a place, like a Google Maps card: photos, name, rating, accessibility, map, reviews.
 // A user opens it from the search. A venue sees its own place here, with an
@@ -18,6 +19,7 @@ export function PlacePage({ id, go, ownerActions }) {
   const { data: reviews, reload } = useApi(`/api/places/${id}/reviews`);
   // Id of my review while I'm editing it
   const [editingId, setEditingId] = useState(null);
+  const [actionError, setActionError] = useState('');
 
   if (loading && !place) return <p>Loading…</p>;
   if (error) return <p className="error" role="alert">{error.message}</p>;
@@ -28,11 +30,19 @@ export function PlacePage({ id, go, ownerActions }) {
     ? (list.reduce((sum, r) => sum + r.rating, 0) / list.length).toFixed(1)
     : null;
   const alreadyReviewed = list.some((r) => r.userId?._id === user?.id);
+  // How many visitors found each criterion, from what they ticked in their reviews
+  const found = {};
+  for (const key of Object.keys(CRITERIA)) found[key] = list.filter((r) => r.found?.[key]).length;
 
   async function removeReview(reviewId) {
     if (!window.confirm('Delete your review?')) return;
-    await apiFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
-    reload();
+    setActionError('');
+    try {
+      await apiFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
+      reload();
+    } catch (err) {
+      setActionError(err.message);
+    }
   }
 
   return (
@@ -66,7 +76,7 @@ export function PlacePage({ id, go, ownerActions }) {
       )}
 
       <h2 className="section-title">Accessibility, as declared by the place</h2>
-      <CriteriaBadges place={place} large />
+      <CriteriaBadges place={place} large found={found} reviewCount={list.length} />
       {/* The venue looking at its own page: equipment that can fix what is missing */}
       {ownerActions && <AccessFixSuggestions place={place} go={go} />}
       <AccessPhotos place={place} />
@@ -87,6 +97,7 @@ export function PlacePage({ id, go, ownerActions }) {
       <PlacesMap places={[place]} />
 
       <h2>Reviews</h2>
+      {actionError && <p className="error" role="alert">{actionError}</p>}
       {user?.role === 'user' && !alreadyReviewed && <ReviewForm placeId={id} onAdded={reload} />}
       {list.length === 0 && (
         <p className="muted">{ownerActions ? 'No reviews yet.' : 'Be the first to share your experience.'}</p>
@@ -111,6 +122,9 @@ export function PlacePage({ id, go, ownerActions }) {
                 <Stars value={r.rating} />
                 <span className="muted">{new Date(r.createdAt).toLocaleDateString()}</span>
               </div>
+              <p className="muted review-found">
+                Found: {Object.keys(CRITERIA).filter((key) => r.found?.[key]).map((key) => CRITERIA[key]).join(', ') || 'none of the four'}
+              </p>
               {r.comment && <p>{r.comment}</p>}
               {r.photoUrl && <img src={r.photoUrl} alt={`Photo by ${r.userId?.name ?? 'a user'}`} className="review-photo" />}
               {r.reply && (

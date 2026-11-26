@@ -39,6 +39,10 @@ requestsRouter.patch('/:id', requireAuth, requireRole('supplier'), async (req, r
   }
   const request = await Request.findById(id);
   if (!request) return res.status(404).json({ error: 'Request not found' });
+  // Answered once: an accepted or declined request cannot be changed again
+  if (request.status !== 'pending') {
+    return res.status(409).json({ error: 'This request was already answered' });
+  }
   // Is the listing behind this request yours?
   const listing = await Listing.findOne({ _id: request.listingId, ownerId: req.userId });
   if (!listing) return res.status(404).json({ error: 'Request not found' });

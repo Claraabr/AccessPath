@@ -22,16 +22,18 @@ app.use(helmet());
 // CLIENT_ORIGIN can list several origins with commas: dev (5173) and preview (4173)
 app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(',') }));
 
-// Rate limits: 300 requests per 15 min for the whole API, 5 login tries
+// Rate limits: 1000 requests per 15 min for the whole API, 5 failed logins.
+// A class often shares one IP, so a successful login does not count.
 const apiLimiter = rateLimit({
   windowMs: 15 * 60_000,
-  limit: 300,
+  limit: 1000,
   message: { error: 'Too many requests. Try again later.' }, // JSON, like our other errors
 });
 const loginLimiter = rateLimit({
   windowMs: 15 * 60_000,
   limit: 5,
-  message: { error: 'Too many attempts. Try again later.' },
+  skipSuccessfulRequests: true,
+  message: { error: 'Too many failed attempts. Try again in 15 minutes.' },
 });
 app.set('trust proxy', 1); // behind the host's proxy once deployed
 // Read JSON bodies sent by the client, 10 kb max

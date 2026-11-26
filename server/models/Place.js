@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { photoUrlRule } from '../utils/isPhotoUrl.js';
 
 export const PLACE_CATEGORIES = [
   'restaurant', 'cafe', 'hotel', 'supermarket', 'shop', 'pharmacy',
@@ -22,17 +23,17 @@ const placeSchema = new mongoose.Schema(
     parking: { type: Boolean, default: false },
     // Photos of the place (links), the first one is the cover
     photos: {
-      type: [String],
+      type: [{ type: String, validate: photoUrlRule }],
       default: [],
       validate: [(list) => list.length <= 10, 'A place can have 10 photos at most'],
     },
     // One photo for each criterion, to show what it really looks like
     // (the ramp or the steps at the door, the elevator, the toilets, the parking). Empty = no photo
     accessPhotos: {
-      stepFree: { type: String, default: '' },
-      elevator: { type: String, default: '' },
-      toilets: { type: String, default: '' },
-      parking: { type: String, default: '' },
+      stepFree: { type: String, default: '', validate: photoUrlRule },
+      elevator: { type: String, default: '', validate: photoUrlRule },
+      toilets: { type: String, default: '', validate: photoUrlRule },
+      parking: { type: String, default: '', validate: photoUrlRule },
     },
   },
   { timestamps: true }

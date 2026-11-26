@@ -5,12 +5,17 @@ import { requireAuth } from '../middleware/requireAuth.js';
 
 const photosRouter = express.Router();
 const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+// The free Atlas database is 512 MB: one account cannot fill it on its own
+const MAX_PHOTOS_PER_ACCOUNT = 60;
 
 // POST /api/photos -> any logged-in account can send a photo
 // The body is the image itself, not JSON: express.raw reads it only for these 3 types, 2 MB max (413 above)
 photosRouter.post('/', requireAuth, express.raw({ type: TYPES, limit: '2mb' }), async (req, res) => {
   if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
     return res.status(400).json({ error: 'Send a JPEG, PNG or WebP photo' });
+  }
+  if ((await Photo.countDocuments({ ownerId: req.userId })) >= MAX_PHOTOS_PER_ACCOUNT) {
+    return res.status(400).json({ error: `You can send ${MAX_PHOTOS_PER_ACCOUNT} photos at most` });
   }
   const photo = await Photo.create({ ownerId: req.userId, contentType: req.is(TYPES), data: req.body });
   // The full address, so it is saved like any other photo URL (in a place, a review or a listing)

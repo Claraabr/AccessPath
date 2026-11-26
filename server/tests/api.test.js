@@ -2,6 +2,8 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { describe, it, expect } from 'vitest';
 import app from '../app.js';
+import { isPhotoUrl } from '../utils/isPhotoUrl.js';
+import { readFound } from '../utils/criteria.js';
 
 // No port and no database: these requests are stopped before Mongo is called
 
@@ -90,6 +92,25 @@ describe('photos', () => {
   });
 });
 
+describe('criteria found in a review', () => {
+  it('keeps only the 4 criteria, and only true when it is really true', () => {
+    const found = readFound({ found: { stepFree: true, elevator: 'yes', parking: false, admin: true } });
+    expect(found).toEqual({ stepFree: true, elevator: false, toilets: false, parking: false });
+  });
+});
+
+describe('photo links', () => {
+  it('accepts an http(s) link or nothing', () => {
+    expect(isPhotoUrl('https://commons.wikimedia.org/wiki/Special:FilePath/x.jpg')).toBe(true);
+    expect(isPhotoUrl('')).toBe(true);
+  });
+
+  it('refuses anything else', () => {
+    expect(isPhotoUrl('javascript:alert(1)')).toBe(false);
+    expect(isPhotoUrl('my photo')).toBe(false);
+  });
+});
+
 describe('the app', () => {
   it('answers a broken JSON body with 400, not 500', async () => {
     const res = await request(app)
@@ -110,5 +131,18 @@ describe('the app', () => {
     expect(res.status).toBe(200);
     expect(res.headers['x-content-type-options']).toBe('nosniff');
     expect(res.headers['x-powered-by']).toBeUndefined();
+  });
+});
+
+// Last, because it uses up the login attempts of this test run.
+// A wrong body is a failed attempt (400); after 5 failures the API answers 429.
+describe('login rate limit', () => {
+  it('blocks after 5 failed attempts', async () => {
+    let status;
+    for (let i = 0; i < 6; i++) {
+      const res = await request(app).post('/api/auth/login').send({ email: 'a@b.com', password: 123 });
+      status = res.status;
+    }
+    expect(status).toBe(429);
   });
 });

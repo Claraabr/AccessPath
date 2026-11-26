@@ -60,13 +60,29 @@ export default function App() {
     window.scrollTo(0, 0);
   }
 
-  // No token -> only the login / signup screen (session 20: App gates on the token)
+  // No token -> a guest can look around: reading places, reviews and listings is public
+  // (the API read routes need no token). Writing needs an account: Log in opens /login.
   if (!token) {
     return (
       <>
-        <Header page={page} go={go} />
+        <header className="header guest-header">
+          <span className="brand">AccessPath</span>
+          <nav className="guest-nav">
+            <button onClick={() => go('places')}>Places</button>
+            <button onClick={() => go('listings')}>AccessFix</button>
+            <button onClick={() => navigate('/login')}>Log in</button>
+          </nav>
+        </header>
         <main className="main">
-          <AuthPage onDone={() => go('home')} />
+          <Routes>
+            <Route path="/" element={<PlacesPage go={go} />} />
+            <Route path="/places/:id" element={<PlaceRoute go={go} />} />
+            <Route path="/accessfix" element={<ListingsPage go={go} />} />
+            <Route path="/accessfix/:id" element={<ListingRoute go={go} />} />
+            <Route path="/login" element={<AuthPage onDone={() => go('home')} />} />
+            <Route path="*" element={<PlacesPage go={go} />} />
+          </Routes>
+          <p className="guest-note">You are looking around as a guest. Log in to write a review or ask for equipment.</p>
         </main>
       </>
     );

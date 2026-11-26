@@ -6,9 +6,9 @@ import { requireAuth } from '../middleware/requireAuth.js';
 import { requireRole } from '../middleware/requireRole.js';
 import { geocode } from '../utils/geocode.js';
 import { escapeRegex } from '../utils/escapeRegex.js';
+import { CRITERIA, readFound } from '../utils/criteria.js';
 
 const placesRouter = express.Router();
-const CRITERIA = ['stepFree', 'elevator', 'toilets', 'parking'];
 
 // The photo of each criterion, taken from the body: only these 4 keys,
 // and only text (a link), anything else becomes "no photo"
@@ -171,6 +171,7 @@ placesRouter.post('/:id/reviews', requireAuth, requireRole('user'), async (req, 
       rating: req.body.rating,
       comment: req.body.comment,
       photoUrl: req.body.photoUrl,
+      found: readFound(req.body),
     });
     res.status(201).json(review);
   } catch (err) {

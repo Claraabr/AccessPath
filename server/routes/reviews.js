@@ -4,6 +4,7 @@ import { Review } from '../models/Review.js';
 import { Place } from '../models/Place.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { requireRole } from '../middleware/requireRole.js';
+import { readFound } from '../utils/criteria.js';
 
 const reviewsRouter = express.Router();
 
@@ -17,6 +18,7 @@ reviewsRouter.patch('/:id', requireAuth, async (req, res) => {
   for (const key of ['rating', 'comment', 'photoUrl']) {
     if (req.body[key] !== undefined) updates[key] = req.body[key];
   }
+  if (req.body.found !== undefined) updates.found = readFound(req.body);
   try {
     const review = await Review.findOneAndUpdate(
       { _id: id, userId: req.userId }, // someone else's review -> 404

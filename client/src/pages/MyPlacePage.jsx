@@ -10,6 +10,7 @@ import { PlacePage } from './PlacePage.jsx';
 export function MyPlacePage({ go }) {
   const { data: place, loading, error, reload } = useApi('/api/places/mine');
   const [editing, setEditing] = useState(false);
+  const [actionError, setActionError] = useState('');
   // Changes after each save so the page below loads the new version
   const [version, setVersion] = useState(0);
 
@@ -29,9 +30,14 @@ export function MyPlacePage({ go }) {
 
   async function deletePlace() {
     if (!window.confirm('Delete your place and all its reviews?')) return;
-    await apiFetch(`/api/places/${place._id}`, { method: 'DELETE' });
-    setEditing(false);
-    reload();
+    setActionError('');
+    try {
+      await apiFetch(`/api/places/${place._id}`, { method: 'DELETE' });
+      setEditing(false);
+      reload();
+    } catch (err) {
+      setActionError(err.message);
+    }
   }
 
   if (loading && !place) return <p>Loading…</p>;
@@ -66,6 +72,7 @@ export function MyPlacePage({ go }) {
         <section className="card">
           <h2>Delete my place</h2>
           <p className="muted">This also deletes all the reviews it received.</p>
+          {actionError && <p className="error" role="alert">{actionError}</p>}
           <button className="danger" onClick={deletePlace}>Delete my place</button>
         </section>
       </>

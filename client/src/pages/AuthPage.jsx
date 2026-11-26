@@ -6,10 +6,13 @@ export function AuthPage({ onDone }) {
   const { login, signup } = useAuth();
   const [mode, setMode] = useState('login'); // 'login' or 'signup'
   const [error, setError] = useState('');
+  const [sending, setSending] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     const form = new FormData(e.target);
+    setSending(true);
+    setError('');
     try {
       if (mode === 'login') {
         await login(form.get('email'), form.get('password'));
@@ -19,6 +22,8 @@ export function AuthPage({ onDone }) {
       onDone();
     } catch (err) {
       setError(err.message);
+    } finally {
+      setSending(false);
     }
   }
 
@@ -64,7 +69,11 @@ export function AuthPage({ onDone }) {
           </fieldset>
         )}
         {error && <p className="error" role="alert">{error}</p>}
-        <button>{mode === 'login' ? 'Log in' : 'Sign up'}</button>
+        <button disabled={sending}>
+          {sending ? 'Please wait…' : mode === 'login' ? 'Log in' : 'Sign up'}
+        </button>
+        {/* Render's free plan sleeps: the first request after a while can take about a minute */}
+        {sending && <p className="muted" role="status">The server may take up to a minute to wake up.</p>}
       </form>
       <p className="muted" style={{ marginTop: 16 }}>
         {mode === 'login' ? 'No account yet? ' : 'Already have an account? '}

@@ -52,9 +52,11 @@ done
 
 **Before:** twenty `401`. Nothing slowed the guessing down.
 
-**Fix:** `express-rate-limit` in `server/app.js`: 5 login attempts per 15 minutes, and 300 requests per 15 minutes for the whole API. The JSON body is also capped at 10 kb.
+**Fix:** `express-rate-limit` in `server/app.js`: 5 failed login attempts per 15 minutes, and 1000 requests per 15 minutes for the whole API. The JSON body is also capped at 10 kb.
 
-**After:** five `401`, then `429 {"error":"Too many attempts. Try again later."}`.
+A successful login does not count (`skipSuccessfulRequests`). A classroom often shares one IP address: with every login counted, a few people logging in to try the three roles would lock everyone out for 15 minutes.
+
+**After:** five `401`, then `429 {"error":"Too many failed attempts. Try again in 15 minutes."}`. A test checks it (`login rate limit` in `server/tests/api.test.js`).
 
 ## 3. Headers
 

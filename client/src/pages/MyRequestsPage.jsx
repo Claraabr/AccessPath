@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useApi } from '../hooks/useApi.js';
 import { apiFetch } from '../api/client.js';
 import { StatusBadge } from '../components/StatusBadge.jsx';
@@ -6,10 +7,17 @@ import { StatusBadge } from '../components/StatusBadge.jsx';
 export function MyRequestsPage({ go }) {
   const { data: requests, loading, error, reload } = useApi('/api/requests/sent');
 
+  const [actionError, setActionError] = useState('');
+
   async function cancel(id) {
     if (!window.confirm('Cancel this request?')) return;
-    await apiFetch(`/api/requests/${id}`, { method: 'DELETE' });
-    reload();
+    setActionError('');
+    try {
+      await apiFetch(`/api/requests/${id}`, { method: 'DELETE' });
+      reload();
+    } catch (err) {
+      setActionError(err.message);
+    }
   }
 
   return (
@@ -22,6 +30,7 @@ export function MyRequestsPage({ go }) {
       <p className="muted">Need a ramp, a wheelchair or a walker? Choose it on AccessFix and send your request to the supplier.</p>
       {loading && !requests && <p>Loading…</p>}
       {error && <p className="error" role="alert">{error.message}</p>}
+      {actionError && <p className="error" role="alert">{actionError}</p>}
       {requests && requests.length === 0 && <p className="muted">You have not sent any request yet.</p>}
       {requests && requests.map((r) => (
         <article key={r._id} className="card">

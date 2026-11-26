@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { photoUrlRule } from '../utils/isPhotoUrl.js';
 
 export const EQUIPMENT_TYPES = ['ramp', 'wheelchair', 'stair-climber', 'walker', 'other'];
 
@@ -11,7 +12,7 @@ const listingSchema = new mongoose.Schema(
     mode: { type: String, required: true, enum: ['rent', 'sale'] },
     price: { type: Number, required: true, min: 0 },
     area: { type: String, required: true, trim: true },
-    photoUrl: { type: String, default: '' },
+    photoUrl: { type: String, default: '', validate: photoUrlRule },
     // Position of the area, found with Nominatim, for "Near me". Empty if the area was not found
     lat: { type: Number },
     lng: { type: Number },

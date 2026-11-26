@@ -98,10 +98,15 @@ function ReplyBox({ review, onSaved }) {
 
   async function remove() {
     if (!window.confirm('Delete your reply?')) return;
-    await apiFetch(`/api/reviews/${review._id}/reply`, { method: 'DELETE' });
-    setText('');
-    setEditing(true);
-    onSaved();
+    setError('');
+    try {
+      await apiFetch(`/api/reviews/${review._id}/reply`, { method: 'DELETE' });
+      setText('');
+      setEditing(true);
+      onSaved();
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   if (!editing) {
@@ -112,6 +117,7 @@ function ReplyBox({ review, onSaved }) {
           <span className="muted">{new Date(review.repliedAt).toLocaleDateString()}</span>
         </p>
         <p>{review.reply}</p>
+        {error && <p className="error" role="alert">{error}</p>}
         <div className="row">
           <button className="secondary" onClick={() => setEditing(true)}>Edit my reply</button>
           <button className="danger" onClick={remove}>Delete my reply</button>

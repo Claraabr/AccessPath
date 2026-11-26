@@ -5,9 +5,13 @@ import { apiFetch } from '../api/client.js';
 export function useApi(path) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
   // reload() changes this number, so the effect below runs again
   const [version, setVersion] = useState(0);
+  // Which request the data on screen belongs to. While it is not the current one, we are loading:
+  // a new path (a new search) or a reload shows "loading" again without setting state in the effect.
+  const key = `${path}#${version}`;
+  const [doneKey, setDoneKey] = useState(null);
+  const loading = doneKey !== key;
 
   // The state is only set when the answer arrives, never during the effect itself.
   // ignore: if the path changes before the answer, the old answer is dropped (session 15, cleanup)
@@ -25,18 +29,15 @@ export function useApi(path) {
         }
       )
       .finally(() => {
-        if (!ignore) setLoading(false);
+        if (!ignore) setDoneKey(key);
       });
     return () => {
       ignore = true;
     };
-  }, [path, version]);
+  }, [path, key]);
 
   // Called after a change (new review, accepted request...) to load the data again
-  const reload = useCallback(() => {
-    setLoading(true);
-    setVersion((v) => v + 1);
-  }, []);
+  const reload = useCallback(() => setVersion((v) => v + 1), []);
 
   return { data, error, loading, reload };
 }

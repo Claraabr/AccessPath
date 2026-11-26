@@ -45,8 +45,9 @@ export function AccessIcon({ name }) {
 
 // The 4 criteria of a place, never shown by color only:
 // - small (search results): 4 squares, a missing one is crossed out, the words are for screen readers
-// - large (place page): one tile per criterion with "Yes" or "No" written
-export function CriteriaBadges({ place, large = false }) {
+// - large (place page): one tile per criterion with "Yes" or "No" written,
+//   and how many visitors found it (found = { stepFree: 3, ... }, out of reviewCount)
+export function CriteriaBadges({ place, large = false, found, reviewCount = 0 }) {
   if (large) {
     return (
       <ul className="access-tiles">
@@ -57,6 +58,9 @@ export function CriteriaBadges({ place, large = false }) {
               <AccessIcon name={key} />
               <strong>{label}</strong>
               <span className="answer">{yes ? 'Yes' : 'No'}</span>
+              {found && reviewCount > 0 && (
+                <span className="found">Found by {found[key]} of {reviewCount} visitors</span>
+              )}
             </li>
           );
         })}

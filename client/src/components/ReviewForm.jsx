@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { apiFetch } from '../api/client.js';
 import { uploadPhoto } from '../api/upload.js';
+import { CRITERIA } from '../constants.js';
 
 // Used to post a review, and to edit one (review = the review to edit)
 export function ReviewForm({ placeId, review, onAdded, onCancel }) {
@@ -21,6 +22,8 @@ export function ReviewForm({ placeId, review, onAdded, onCancel }) {
         rating: Number(form.get('rating')),
         comment: form.get('comment'),
         photoUrl,
+        // A ticked box sends "on", an empty one sends nothing
+        found: Object.fromEntries(Object.keys(CRITERIA).map((key) => [key, form.get(`found-${key}`) === 'on'])),
       });
       // 2. Save it in our API: PATCH my review, or POST a new one
       if (review) {
@@ -50,6 +53,15 @@ export function ReviewForm({ placeId, review, onAdded, onCancel }) {
           <option value="1">1 – Not accessible</option>
         </select>
       </label>
+      <fieldset>
+        <legend>What did you find there?</legend>
+        {Object.entries(CRITERIA).map(([key, label]) => (
+          <label key={key} className="check">
+            <input type="checkbox" name={`found-${key}`} defaultChecked={review?.found?.[key]} />
+            {label}
+          </label>
+        ))}
+      </fieldset>
       <label>
         Comment
         <textarea

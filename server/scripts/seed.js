@@ -664,8 +664,11 @@ for (const name of VISITORS) visitors[name] = await makeUser(name, 'user');
 
 const reviews = {}; // "place|visitor" -> the review, to add the replies below
 for (const [placeName, visitorName, rating, comment] of REVIEWS) {
+  const place = places[placeName];
   reviews[`${placeName}|${visitorName}`] = await Review.create({
-    placeId: places[placeName]._id, userId: visitors[visitorName]._id, rating, comment,
+    placeId: place._id, userId: visitors[visitorName]._id, rating, comment,
+    // The demo visitors found what the place declares
+    found: { stepFree: place.stepFree, elevator: place.elevator, toilets: place.toilets, parking: place.parking },
   });
 }
 
