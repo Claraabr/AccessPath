@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { apiFetch } from '../api/client.js';
 
 const AuthContext = createContext(null);
+// The hook lives next to its context; fast refresh simply reloads this file in full
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {

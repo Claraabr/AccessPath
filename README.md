@@ -527,13 +527,14 @@ All routes start with `/api`. 🔒 = needs a token (401 without one). The role i
 ```bash
 cd server && npm test   # API: 401, 400, 404, helmet headers, reply and photo need a token, not a photo -> 400 (no database needed)
 cd client && npm test   # components: PlaceForm, Stars; distances for Near me
+cd client && npm run lint   # ESLint (React hooks rules), no errors
 ```
 
 Both use Vitest. The server tests import `app.js` with supertest, so they need no port and no database.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on every push and pull request (session 23): a clean GitHub machine installs the server and the client with `npm ci`, runs `npm test` in both, and builds the client. A red check on GitHub means something is broken before it reaches Render or Vercel. On Render, Auto-Deploy is set to "After CI checks pass", so a failing commit is never deployed.
+`.github/workflows/ci.yml` runs on every push and pull request (session 23): a clean GitHub machine installs the server and the client with `npm ci`, runs `npm test` in both, runs ESLint on the client and builds it. A red check on GitHub means something is broken before it reaches Render or Vercel. On Render, Auto-Deploy is set to "After CI checks pass", so a failing commit is never deployed.
 
 ## Security
 
